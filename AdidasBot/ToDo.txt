@@ -1,0 +1,19 @@
+﻿Create a tool that uses http requests to sit on a website and refresh every x seconds, 
+must keep the cookies so each refresh is like refreshing a tab on a browser and 
+not creating a new session or something. It must look for the site key on the site 
+(data-sitekey=) once its find that it must assign the sitekey to the bot and assign all 
+cookies/user-agent/proxy used to the post request so that all tasks that are started 
+after will use them cookies to bypass the splash page and add straight to cart. 
+
+GUI for splash tool - mass import proxies via text file 
+(IP:port and IP:port:username:password format), option to type in number of threads/refresh time,
+place that shows a count of how many proxies you entered, place to input link of 
+website to refresh on. Once a proxy passes the splash page and finds the sitekey and 
+cookies etc somewhere a button or something has to appear for the user to click once 
+clicked it will assign sitekey/proxy/cookies etc to the bot and proxy to all 
+current tasks made and future tasks made. Must also be a button to remove all 
+cookies/proxy from going to newly created tasks etc back to how the bot was normally before.
+
+Must be a 10 minute timer somewhere next to the button (expiry time of specific cook is 10mins)
+
+Must be multiply buttons as multiple can pass within a time frame
