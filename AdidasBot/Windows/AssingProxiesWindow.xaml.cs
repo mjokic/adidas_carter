@@ -1,4 +1,5 @@
 ﻿using AdidasBot.Model;
+using MahApps.Metro.Controls;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace AdidasBot.Windows
     /// <summary>
     /// Interaction logic for AssingProxiesWindow.xaml
     /// </summary>
-    public partial class AssingProxiesWindow : Window
+    public partial class AssingProxiesWindow : MetroWindow
     {
         private Job job;
 

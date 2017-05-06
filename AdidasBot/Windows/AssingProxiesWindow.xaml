@@ -1,9 +1,10 @@
-﻿<Window x:Class="AdidasBot.Windows.AssingProxiesWindow"
+﻿<Controls:MetroWindow x:Class="AdidasBot.Windows.AssingProxiesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AdidasBot.Windows"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
         Title="Assing Proxies" Height="354" Width="319.211" ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
@@ -14,4 +15,4 @@
         <Button x:Name="buttonManualAssingProxy" Content="Manual Assing" HorizontalAlignment="Left" Margin="169,294,0,0" VerticalAlignment="Top" Width="134" Click="buttonManualAssingProxy_Click"/>
 
     </Grid>
-</Window>
+</Controls:MetroWindow>
