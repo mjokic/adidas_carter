@@ -2,6 +2,7 @@
 using AdidasBot.Model.Captchas;
 using AdidasBot.Windows;
 using Cryptlex;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -45,6 +46,8 @@ namespace AdidasBot
 
         public static SiteProfile selectedProfile;
 
+        public static MetroDialogSettings mdsQustion = new MetroDialogSettings {
+            AffirmativeButtonText = "YES", NegativeButtonText = "NO" };
 
         public static bool cartAfterCaptcha = false;
         public static bool retryOutOfStock = false;

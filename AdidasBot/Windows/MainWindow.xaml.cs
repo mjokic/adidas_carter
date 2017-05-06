@@ -411,7 +411,7 @@ namespace AdidasBot
             }else
             {
 
-                var mb = await this.ShowMessageAsync("Are you sure?", "All tasks will be deleted", MessageDialogStyle.AffirmativeAndNegative);
+                var mb = await this.ShowMessageAsync("Are you sure?", "All tasks will be deleted", MessageDialogStyle.AffirmativeAndNegative, Manager.mdsQustion);
 
                 if (mb == MessageDialogResult.Affirmative)
                 {
@@ -523,7 +523,7 @@ namespace AdidasBot
             Account selectedAccount = dataGridAccounts.SelectedItem as Account;
             if (selectedAccount == null && Manager.accounts.Count != 0)
             {
-                var mbr = await this.ShowMessageAsync("Are you sure?", "You'll delete all accounts", MessageDialogStyle.AffirmativeAndNegative);
+                var mbr = await this.ShowMessageAsync("Are you sure?", "You'll delete all accounts", MessageDialogStyle.AffirmativeAndNegative, Manager.mdsQustion);
                 if (mbr == MessageDialogResult.Affirmative)
                 {
                     foreach (Account acc in Manager.accounts.ToList())
@@ -596,7 +596,7 @@ namespace AdidasBot
 
                 // if there's not selected proxy
                 // we remove all proxies
-                var dr = await this.ShowMessageAsync("Are you sure?", "All proxies will be removed", MessageDialogStyle.AffirmativeAndNegative);
+                var dr = await this.ShowMessageAsync("Are you sure?", "All proxies will be removed", MessageDialogStyle.AffirmativeAndNegative, Manager.mdsQustion);
 
                 if (dr == MessageDialogResult.Affirmative)
                 {
@@ -730,7 +730,7 @@ namespace AdidasBot
             var selectedItem = dataGridCustomHeaders.SelectedItem;
             if (selectedItem != null)
             {
-                var mbr = await this.ShowMessageAsync("Are you sure?", "All custom headers will be removed", MessageDialogStyle.AffirmativeAndNegative);
+                var mbr = await this.ShowMessageAsync("Are you sure?", "All custom headers will be removed", MessageDialogStyle.AffirmativeAndNegative, Manager.mdsQustion);
 
                 if(mbr == MessageDialogResult.Affirmative)
                 {
@@ -1159,7 +1159,7 @@ namespace AdidasBot
         {
             e.Cancel = true;
             var what = MessageBox.Show("You're about to close application", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            //var what = this.ShowMessageAsync("Are you sure?", "You're about to close application", MessageDialogStyle.AffirmativeAndNegative);
+            //var what = this.ShowMessageAsync("Are you sure?", "You're about to close application", MessageDialogStyle.AffirmativeAndNegative, Manager.mdsQustion);
 
             if (what.ToString() == "Yes")
             {
