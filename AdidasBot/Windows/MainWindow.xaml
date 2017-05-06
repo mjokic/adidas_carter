@@ -116,9 +116,19 @@
 
 
             <Controls:MetroTabItem x:Name="OptionsTab" Header="Options">
-                <Grid Background="#FFE5E5E5">
+                <Grid Name="mainContent" Background="#FFE5E5E5">
 
-                    <GroupBox x:Name="groupBox" Header="Variables" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="216" Width="450">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+
+                    <GroupBox x:Name="groupBox" Grid.Row="0" Grid.Column="0" Header="Variables" >
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="100" />
@@ -133,10 +143,10 @@
                                 <RowDefinition Height="10" />
                                 <RowDefinition Height="20" />
                                 <RowDefinition Height="10" />
+                                <RowDefinition Height="25" />
                                 <RowDefinition Height="20" />
-                                <RowDefinition Height="20" />
-                                <RowDefinition Height="20" />
-                                <RowDefinition Height="23" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
 
                             </Grid.RowDefinitions>
 
@@ -152,12 +162,12 @@
                             <TextBlock x:Name="textBlock7" Grid.Row="7" Grid.ColumnSpan="2" Text="Site:" VerticalAlignment="Center" HorizontalAlignment="Center" Width="54" Margin="0,0,150,0" TextAlignment="Center"/>
                             <ComboBox x:Name="comboBoxSites" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Grid.Column="1" Margin="78,1,160,0" />
 
-                            <Button x:Name="buttonTest" Grid.Row="9" Grid.ColumnSpan="2" Content="Check Balance" VerticalAlignment="Bottom" Width="382" Click="buttonTest_Click"/>
-                            <Button x:Name="buttonSaveSettings" Grid.Row="10" Grid.ColumnSpan="2" Content="Save" VerticalAlignment="Bottom" Width="382" Click="buttonSaveSettings_Click"/>
+                            <Button x:Name="buttonTest" Grid.Row="9" Grid.ColumnSpan="2" Content="Check Balance" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="50,0" Click="buttonTest_Click"/>
+                            <Button x:Name="buttonSaveSettings" Grid.Row="10" Grid.ColumnSpan="2" Content="Save" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="50,0" Click="buttonSaveSettings_Click"/>
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="groupBox1" Header="Custom Headers" HorizontalAlignment="Left" Margin="471,10,0,0" VerticalAlignment="Top" Height="216" Width="500">
+                    <GroupBox x:Name="groupBox1" Grid.Row="0" Grid.Column="1" Header="Custom Headers" >
                         <Grid>
                             <TextBox x:Name="textBoxHeaderName" Height="23" Margin="10,10,338,165" TextWrapping="Wrap" Text="" Width="140"/>
                             <TextBox x:Name="textBoxHeaderValue" Height="23" Margin="155,10,106,165" TextWrapping="Wrap" Text="" Width="227"/>
@@ -165,7 +175,7 @@
                             <DataGrid x:Name="dataGridCustomHeaders" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Height="150" Width="468" MouseDoubleClick="dataGridCustomHeaders_MouseDoubleClick"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="groupBox2" Header="User Information" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,231,0,0" Height="204" Width="450">
+                    <GroupBox x:Name="groupBox2" Grid.Row="1" Grid.Column="0" Header="User Information" >
                         <Grid>
                             <TextBlock x:Name="textBlock12" HorizontalAlignment="Left" Margin="56,22,0,0" TextWrapping="Wrap" Text="Username:" VerticalAlignment="Top"/>
                             <TextBlock x:Name="textBlock13" HorizontalAlignment="Left" Margin="127,22,0,0" TextWrapping="Wrap" Text="{Binding ElementName=textBlockLoggedInUser, Path=Text}" VerticalAlignment="Top"/>
@@ -181,7 +191,7 @@
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="groupBox3" Header="News" HorizontalAlignment="Left" Margin="471,231,0,0" VerticalAlignment="Top" Height="204" Width="500">
+                    <GroupBox x:Name="groupBox3" Grid.Row="1" Grid.Column="1" Header="News" >
                         <Grid>
                             <DataGrid x:Name="dataGridNews" Margin="10" MouseDoubleClick="dataGridNews_MouseDoubleClick"/>
 
