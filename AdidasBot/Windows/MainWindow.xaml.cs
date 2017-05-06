@@ -336,6 +336,14 @@ namespace AdidasBot
             if (buttonStart.Content as string == "Start")
             {
 
+                int status = LexActivator.IsProductActivated();
+                Console.WriteLine("Product Status: " + status);
+                if(status != LexActivator.LA_OK)
+                {
+                    Environment.Exit(0);
+                    return;
+                }
+
                 // display error if site is not selected
                 if(Manager.selectedProfile == null) { MessageBox.Show("Please select site in options tab!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
 
