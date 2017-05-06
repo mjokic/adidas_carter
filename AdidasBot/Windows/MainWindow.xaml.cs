@@ -8,6 +8,7 @@ using AdidasCarterPro.Model;
 using AdidasCarterPro.Windows;
 using Cryptlex;
 using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using Microsoft.CSharp;
 using Microsoft.Win32;
 using System;
@@ -296,20 +297,21 @@ namespace AdidasBot
 
         // buton clicks
         // TASKS TAB
-        private void buttonAdd_Click(object sender, RoutedEventArgs e)
+        private async void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
             string pid = textBoxPId.Text;
             string size = comboBoxSizes.SelectedValue as string;
             string quantityTmp = textBoxQuantity.Text;
             int quantity;
 
-            if(!int.TryParse(quantityTmp, out quantity))
+            if (!int.TryParse(quantityTmp, out quantity))
             {
-                MessageBox.Show("Quantity needs to be a number!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                await this.ShowMessageAsync("Error!", "Quantity needs to be a number!", MessageDialogStyle.Affirmative);
                 return;
-            }else if(size == null)
+            }
+            else if (size == null)
             {
-                MessageBox.Show("Select site from options tab!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                await this.ShowMessageAsync("Error!", "Select site from options tab!", MessageDialogStyle.Affirmative);
                 OptionsTab.IsSelected = true;
                 return;
             }
@@ -317,17 +319,18 @@ namespace AdidasBot
             // getting sizeCode and creating object
             // setting size property value (display only)
             string sizeCode;
-            if(textBoxCustomSize.IsVisible)
+            if (textBoxCustomSize.IsVisible)
             {
                 sizeCode = textBoxCustomSize.Text;
                 size = sizeCode;
-            }else
+            }
+            else
             {
                 Manager.sizes.TryGetValue(size, out sizeCode);
             }
             Job job = new Job(pid, sizeCode, quantity);
             job.Size = size;
-                
+
             Manager.jobs.Add(job);
 
         }
@@ -346,7 +349,7 @@ namespace AdidasBot
                 }
 
                 // display error if site is not selected
-                if(Manager.selectedProfile == null) { MessageBox.Show("Please select site in options tab!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+                if(Manager.selectedProfile == null) { this.ShowMessageAsync("Error!", "Please select site in options tab!", MessageDialogStyle.Affirmative); return; }
 
                 Manager.stopAllTask = false;
                 buttonStart.Content = "Stop";
@@ -398,7 +401,7 @@ namespace AdidasBot
 
         }
 
-        private void buttonRemoveJobs_Click(object sender, RoutedEventArgs e)
+        private async void buttonRemoveJobs_Click(object sender, RoutedEventArgs e)
         {
             Job selectedJob = dataGridJobs.SelectedItem as Job;
             
@@ -408,9 +411,9 @@ namespace AdidasBot
             }else
             {
 
-                MessageBoxResult mb = MessageBox.Show("All tasks will be deleted", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                var mb = await this.ShowMessageAsync("Are you sure?", "All tasks will be deleted", MessageDialogStyle.AffirmativeAndNegative);
 
-                if (mb == MessageBoxResult.Yes)
+                if (mb == MessageDialogResult.Affirmative)
                 {
                     foreach (Job j in Manager.jobs.ToList())
                     {
@@ -428,11 +431,11 @@ namespace AdidasBot
         {
             if(Manager.proxies.Count == 0)
             {
-                MessageBox.Show("You don't have proxies!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.ShowMessageAsync("Error!", "You don't have proxies!", MessageDialogStyle.Affirmative);
                 return;
             }else if(Manager.jobs.Count == 0)
             {
-                MessageBox.Show("You don't have tasks!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.ShowMessageAsync("Error!", "You don't have tasks!", MessageDialogStyle.Affirmative);
                 return;
             }
 
@@ -455,7 +458,7 @@ namespace AdidasBot
         {
             if(Manager.accounts.Count == 0)
             {
-                MessageBox.Show("You don't have any accounts!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.ShowMessageAsync("Error!", "You don't have any accounts!", MessageDialogStyle.Affirmative);
                 return;
             }
 
@@ -508,20 +511,20 @@ namespace AdidasBot
             {
                 if (!parseAccount(line))
                 {
-                    MessageBox.Show("Wrong accounts format!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    this.ShowMessageAsync("Error!", "Wrong accounts format!", MessageDialogStyle.Affirmative);
                     break;
                 }
             }
 
         }
 
-        private void buttonRemoveAccounts_Click(object sender, RoutedEventArgs e)
+        private async void buttonRemoveAccounts_Click(object sender, RoutedEventArgs e)
         {
             Account selectedAccount = dataGridAccounts.SelectedItem as Account;
             if (selectedAccount == null && Manager.accounts.Count != 0)
             {
-                MessageBoxResult mbr = MessageBox.Show("You'll delete all accounts", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (mbr == MessageBoxResult.Yes)
+                var mbr = await this.ShowMessageAsync("Are you sure?", "You'll delete all accounts", MessageDialogStyle.AffirmativeAndNegative);
+                if (mbr == MessageDialogResult.Affirmative)
                 {
                     foreach (Account acc in Manager.accounts.ToList())
                     {
@@ -550,7 +553,7 @@ namespace AdidasBot
             }
             else
             {
-                MessageBox.Show("Enter username/password!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.ShowMessageAsync("Error!", "Enter username/password!", MessageDialogStyle.Affirmative);
             }
 
         }
@@ -575,7 +578,7 @@ namespace AdidasBot
             {
                 if (!parseProxy(line))
                 {
-                    MessageBox.Show("Wrong proxy format!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    this.ShowMessageAsync("Error!", "Wrong proxy format!", MessageDialogStyle.Affirmative);
                     break;
                 }
             }
@@ -584,7 +587,7 @@ namespace AdidasBot
 
         }
 
-        private void buttonRemoveProxy_Click(object sender, RoutedEventArgs e)
+        private async void buttonRemoveProxy_Click(object sender, RoutedEventArgs e)
         {
             Proxy selectedProxy = dataGridProxies.SelectedItem as Proxy;
 
@@ -593,9 +596,9 @@ namespace AdidasBot
 
                 // if there's not selected proxy
                 // we remove all proxies
-                var dr = MessageBox.Show("All proxies will be removed", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                var dr = await this.ShowMessageAsync("Are you sure?", "All proxies will be removed", MessageDialogStyle.AffirmativeAndNegative);
 
-                if (dr == MessageBoxResult.Yes)
+                if (dr == MessageDialogResult.Affirmative)
                 {
                     foreach (Proxy p in Manager.proxies.ToList())
                     {
@@ -677,7 +680,7 @@ namespace AdidasBot
             SiteProfile selectedProfile = comboBoxSites.SelectedItem as SiteProfile;
             if (selectedProfile == null)
             {
-                MessageBox.Show("Please select country!", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                this.ShowMessageAsync("Error!", "Please select country!", MessageDialogStyle.Affirmative);
                 return;
             }
 
@@ -693,7 +696,7 @@ namespace AdidasBot
             Manager.saveToRegistry("antiCaptchaApiKey", Manager.apiAntiCaptchaKey);
 
 
-            MessageBox.Show("Setting saved successfully!", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+            this.ShowMessageAsync("Saved!", "Setting saved successfully!", MessageDialogStyle.Affirmative);
 
         }
 
@@ -722,14 +725,14 @@ namespace AdidasBot
 
         }
 
-        private void dataGridCustomHeaders_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private async void dataGridCustomHeaders_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var selectedItem = dataGridCustomHeaders.SelectedItem;
             if (selectedItem != null)
             {
-                MessageBoxResult mbr = MessageBox.Show("All custom headers will be removed", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                var mbr = await this.ShowMessageAsync("Are you sure?", "All custom headers will be removed", MessageDialogStyle.AffirmativeAndNegative);
 
-                if(mbr == MessageBoxResult.Yes)
+                if(mbr == MessageDialogResult.Affirmative)
                 {
 
                     foreach (var key in Manager.customHeaders.Keys.ToList())
@@ -1013,7 +1016,8 @@ namespace AdidasBot
 
             }
 
-            MessageBox.Show("Balance: " + balance, title, MessageBoxButton.OK, MessageBoxImage.Information);
+            //MessageBox.Show("Balance: " + balance, title, MessageBoxButton.OK, MessageBoxImage.Information);
+            await this.ShowMessageAsync(title, "Balance " + balance, MessageDialogStyle.Affirmative);
 
         }
 
@@ -1155,6 +1159,7 @@ namespace AdidasBot
         {
             e.Cancel = true;
             var what = MessageBox.Show("You're about to close application", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            //var what = this.ShowMessageAsync("Are you sure?", "You're about to close application", MessageDialogStyle.AffirmativeAndNegative);
 
             if (what.ToString() == "Yes")
             {
