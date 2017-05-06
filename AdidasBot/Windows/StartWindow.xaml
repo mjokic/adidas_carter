@@ -1,0 +1,13 @@
+﻿<Window x:Class="AdidasCarterPro.Windows.StartWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AdidasCarterPro.Windows"
+        mc:Ignorable="d"
+        Title="Loading..." Height="189.394" Width="465.152" WindowStartupLocation="CenterScreen" WindowState="Minimized" ResizeMode="NoResize">
+    <Grid>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="113,67,0,0" TextWrapping="Wrap" Text="PLEASE WAIT. LOADING..." VerticalAlignment="Top" FontSize="18"/>
+
+    </Grid>
+</Window>
