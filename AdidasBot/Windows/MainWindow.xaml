@@ -40,7 +40,7 @@
                     <Button x:Name="buttonRemoveJobs" Content="Remove" HorizontalAlignment="Left" Margin="394,63,0,0" VerticalAlignment="Top" Width="101" Click="buttonRemoveJobs_Click"/>
                     <Button x:Name="buttonAssingAccosWindow" Content="Assign Accounts" HorizontalAlignment="Left" Margin="394,27,0,0" VerticalAlignment="Top" Width="101" Click="buttonAssingAccosWindow_Click"/>
                     <TextBlock x:Name="textBlockNumOfTasks" HorizontalAlignment="Left" Margin="504,97,0,0" TextWrapping="Wrap" Text="{Binding ElementName=dataGridJobs, Path=Items.Count}" VerticalAlignment="Top" ToolTip="Number of tasks"/>
-                    <TextBlock x:Name="textBlock11" Margin="0,97,10,0" TextWrapping="Wrap" Text="{Binding ElementName=dataGridInCart, Path=Items.Count}" VerticalAlignment="Top" ToolTip="Number of finished tasks" HorizontalAlignment="Right" Width="6"/>
+                    <TextBlock x:Name="textBlock11" Margin="0,97,10,0" TextAlignment="Right" TextWrapping="NoWrap" Text="{Binding ElementName=dataGridInCart, Path=Items.Count}" VerticalAlignment="Top" ToolTip="Number of finished tasks" HorizontalAlignment="Right" Width="32"/>
                     <GroupBox x:Name="groupBox5" Header="Aditional Options" Margin="806,10,10,0" VerticalAlignment="Top" Height="82">
                         <Grid>
                             <CheckBox x:Name="checkBoxCartAfterCaptcha" Content="Cart After Success Captcha" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0" Click="checkBoxCartAfterCaptcha_Click"/>

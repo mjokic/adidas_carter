@@ -40,11 +40,12 @@ namespace AdidasCarterPro.Windows
         private void check()
         {
             LexActivator.SetVersionGUID("44F2F567-E715-1F19-93D5-E376D65434A5", LexActivator.PermissionFlags.LA_USER);
+            LexActivator.SetDayIntervalForServerCheck(1);
+            LexActivator.SetGracePeriodForNetworkError(1);
 
             int statusG;
             statusG = LexActivator.IsProductGenuine();
-            LexActivator.SetDayIntervalForServerCheck(1);
-            LexActivator.SetGracePeriodForNetworkError(1);
+            Console.WriteLine(statusG);
             
             if (statusG == LexActivator.LA_OK)
             {
