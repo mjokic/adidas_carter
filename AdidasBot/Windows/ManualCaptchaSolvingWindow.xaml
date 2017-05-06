@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Manual Captcha" Height="491.062" Width="931.1" Loaded="Window_Loaded" >
     <Grid Name="myGrid">
-        <!--<cefSharp:ChromiumWebBrowser Name="chrome" />-->
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="838,10,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+        <cefSharp:ChromiumWebBrowser Name="chrome" />
+        <!--<Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="838,10,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>-->
     </Grid>
 </Window>

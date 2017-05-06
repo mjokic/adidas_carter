@@ -24,32 +24,18 @@ namespace AdidasCarterPro.Windows
     /// </summary>
     public partial class ManualCaptchaSolvingWindow : Window
     {
+
         public string CaptchaSolution { get; set; }
         public Job Job { get; set; }
-        private ChromiumWebBrowser chrome;
 
         public ManualCaptchaSolvingWindow(Job job)
         {
             this.Job = job;
-            //Console.WriteLine("USING PROXY: " + job.Proxy.ToString());
-
-            CefSettings settings = new CefSettings();
-            if(job.Proxy != null) settings.CefCommandLineArgs.Add("proxy-server", job.Proxy.ToString());
-            settings.PersistSessionCookies = false;
-            settings.PersistUserPreferences = false;
-            settings.UserAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:53.0) Gecko/20100101 Firefox/53.0";
-
-            Cef.Initialize(settings);
-            this.chrome = new ChromiumWebBrowser();
-            this.chrome.Width = 900;
-            this.chrome.Height = 490;
             InitializeComponent();
         }
 
         private void loadPage()
         {
-           
-
             string content = @"
                             <html>
                             <head>
@@ -106,9 +92,6 @@ namespace AdidasCarterPro.Windows
 
             string url = "http://www." + Manager.selectedProfile.Domain.Replace("global.", "");
             chrome.LoadHtml(content + Manager.siteKey + part2, url);
-            //chrome.Address = "https://www.google.com/recaptcha/api2/demo";
-            Console.WriteLine("Loaded...");
-
         }
 
         private async void getSolution()
@@ -136,7 +119,7 @@ namespace AdidasCarterPro.Windows
                     this.Job.Status = "Got captcha response!";
                     Console.WriteLine("FOUND?");
                     // closing z window
-                    App.Current.Dispatcher.Invoke((Action) delegate {
+                    App.Current.Dispatcher.Invoke((Action)delegate {
                         this.Close();
                     });
                     return;
@@ -155,40 +138,37 @@ namespace AdidasCarterPro.Windows
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Thread.Sleep(500);
-            myGrid.Children.Add(this.chrome);
             loadPage();
 
-            //Task t = Task.Run(() => getSolution());
+            Task t = Task.Run(() => getSolution());
         }
 
         private async void button_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("page loading...");
-            loadPage();
+            string source = await chrome.GetSourceAsync();
 
-            //string source = await chrome.GetSourceAsync();
+            //string source = "aaaa<!--mkflalfjaakfjakfmak-->a<!--marko-->aabbask";
 
-            ////string source = "aaaa<!--mkflalfjaakfjakfmak-->a<!--marko-->aabbask";
+            Regex r = new Regex("<!--(.*?)-->");
 
-            //Regex r = new Regex("<!--(.*?)-->");
+            var tmp = r.Matches(source);
+            try
+            {
+                this.CaptchaSolution = tmp[1].Groups[1].Value;
+                this.Job.CaptchaResponse = this.CaptchaSolution;
+                this.Job.Status = this.CaptchaSolution;
+                Console.WriteLine("FOUND");
+                this.Close();
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("NOT FOUND!");
+            }
 
-            //var tmp = r.Matches(source);
-            //try
-            //{
-            //    this.CaptchaSolution = tmp[1].Groups[1].Value;
-            //    this.Job.CaptchaResponse = this.CaptchaSolution;
-            //    this.Job.Status = this.CaptchaSolution;
-            //    Console.WriteLine("FOUND");
-            //    this.Close();
-            //}
-            //catch (ArgumentOutOfRangeException)
-            //{
-            //    Console.WriteLine("NOT FOUND!");
-            //}
-
-            //Thread.Sleep(500);
+            Thread.Sleep(500);
 
         }
-        
+
+
     }
 }
