@@ -1,11 +1,14 @@
-﻿<Window x:Class="AdidasBot.MainWindow"
+﻿<Controls:MetroWindow x:Class="AdidasBot.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AdidasBot"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="Adidas Carter - PRO" Height="527.9" Width="999" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
+        ShowIconOnTitleBar="False"
+        TitleAlignment="Center"
+        Title="Adidas Carter - PRO" Height="527.9" Width="1039.5" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
 
     <Grid>
 
@@ -16,36 +19,53 @@
             <MenuItem Name="MenuButtonSplashTool" Header="Splash Tool" Click="MenuButtonSplashTool_Click"/>
         </Menu>
 
-        <TextBlock x:Name="textBlockLoggedInUser" Margin="0,6,20,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="username" HorizontalAlignment="Right" Width="80"/>
-        <TextBlock x:Name="textblockJustText" Margin="0,6,105,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Logged in as " HorizontalAlignment="Right" Width="65"/>
+        <TextBlock x:Name="textBlockLoggedInUser" Margin="0,6,20,0" TextWrapping="NoWrap" TextAlignment="Center" VerticalAlignment="Top" Text="username" HorizontalAlignment="Right" Width="80"/>
+        <TextBlock x:Name="textblockJustText" Margin="0,6,100,0" TextWrapping="NoWrap" TextAlignment="Left" VerticalAlignment="Top" Text="Logged in as" HorizontalAlignment="Right" Width="70"/>
 
-        <TabControl x:Name="tabControl" Margin="0,24,0,0">
-            <TabItem Header="Tasks">
+        <Controls:MetroAnimatedTabControl x:Name="tabControl" Margin="0,24,0,0">
+            <Controls:MetroTabItem Header="Tasks">
                 <Grid Background="#FFE5E5E5">
                     <TextBox x:Name="textBoxPId" HorizontalAlignment="Left" Height="23" Margin="60,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="83"/>
                     <ComboBox x:Name="comboBoxSizes" HorizontalAlignment="Left" Margin="60,37,0,0" VerticalAlignment="Top" Width="83" SelectionChanged="comboBoxSizes_SelectionChanged"/>
-                    <TextBox x:Name="textBoxQuantity" HorizontalAlignment="Left" Height="23" Margin="59,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="84"/>
-                    <Button x:Name="buttonAdd" Content="Add" HorizontalAlignment="Left" Margin="274,63,0,0" VerticalAlignment="Top" Width="95" Click="buttonAdd_Click"/>
+                    <TextBox x:Name="textBoxQuantity" HorizontalAlignment="Left" Height="26" Margin="60,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="84"/>
+                    <Button x:Name="buttonAdd" Content="Add" HorizontalAlignment="Left" Margin="262,63,0,0" VerticalAlignment="Top" Width="116" Click="buttonAdd_Click"/>
                     <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="13,14,0,0" TextWrapping="Wrap" Text="PID" VerticalAlignment="Top"/>
                     <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Margin="13,45,0,0" TextWrapping="Wrap" Text="SIZE" VerticalAlignment="Top"/>
                     <Button x:Name="buttonStart" Content="Start" HorizontalAlignment="Left" Margin="552,63,0,0" VerticalAlignment="Top" Width="100" Click="buttonStart_Click"/>
-                    <TextBlock x:Name="textBlock2" HorizontalAlignment="Left" Margin="10,72,0,0" TextWrapping="Wrap" Text="QUANTITY" VerticalAlignment="Top" Height="14" Width="44" FontSize="9" TextAlignment="Center"/>
-                    <Button x:Name="buttonSolveCaptchas" Content="Solve Captchas" HorizontalAlignment="Left" Margin="552,27,0,0" VerticalAlignment="Top" Width="209" Click="buttonSolveCaptchas_Click"/>
-                    <DataGrid x:Name="dataGridInCart" Margin="0,115,10,10" MouseDoubleClick="dataGridInCart_MouseDoubleClick" HorizontalAlignment="Right" Width="450"/>
-                    <DataGrid x:Name="dataGridJobs" HorizontalAlignment="Left" Margin="10,115,0,10" Width="500" MouseDoubleClick="dataGridJobs_MouseDoubleClick"/>
-                    <TextBlock x:Name="textBlock3" Margin="0,97,422,0" TextWrapping="Wrap" Text="In Cart:" VerticalAlignment="Top" HorizontalAlignment="Right" Width="38"/>
-                    <TextBlock x:Name="textBlock4" HorizontalAlignment="Left" Margin="13,97,0,0" TextWrapping="Wrap" Text="Tasks:" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="textBlock2" HorizontalAlignment="Left" Margin="10,76,0,0" TextWrapping="Wrap" Text="QUANTITY" VerticalAlignment="Top" Height="14" Width="44" FontSize="9" TextAlignment="Center"/>
+                    <Button x:Name="buttonSolveCaptchas" Content="Solve Captchas" HorizontalAlignment="Left" Margin="552,13,0,0" VerticalAlignment="Top" Width="209" Click="buttonSolveCaptchas_Click"/>
 
-                    <Button x:Name="buttonAssingProxiesWindow" Content="Assign Proxies" HorizontalAlignment="Left" Margin="274,27,0,0" VerticalAlignment="Top" Width="95" Click="buttonAssingProxiesWindow_Click"/>
-                    <Button x:Name="buttonRemoveJobs" Content="Remove" HorizontalAlignment="Left" Margin="394,63,0,0" VerticalAlignment="Top" Width="101" Click="buttonRemoveJobs_Click"/>
-                    <Button x:Name="buttonAssingAccosWindow" Content="Assign Accounts" HorizontalAlignment="Left" Margin="394,27,0,0" VerticalAlignment="Top" Width="101" Click="buttonAssingAccosWindow_Click"/>
-                    <TextBlock x:Name="textBlockNumOfTasks" HorizontalAlignment="Left" Margin="504,97,0,0" TextWrapping="Wrap" Text="{Binding ElementName=dataGridJobs, Path=Items.Count}" VerticalAlignment="Top" ToolTip="Number of tasks"/>
-                    <TextBlock x:Name="textBlock11" Margin="0,97,10,0" TextAlignment="Right" TextWrapping="NoWrap" Text="{Binding ElementName=dataGridInCart, Path=Items.Count}" VerticalAlignment="Top" ToolTip="Number of finished tasks" HorizontalAlignment="Right" Width="32"/>
-                    <GroupBox x:Name="groupBox5" Header="Aditional Options" Margin="806,10,10,0" VerticalAlignment="Top" Height="82">
+                    <Grid Name="downGrid" Margin="13,123,10,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="500"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="textBlock4" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" TextWrapping="NoWrap" Text="Tasks:" Width="47"/>
+                        <TextBlock x:Name="textBlockNumOfTasks" Grid.Row="0" Grid.Column="1" TextAlignment="Right" HorizontalAlignment="Right" TextWrapping="NoWrap" Text="{Binding ElementName=dataGridJobs, Path=Items.Count}" ToolTip="Number of tasks" Width="32"/>
+
+                        <TextBlock x:Name="textBlock3" Grid.Row="0" Grid.Column="3" TextWrapping="NoWrap" Text="In Cart:" HorizontalAlignment="Left" Width="47"/>
+                        <TextBlock x:Name="textBlockNumOfInCart" Grid.Row="0" Grid.Column="4" TextAlignment="Right" TextWrapping="NoWrap" Text="{Binding ElementName=dataGridInCart, Path=Items.Count}" VerticalAlignment="Top" ToolTip="Number of finished tasks" HorizontalAlignment="Right" Width="32"/>
+
+                        <DataGrid x:Name="dataGridJobs" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" MouseDoubleClick="dataGridJobs_MouseDoubleClick"/>
+                        <DataGrid x:Name="dataGridInCart" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" MouseDoubleClick="dataGridInCart_MouseDoubleClick"/>
+
+                    </Grid>
+
+                    <Button x:Name="buttonAssingProxiesWindow" Content="Assign Proxies" HorizontalAlignment="Left" Margin="262,10,0,0" VerticalAlignment="Top" Width="116" Click="buttonAssingProxiesWindow_Click"/>
+                    <Button x:Name="buttonRemoveJobs" Content="Remove" HorizontalAlignment="Left" Margin="394,63,0,0" VerticalAlignment="Top" Width="116" Click="buttonRemoveJobs_Click"/>
+                    <Button x:Name="buttonAssingAccosWindow" Content="Assign Accounts" HorizontalAlignment="Left" Margin="394,10,0,0" VerticalAlignment="Top" Width="116" Click="buttonAssingAccosWindow_Click"/>
+                    <GroupBox x:Name="groupBox5" Header="Aditional Options" Margin="806,10,10,0" VerticalAlignment="Top" Height="108">
                         <Grid>
-                            <CheckBox x:Name="checkBoxCartAfterCaptcha" Content="Cart After Success Captcha" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0" Click="checkBoxCartAfterCaptcha_Click"/>
-                            <CheckBox x:Name="checkBoxRetryOutOfStock" Content="Retry when out of stock" HorizontalAlignment="Left" Margin="0,31,0,0" VerticalAlignment="Top" Width="146" Click="checkBoxRetryOutOfStock_Click" IsEnabled="False"/>
-                            <CheckBox x:Name="checkBoxSendToSite" Content="Send To Site" HorizontalAlignment="Left" Margin="0,49,0,-1" VerticalAlignment="Top" Width="143"/>
+                            <CheckBox x:Name="checkBoxCartAfterCaptcha" Content="Cart After Success Captcha" HorizontalAlignment="Left" VerticalAlignment="Top" Click="checkBoxCartAfterCaptcha_Click"/>
+                            <CheckBox x:Name="checkBoxRetryOutOfStock" Content="Retry when out of stock" HorizontalAlignment="Left" Margin="0,23,0,0" VerticalAlignment="Top" Width="146" Click="checkBoxRetryOutOfStock_Click" IsEnabled="False"/>
+                            <CheckBox x:Name="checkBoxSendToSite" Content="Send To Site" HorizontalAlignment="Left" Margin="0,46,0,0" VerticalAlignment="Top" Width="143"/>
                         </Grid>
                     </GroupBox>
                     <TextBox x:Name="textBoxCustomSize" HorizontalAlignment="Left" Height="21" Margin="160,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="78" Visibility="Hidden"/>
@@ -53,17 +73,16 @@
                     <!--<Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="624,90,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>-->
 
                 </Grid>
-            </TabItem>
+            </Controls:MetroTabItem>
 
 
-
-            <TabItem Header="Accounts">
+            <Controls:MetroTabItem Header="Accounts">
                 <Grid Background="#FFE5E5E5">
                     <DataGrid x:Name="dataGridAccounts" Margin="10,47,0,9" HorizontalAlignment="Left" Width="590"/>
                     <Button x:Name="buttonImportAccs" Content="Import" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Margin="10,15,0,0" Click="buttonImportAccs_Click"/>
-                    <TextBlock x:Name="textBlockNumberOfAccounts" Margin="0,29,381,0" Text="{Binding ElementName=dataGridAccounts, Path=Items.Count}" VerticalAlignment="Top" ToolTip="Number Of Accounts" HorizontalAlignment="Right" Width="72" TextAlignment="Right"/>
+                    <TextBlock x:Name="textBlockNumberOfAccounts" Margin="0,29,432,0" Text="{Binding ElementName=dataGridAccounts, Path=Items.Count}" VerticalAlignment="Top" ToolTip="Number Of Accounts" HorizontalAlignment="Right" Width="72" TextAlignment="Right"/>
                     <Button x:Name="buttonRemoveAccounts" Content="Remove" HorizontalAlignment="Left" Margin="103,15,0,0" VerticalAlignment="Top" Width="75" Click="buttonRemoveAccounts_Click"/>
-                    <GroupBox x:Name="groupBox4" Header="Add Account" Margin="0,47,10,0" VerticalAlignment="Top" Height="168" HorizontalAlignment="Right" Width="349">
+                    <GroupBox x:Name="groupBox4" Header="Add Account" Margin="0,47,10,0" VerticalAlignment="Top" Height="189" HorizontalAlignment="Right" Width="349">
                         <Grid>
                             <TextBlock x:Name="textBlock16" HorizontalAlignment="Left" Margin="10,37,0,0" TextWrapping="Wrap" Text="Email:" VerticalAlignment="Top" Width="53" TextAlignment="Center"/>
                             <TextBox x:Name="textBoxAccountUsername" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Width="224" Margin="90,27,0,0"/>
@@ -76,27 +95,27 @@
                         </Grid>
                     </GroupBox>
                 </Grid>
-            </TabItem>
+            </Controls:MetroTabItem>
 
 
-            <TabItem Header="Proxies">
+            <Controls:MetroTabItem Header="Proxies">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGridProxies" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top" Height="339" Width="961"/>
+                    <DataGrid x:Name="dataGridProxies" Margin="10,96,0,0" VerticalAlignment="Top" Height="339" HorizontalAlignment="Left" Width="1012"/>
                     <Button x:Name="buttonImportProxies" Content="Import" HorizontalAlignment="Left" Margin="10,29,0,0" VerticalAlignment="Top" Width="75" Click="buttonImportProxies_Click"/>
                     <Button x:Name="buttonRemoveProxy" Content="Remove" HorizontalAlignment="Left" Margin="10,56,0,0" VerticalAlignment="Top" Width="75" Click="buttonRemoveProxy_Click"/>
-                    <Button x:Name="buttonCheckroxy" Content="Check Proxy" HorizontalAlignment="Left" Margin="896,62,0,0" VerticalAlignment="Top" Width="75" Click="buttonCheckroxy_Click"/>
-                    <Slider x:Name="sliderThreadsNumber" HorizontalAlignment="Left" Margin="755,12,0,0" VerticalAlignment="Top" Width="214" SmallChange="1" Minimum="1" Maximum="100" Value="1" LargeChange="10" IsSnapToTickEnabled="True" ToolTip="Number of threads"/>
-                    <TextBlock x:Name="textBlock8" HorizontalAlignment="Left" Margin="755,38,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
-                    <TextBlock x:Name="textBlock9" HorizontalAlignment="Left" Margin="951,40,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top"/>
-                    <TextBlock x:Name="textBlockProxyCheckThreads" Text="{Binding ElementName=sliderThreadsNumber, Path=Value}" HorizontalAlignment="Left" Margin="861,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-                    <TextBlock x:Name="textBlock10" HorizontalAlignment="Left" Margin="754,67,0,0" TextWrapping="Wrap" Text="Number Of Threads" VerticalAlignment="Top" Width="102"/>
+                    <Button x:Name="buttonCheckroxy" Content="Check Proxy" HorizontalAlignment="Left" Margin="904,62,0,0" VerticalAlignment="Top" Width="118" Click="buttonCheckroxy_Click"/>
+                    <Slider x:Name="sliderThreadsNumber" HorizontalAlignment="Left" Margin="808,10,0,0" VerticalAlignment="Top" Width="214" SmallChange="1" Minimum="1" Maximum="100" Value="1" LargeChange="10" IsSnapToTickEnabled="True" ToolTip="Number of threads"/>
+                    <TextBlock x:Name="textBlock8" HorizontalAlignment="Left" Margin="808,40,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="textBlock9" HorizontalAlignment="Left" Margin="1004,40,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="textBlockProxyCheckThreads" Text="{Binding ElementName=sliderThreadsNumber, Path=Value}" HorizontalAlignment="Left" Margin="893,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="textBlock10" HorizontalAlignment="Left" Margin="786,72,0,0" TextWrapping="NoWrap" Text="Number Of Threads" VerticalAlignment="Top" Width="102"/>
                     <Button x:Name="buttonRemoveFalse" Content="Remove Dead Proxies" HorizontalAlignment="Left" Margin="105,56,0,0" VerticalAlignment="Top" Width="131" Click="buttonRemoveFalse_Click"/>
 
                 </Grid>
-            </TabItem>
+            </Controls:MetroTabItem>
 
 
-            <TabItem x:Name="OptionsTab" Header="Options">
+            <Controls:MetroTabItem x:Name="OptionsTab" Header="Options">
                 <Grid Background="#FFE5E5E5">
 
                     <GroupBox x:Name="groupBox" Header="Variables" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="216" Width="450">
@@ -171,9 +190,10 @@
                     </GroupBox>
 
                 </Grid>
-            </TabItem>
+            </Controls:MetroTabItem>
 
-        </TabControl>
+
+        </Controls:MetroAnimatedTabControl>
 
     </Grid>
-</Window>
+</Controls:MetroWindow>

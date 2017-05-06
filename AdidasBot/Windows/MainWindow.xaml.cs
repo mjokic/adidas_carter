@@ -7,6 +7,7 @@ using AdidasBot.Windows;
 using AdidasCarterPro.Model;
 using AdidasCarterPro.Windows;
 using Cryptlex;
+using MahApps.Metro.Controls;
 using Microsoft.CSharp;
 using Microsoft.Win32;
 using System;
@@ -35,7 +36,7 @@ namespace AdidasBot
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
 
         public MainWindow()
