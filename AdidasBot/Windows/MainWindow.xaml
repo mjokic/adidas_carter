@@ -8,6 +8,8 @@
         mc:Ignorable="d"
         ShowIconOnTitleBar="False"
         TitleAlignment="Center"
+        MinHeight="500"
+        MinWidth="1000"
         Title="Adidas Carter - PRO" Height="527.9" Width="1039.5" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
 
     <Grid>
@@ -94,7 +96,7 @@
                     <Button x:Name="buttonRemoveAccounts" Content="Remove" Grid.Row="0" Grid.Column="1" Margin="20" MaxWidth="150" Click="buttonRemoveAccounts_Click"/>
                     <TextBlock x:Name="textBlockNumberOfAccounts" Grid.Row="0" Grid.Column="2"  Margin="0,0,10,0" TextAlignment="Right" VerticalAlignment="Bottom" Text="{Binding ElementName=dataGridAccounts, Path=Items.Count}" ToolTip="Number Of Accounts"/>
 
-                    <DataGrid x:Name="dataGridAccounts" Grid.Row="1" Grid.ColumnSpan="3" Margin="10,0,10,0" />
+                    <DataGrid x:Name="dataGridAccounts" Grid.Row="1" Grid.ColumnSpan="3" Margin="10,0,10,10" />
 
                     <GroupBox x:Name="groupBox4" Header="Add Account" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Top">
                         <Grid>
@@ -132,7 +134,7 @@
                     <Button x:Name="buttonRemoveProxy" Content="Remove" Grid.Row="1" Grid.Column="0"  Width="150" Height="20" Click="buttonRemoveProxy_Click"/>
                     <Button x:Name="buttonRemoveFalse" Content="Remove Dead Proxies" Grid.Row="1" Grid.Column="1" Width="150" Height="20" HorizontalAlignment="Left" Click="buttonRemoveFalse_Click"/>
 
-                    <Button x:Name="buttonCheckroxy" Content="Check Proxy" Grid.Row="1" Grid.Column="4"  Width="150" Height="20" Margin="0,10,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="buttonCheckroxy_Click"/>
+                    <Button x:Name="buttonCheckroxy" Content="Check Proxy" Grid.Row="1" Grid.Column="4" Height="20" Margin="30,10,30,0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="buttonCheckroxy_Click"/>
                     <Slider x:Name="sliderThreadsNumber" Grid.Row="0" Grid.Column="4" Margin="10,20" VerticalAlignment="Center" SmallChange="1" Minimum="1" Maximum="100" Value="1" LargeChange="10" IsSnapToTickEnabled="True" ToolTip="Number of threads"/>
                     
                     <TextBlock x:Name="textBlock8" TextWrapping="NoWrap" Margin="10,0,0,0" Text="1" Grid.Row="0" Grid.Column="4" VerticalAlignment="Bottom"/>
@@ -140,7 +142,7 @@
                     <TextBlock x:Name="textBlockProxyCheckThreads" Text="{Binding ElementName=sliderThreadsNumber, Path=Value}"  Grid.Row="0" Grid.Column="4" HorizontalAlignment="Center" TextWrapping="NoWrap" VerticalAlignment="Bottom"/>
                     <!--<TextBlock x:Name="textBlock10" TextWrapping="NoWrap" Text="Number Of Threads" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Left"/>-->
 
-                    <DataGrid x:Name="dataGridProxies" Grid.Row="2" Grid.ColumnSpan="4" Margin="10,20,10,5"/>
+                    <DataGrid x:Name="dataGridProxies" Grid.Row="2" Grid.ColumnSpan="4" Margin="10,20,10,10"/>
 
                 </Grid>
             </Controls:MetroTabItem>
@@ -150,7 +152,7 @@
                 <Grid Name="mainContent" Background="#FFE5E5E5">
 
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -162,48 +164,55 @@
                     <GroupBox x:Name="groupBox" Grid.Row="0" Grid.Column="0" Header="Variables" >
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="10" />
-                                <RowDefinition Height="20" />
-                                <RowDefinition Height="10" />
-                                <RowDefinition Height="20" />
-                                <RowDefinition Height="10" />
-                                <RowDefinition Height="20" />
-                                <RowDefinition Height="10" />
-                                <RowDefinition Height="25" />
-                                <RowDefinition Height="20" />
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
 
-                            <TextBlock x:Name="textBlock5" Grid.Row="3" Grid.Column="0" Text="Api Key:" TextAlignment="Center" Margin="0,1,0,10" Grid.RowSpan="2"/>
-                            <PasswordBox x:Name="textBoxCaptchaApiKey" Grid.Row="3" Grid.Column="1" Width="284" Password=""/>
+                            <RadioButton x:Name="radioButton2Captcha" Grid.Row="0" Grid.Column="0" Content="2Captcha" VerticalAlignment="Center" HorizontalAlignment="Center" Checked="radioButton2Captcha_Checked"/>
+                            <RadioButton x:Name="radioButtonAntiCaptcha" Grid.Row="0" Grid.Column="1" Content="Anti Captcha" VerticalAlignment="Center" HorizontalAlignment="Center" Checked="radioButtonAntiCaptcha_Checked"/>
 
-                            <RadioButton x:Name="radioButton2Captcha" Grid.Row="1" Grid.ColumnSpan="2" Content="2Captcha" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="70, 0, 0, 0" Checked="radioButton2Captcha_Checked"/>
-                            <RadioButton x:Name="radioButtonAntiCaptcha" Grid.Row="1" Grid.ColumnSpan="2" Content="Anti Captcha" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 70, 0" Checked="radioButtonAntiCaptcha_Checked"/>
+                            <TextBlock x:Name="textBlock5" Grid.Row="1" Grid.Column="0" Text="Api Key:" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <PasswordBox x:Name="textBoxCaptchaApiKey" Grid.Row="1" Grid.Column="1" Margin="10,5,10,0" VerticalAlignment="Center"/>
 
-                            <TextBlock x:Name="textBlock6" Grid.Row="5" Grid.Column="0" Text="Site Key:" TextAlignment="Center" Width="86" Margin="10,1,4,10" Height="21" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.RowSpan="2"/>
-                            <TextBox x:Name="textBoxSiteKey" Grid.Row="5" Grid.Column="1" Width="284" />
+                            <TextBlock x:Name="textBlock6" Grid.Row="2" Grid.Column="0" Text="Site Key:" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="textBoxSiteKey" Grid.Row="2" Grid.Column="1" Margin="10,5,10,0" VerticalAlignment="Center" />
 
-                            <TextBlock x:Name="textBlock7" Grid.Row="7" Grid.ColumnSpan="2" Text="Site:" VerticalAlignment="Center" HorizontalAlignment="Center" Width="54" Margin="0,0,150,0" TextAlignment="Center"/>
-                            <ComboBox x:Name="comboBoxSites" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Grid.Column="1" Margin="78,1,160,0" />
+                            <TextBlock x:Name="textBlock7" Grid.Row="3" Grid.Column="0" Text="Site:" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            <ComboBox x:Name="comboBoxSites" Grid.Row="3" Grid.Column="1" Margin="50,5,50,0" VerticalAlignment="Center" />
 
-                            <Button x:Name="buttonTest" Grid.Row="9" Grid.ColumnSpan="2" Content="Check Balance" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="50,0" Click="buttonTest_Click"/>
-                            <Button x:Name="buttonSaveSettings" Grid.Row="10" Grid.ColumnSpan="2" Content="Save" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="50,0" Click="buttonSaveSettings_Click"/>
+                            <Button x:Name="buttonTest" Grid.Row="4" Grid.ColumnSpan="2" Content="Check Balance" VerticalAlignment="Bottom" Margin="50,5,50,0" MaxWidth="400" Click="buttonTest_Click"/>
+                            <Button x:Name="buttonSaveSettings" Grid.Row="5" Grid.ColumnSpan="2" Content="Save" VerticalAlignment="Top" Margin="50,5,50,0" MaxWidth="400" Click="buttonSaveSettings_Click"/>
 
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="groupBox1" Grid.Row="0" Grid.Column="1" Header="Custom Headers" >
                         <Grid>
-                            <TextBox x:Name="textBoxHeaderName" Height="23" Margin="10,10,338,165" TextWrapping="Wrap" Text="" Width="140"/>
-                            <TextBox x:Name="textBoxHeaderValue" Height="23" Margin="155,10,106,165" TextWrapping="Wrap" Text="" Width="227"/>
-                            <Button x:Name="buttonHeaderAdd" Content="Add" Margin="387,10,10,0" VerticalAlignment="Top" Height="23" Click="buttonHeaderAdd_Click"/>
-                            <DataGrid x:Name="dataGridCustomHeaders" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Height="150" Width="468" MouseDoubleClick="dataGridCustomHeaders_MouseDoubleClick"/>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Name="textblockHeaderName" Grid.Row="0" Grid.Column="0" Text="Header Name:" TextWrapping="NoWrap"/>
+                            <TextBlock Name="textblockHeaderValue" Grid.Row="0" Grid.Column="1" Text="Header Value:" TextWrapping="NoWrap"/>
+                            <TextBox x:Name="textBoxHeaderName" Grid.Row="1" Grid.Column="0" TextWrapping="NoWrap" />
+                            <TextBox x:Name="textBoxHeaderValue" Grid.Row="1" Grid.Column="1" TextWrapping="NoWrap"/>
+                            <Button x:Name="buttonHeaderAdd" Content="Add" Grid.Row="1" Grid.Column="2" Margin="5,0,0,0" Click="buttonHeaderAdd_Click"/>
+                            <DataGrid x:Name="dataGridCustomHeaders" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,5,0,0" MouseDoubleClick="dataGridCustomHeaders_MouseDoubleClick"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="groupBox2" Grid.Row="1" Grid.Column="0" Header="User Information" >

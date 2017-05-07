@@ -25,7 +25,8 @@ namespace AdidasCarterPro.Windows
     public partial class ActivateWindow : MetroWindow
     {
         private MetroDialogSettings dialogSettings = new MetroDialogSettings {
-            MaximumBodyHeight = 25, DialogMessageFontSize = 16, DialogTitleFontSize = 20 };
+            MaximumBodyHeight = 25, DialogMessageFontSize = 16, DialogTitleFontSize = 20, AnimateHide = false
+        };
 
         public ActivateWindow()
         {

@@ -1010,7 +1010,6 @@ namespace AdidasBot
 
             }
 
-            //MessageBox.Show("Balance: " + balance, title, MessageBoxButton.OK, MessageBoxImage.Information);
             await this.ShowMessageAsync(title, "Balance " + balance, MessageDialogStyle.Affirmative);
 
         }
@@ -1203,19 +1202,25 @@ namespace AdidasBot
             }
         }
 
-        private void buttonDeactivateLicense_Click(object sender, RoutedEventArgs e)
+        private async void buttonDeactivateLicense_Click(object sender, RoutedEventArgs e)
         {
+            var setts = new MetroDialogSettings { AnimateHide = false };
+            var what = await this.ShowMessageAsync("Are you sure?", "Your license will be deactivated!", MessageDialogStyle.AffirmativeAndNegative, Manager.mdsQustion);
+
+            if (what != MessageDialogResult.Affirmative) return;
+
             int status;
             status = LexActivator.DeactivateProduct();
             if(status == LexActivator.LA_OK)
             {
-                MessageBox.Show("License Successfully Deactivated!", "Deactivated", MessageBoxButton.OK, MessageBoxImage.Information);
-                //this.Close();
-                Environment.Exit(0);
+                await this.ShowMessageAsync("Success!", "Your license is successfully deactivated!", MessageDialogStyle.Affirmative, setts);
+                //Environment.Exit(0);
+                Application.Current.Shutdown();
 
             }else
             {
-                MessageBox.Show("Error while deactivating your license!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                await this.ShowMessageAsync("Error!" + status, "Error while deactivating your license!", MessageDialogStyle.Affirmative, setts);
+                Application.Current.Shutdown();
             }
         }
 
