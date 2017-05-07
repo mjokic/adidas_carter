@@ -286,12 +286,6 @@ namespace AdidasBot
             dataGridNews.Columns.Add(c);
             #endregion
 
-
-            //Dummy d = new Dummy();
-            //textBoxSiteKey.DataContext = d;
-            //textBoxSiteKey.Text = d.SiteKey;
-
-            
         }
 
 
@@ -1052,28 +1046,6 @@ namespace AdidasBot
         }
 
 
-        //private bool checkProcess()
-        //{
-        //    Process[] processes = Process.GetProcesses();
-
-        //    int x = 0;
-        //    foreach (Process process in processes)
-        //    {
-        //        if(process.ProcessName == "AdidasCarterEco")
-        //        {
-        //            x += 1;
-        //        }
-        //    }
-
-        //    if(x < 2)
-        //    {
-        //        return true;
-        //    }
-
-        //    return false;
-        //}
-
-
         private async Task<bool> sendToSite(Job j)
         {
             bool status = false;
@@ -1155,18 +1127,26 @@ namespace AdidasBot
 
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
-            var what = MessageBox.Show("You're about to close application", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            //var what = this.ShowMessageAsync("Are you sure?", "You're about to close application", MessageDialogStyle.AffirmativeAndNegative, Manager.mdsQustion);
+            MessageDialogResult what;
 
-            if (what.ToString() == "Yes")
+            MetroDialogSettings settings = new MetroDialogSettings {
+                AnimateHide = false,
+                AffirmativeButtonText = "YES",
+                NegativeButtonText = "NO"
+            };
+
+            what = await this.ShowMessageAsync("Are you sure?", "You're about to close application", MessageDialogStyle.AffirmativeAndNegative, settings);
+
+            if (what == MessageDialogResult.Affirmative)
             {
-                e.Cancel = false;
+                Application.Current.Shutdown();
             }
 
         }
+
 
         private void checkBoxCartAfterCaptcha_Click(object sender, RoutedEventArgs e)
         {

@@ -32,14 +32,14 @@ namespace AdidasCarterPro.Windows
             InitializeComponent();
         }
 
-        private void buttonActivate_Click(object sender, RoutedEventArgs e)
+        private async void buttonActivate_Click(object sender, RoutedEventArgs e)
         {
             string alias = textBoxAlias.Text;
             string pKey = textBoxLicenseKey.Text;
 
             if(alias == string.Empty)
             {
-                this.ShowMessageAsync("Error!", "Alias can't be empty!", MessageDialogStyle.Affirmative, this.dialogSettings);
+                await this.ShowMessageAsync("Error!", "Alias can't be empty!", MessageDialogStyle.Affirmative, this.dialogSettings);
                 return;
             }
 
@@ -53,17 +53,17 @@ namespace AdidasCarterPro.Windows
             {
                 if (LexActivator.ActivateProduct() == LexActivator.LA_OK)
                 {
-                    this.ShowMessageAsync("Success!", "License Activated! Run software again!", MessageDialogStyle.Affirmative, this.dialogSettings);
+                    await this.ShowMessageAsync("Success!", "License Activated! Run software again!", MessageDialogStyle.Affirmative, this.dialogSettings);
                     this.Close();
                 }else
                 {
-                    this.ShowMessageAsync("Error!", "License key is not valid!", MessageDialogStyle.Affirmative, this.dialogSettings);
+                    await this.ShowMessageAsync("Error!", "License key is not valid!", MessageDialogStyle.Affirmative, this.dialogSettings);
                 }
 
             }
             else
             {
-                this.ShowMessageAsync("Error!", "License key is not valid!", MessageDialogStyle.Affirmative, this.dialogSettings);
+                await this.ShowMessageAsync("Error!", "License key is not valid!", MessageDialogStyle.Affirmative, this.dialogSettings);
             }
 
         }
