@@ -1,5 +1,7 @@
 ﻿using AdidasBot;
 using Cryptlex;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,33 +22,14 @@ namespace AdidasCarterPro.Windows
     /// <summary>
     /// Interaction logic for ActivateWindow.xaml
     /// </summary>
-    public partial class ActivateWindow : Window
+    public partial class ActivateWindow : MetroWindow
     {
+        private MetroDialogSettings dialogSettings = new MetroDialogSettings {
+            MaximumBodyHeight = 25, DialogMessageFontSize = 16, DialogTitleFontSize = 20 };
+
         public ActivateWindow()
         {
             InitializeComponent();
-        }
-
-
-        private bool checkProcess()
-        {
-            Process[] processes = Process.GetProcesses();
-
-            int x = 0;
-            foreach (Process process in processes)
-            {
-                if (process.ProcessName == "AdidasCarterEco")
-                {
-                    x += 1;
-                }
-            }
-
-            if (x < 2)
-            {
-                return true;
-            }
-
-            return false;
         }
 
         private void buttonActivate_Click(object sender, RoutedEventArgs e)
@@ -56,7 +39,7 @@ namespace AdidasCarterPro.Windows
 
             if(alias == string.Empty)
             {
-                MessageBox.Show("Alias can't be empty!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.ShowMessageAsync("Error!", "Alias can't be empty!", MessageDialogStyle.Affirmative, this.dialogSettings);
                 return;
             }
 
@@ -70,17 +53,17 @@ namespace AdidasCarterPro.Windows
             {
                 if (LexActivator.ActivateProduct() == LexActivator.LA_OK)
                 {
-                    MessageBox.Show("License Activated! Run software again!", "Success!", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.ShowMessageAsync("Success!", "License Activated! Run software again!", MessageDialogStyle.Affirmative, this.dialogSettings);
                     this.Close();
                 }else
                 {
-                    MessageBox.Show("License key is not valid!", "Error " + status, MessageBoxButton.OK, MessageBoxImage.Error);
+                    this.ShowMessageAsync("Error!", "License key is not valid!", MessageDialogStyle.Affirmative, this.dialogSettings);
                 }
 
             }
             else
             {
-                MessageBox.Show("License key is not valid!", "Error " + status, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.ShowMessageAsync("Error!", "License key is not valid!", MessageDialogStyle.Affirmative, this.dialogSettings);
             }
 
         }
