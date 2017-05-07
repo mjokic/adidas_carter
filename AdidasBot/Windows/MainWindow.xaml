@@ -78,11 +78,25 @@
 
             <Controls:MetroTabItem Header="Accounts">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGridAccounts" Margin="10,47,0,9" HorizontalAlignment="Left" Width="590"/>
-                    <Button x:Name="buttonImportAccs" Content="Import" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Margin="10,15,0,0" Click="buttonImportAccs_Click"/>
-                    <TextBlock x:Name="textBlockNumberOfAccounts" Margin="0,29,432,0" Text="{Binding ElementName=dataGridAccounts, Path=Items.Count}" VerticalAlignment="Top" ToolTip="Number Of Accounts" HorizontalAlignment="Right" Width="72" TextAlignment="Right"/>
-                    <Button x:Name="buttonRemoveAccounts" Content="Remove" HorizontalAlignment="Left" Margin="103,15,0,0" VerticalAlignment="Top" Width="75" Click="buttonRemoveAccounts_Click"/>
-                    <GroupBox x:Name="groupBox4" Header="Add Account" Margin="0,47,10,0" VerticalAlignment="Top" Height="189" HorizontalAlignment="Right" Width="349">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Button x:Name="buttonImportAccs" Content="Import" Grid.Row="0" Grid.Column="0" Margin="20" MaxWidth="150" Click="buttonImportAccs_Click"/>
+                    <Button x:Name="buttonRemoveAccounts" Content="Remove" Grid.Row="0" Grid.Column="1" Margin="20" MaxWidth="150" Click="buttonRemoveAccounts_Click"/>
+                    <TextBlock x:Name="textBlockNumberOfAccounts" Grid.Row="0" Grid.Column="2"  Margin="0,0,10,0" TextAlignment="Right" VerticalAlignment="Bottom" Text="{Binding ElementName=dataGridAccounts, Path=Items.Count}" ToolTip="Number Of Accounts"/>
+
+                    <DataGrid x:Name="dataGridAccounts" Grid.Row="1" Grid.ColumnSpan="3" Margin="10,0,10,0" />
+
+                    <GroupBox x:Name="groupBox4" Header="Add Account" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Top">
                         <Grid>
                             <TextBlock x:Name="textBlock16" HorizontalAlignment="Left" Margin="10,37,0,0" TextWrapping="Wrap" Text="Email:" VerticalAlignment="Top" Width="53" TextAlignment="Center"/>
                             <TextBox x:Name="textBoxAccountUsername" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Width="224" Margin="90,27,0,0"/>
