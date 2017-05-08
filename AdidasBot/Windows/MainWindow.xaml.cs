@@ -267,25 +267,6 @@ namespace AdidasBot
             #endregion
 
 
-            #region dataGridNews Settings
-            dataGridNews.ItemsSource = Manager.news;
-            dataGridNews.AutoGenerateColumns = false;
-            dataGridNews.SelectionMode = DataGridSelectionMode.Single;
-            dataGridNews.IsReadOnly = true;
-
-            c = new DataGridTextColumn();
-            c.Header = "Title";
-            c.Binding = new Binding("Title");
-            c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-            dataGridNews.Columns.Add(c);
-
-            c = new DataGridTextColumn();
-            c.Header = "Date";
-            c.Binding = new Binding("Date");
-            c.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
-            dataGridNews.Columns.Add(c);
-            #endregion
-
         }
 
 
@@ -1114,18 +1095,6 @@ namespace AdidasBot
 
         }
 
-        private void dataGridNews_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            News selected_news = dataGridNews.SelectedItem as News;
-
-            if (selected_news != null)
-            {
-                NewsWindow nw = new NewsWindow(selected_news);
-                nw.ShowDialog();
-            }
-
-        }
-
         private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
@@ -1224,5 +1193,18 @@ namespace AdidasBot
             }
         }
 
+        private void buttonUpdate_Click(object sender, RoutedEventArgs e)
+        {
+
+            MessageBox.Show(Updater.GetMD5());
+
+            //if (true) // if update available
+            //{
+            //    // then download updater.exe
+            //    // close this process 
+            //    // and run updater
+            //}
+
+        }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using AdidasBot;
+using AdidasCarterPro.Model;
 using Cryptlex;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -25,19 +27,29 @@ namespace AdidasCarterPro.Windows
         public StartWindow()
         {
             Mutex m = new Mutex(true, "{c1ac06c5-fd46-4423-8999-acfe7667d009}");
-            
-            if(m.WaitOne(TimeSpan.Zero, true))
+
+            if (m.WaitOne(TimeSpan.Zero, true))
             {
-                check();
-                m.ReleaseMutex();
-            }else
+                bool status = checkUpdates();
+                if (status == false)
+                {
+                    checkLicense();
+                    m.ReleaseMutex();
+                }
+                else
+                {
+                    // open updater and close this process
+                    Process.Start("updater.exe");
+                    Application.Current.Shutdown();
+                }
+            } else
             {
                 App.Current.Shutdown();
             }
 
         }
 
-        private void check()
+        private void checkLicense()
         {
             LexActivator.SetVersionGUID("44F2F567-E715-1F19-93D5-E376D65434A5", LexActivator.PermissionFlags.LA_USER);
             LexActivator.SetDayIntervalForServerCheck(1);
@@ -46,12 +58,12 @@ namespace AdidasCarterPro.Windows
             int statusG;
             statusG = LexActivator.IsProductGenuine();
             Console.WriteLine(statusG);
-            
+
             if (statusG == LexActivator.LA_OK)
             {
                 MainWindow mw = new MainWindow();
                 mw.Show();
-            }else
+            } else
             {
                 ActivateWindow aw = new ActivateWindow();
                 aw.Show();
@@ -59,6 +71,38 @@ namespace AdidasCarterPro.Windows
 
             this.Close();
 
+        }
+
+
+        private bool checkUpdates()
+        {
+            bool status = false;
+            Updater updater = new Updater();
+
+            // check if new update is available
+            Task t = Task.Run(async () => status = await updater.checkForUpdates());
+            t.Wait();
+
+            if (status == true)
+            {
+
+                // check if updater already exists
+
+
+                Console.WriteLine("DOWNLOAD UPDATER CALLED...");
+                // if it is download updater and return true
+                t = Task.Run(async () => status = await updater.downloadUpdater());
+                t.Wait();
+
+
+            }else
+            {
+                // if it's not return false
+                return false;
+            }
+
+
+            return status;
         }
 
     }

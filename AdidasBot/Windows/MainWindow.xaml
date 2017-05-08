@@ -231,10 +231,10 @@
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="groupBox3" Grid.Row="1" Grid.Column="1" Header="News" >
+                    <GroupBox x:Name="groupBox3" Grid.Row="1" Grid.Column="1" Header="Updates" >
                         <Grid>
-                            <DataGrid x:Name="dataGridNews" Margin="10" MouseDoubleClick="dataGridNews_MouseDoubleClick"/>
-
+                            <!--<DataGrid x:Name="dataGridNews" Margin="10" MouseDoubleClick="dataGridNews_MouseDoubleClick"/>-->
+                            <Button Name="buttonUpdate" Content="Update" Width="100" Height="20" Click="buttonUpdate_Click"/>
                             <!--<TextBox x:Name="textBoxNews" IsReadOnly="True" HorizontalAlignment="Center" Height="166" Margin="10" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="432"/>-->
                         </Grid>
                     </GroupBox>

@@ -204,9 +204,11 @@
     <Compile Include="Model\Captchas\AntiCaptchaAPI\Helper\JsonHelper.cs" />
     <Compile Include="Model\Captchas\AntiCaptchaAPI\Helper\StringHelper.cs" />
     <Compile Include="Model\Captchas\AntiCaptchaAPI\IAnticaptchaTaskProtocol.cs" />
+    <Compile Include="Model\Download.cs" />
     <Compile Include="Model\Dummy.cs" />
     <Compile Include="Model\News.cs" />
     <Compile Include="Model\SiteProfile.cs" />
+    <Compile Include="Model\Updater.cs" />
     <Compile Include="Windows\ActivateWindow.xaml.cs">
       <DependentUpon>ActivateWindow.xaml</DependentUpon>
     </Compile>
