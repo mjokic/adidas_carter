@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -30,7 +31,24 @@ namespace AdidasCarterPro.Model
                 string content = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(content);
 
-                status = bool.Parse(content);
+                try
+                {
+                    JObject json = JObject.Parse(content);
+
+                    bool update = bool.Parse(json.GetValue("update").ToString());
+                    string hash = json.GetValue("hash").ToString();
+
+
+                    if (update == true && hash != GetMD5())
+                    {
+                        status = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    status = false;
+                }
+                
             }
 
             return status;
@@ -66,7 +84,7 @@ namespace AdidasCarterPro.Model
             FileStream stream = new FileStream(Process.GetCurrentProcess().MainModule.FileName,
                 FileMode.Open, FileAccess.Read);
 
-            //md5.ComputeHash(stream);
+            md5.ComputeHash(stream);
 
             stream.Close();
 
@@ -74,7 +92,7 @@ namespace AdidasCarterPro.Model
             for (int i = 0; i < md5.Hash.Length; i++)
                 sb.Append(md5.Hash[i].ToString("x2"));
 
-            return sb.ToString().ToUpperInvariant();
+            return sb.ToString();
         }
 
     }
