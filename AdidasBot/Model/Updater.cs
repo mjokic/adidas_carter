@@ -26,7 +26,12 @@ namespace AdidasCarterPro.Model
             bool status = false;
             string url = "http://adidascarter.club/check.php";
 
-            using (HttpResponseMessage response = await this.client.PostAsync(url, null))
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict.Add("type", "pro");
+
+            var data = new FormUrlEncodedContent(dict);
+
+            using (HttpResponseMessage response = await this.client.PostAsync(url, data))
             {
                 string content = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(content);
@@ -54,7 +59,6 @@ namespace AdidasCarterPro.Model
             return status;
 
         }
-
 
         public async Task<bool> downloadUpdater()
         {
