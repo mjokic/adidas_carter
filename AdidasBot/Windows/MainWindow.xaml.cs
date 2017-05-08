@@ -1063,7 +1063,7 @@ namespace AdidasBot
 
             while (true)
             {
-                Thread.Sleep(60000);
+                Thread.Sleep(600000);
 
                 bool status = await updater.checkForUpdates();
 
@@ -1220,12 +1220,21 @@ namespace AdidasBot
 
         private async void buttonUpdate_Click(object sender, RoutedEventArgs e)
         {
-            Updater updater = new Updater();
-            await updater.downloadUpdater();
 
-            // open updater and close this process
-            Process.Start("updater.exe");
-            Application.Current.Shutdown();
+            MessageDialogResult status = await this.ShowMessageAsync("Are you sure?", "You're about to update software",
+                MessageDialogStyle.AffirmativeAndNegative, Manager.mdsQustion);
+
+            if(status == MessageDialogResult.Affirmative)
+            {
+                Updater updater = new Updater();
+                await updater.downloadUpdater();
+
+                // open updater and close this process
+                Process.Start("updater.exe");
+                Application.Current.Shutdown();
+            }
+
         }
+
     }
 }
