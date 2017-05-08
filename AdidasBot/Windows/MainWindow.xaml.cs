@@ -43,21 +43,14 @@ namespace AdidasBot
         public MainWindow()
         {
 
-            //if (checkProcess() == false)
-            //{
-            //    this.Close();
-            //}else
-            //{
-            //    Manager.initialize();
-            //}
-
             Manager.initialize();
-
 
             InitializeComponent();
 
             loadVariables();
             radioButton2Captcha.IsChecked = true;
+
+            Task.Run(() => checkForUpdate());
 
 
             #region Site Profiles
@@ -315,7 +308,9 @@ namespace AdidasBot
             if (buttonStart.Content as string == "Start")
             {
 
-                int status = LexActivator.IsProductActivated();
+                //int status = LexActivator.IsProductActivated();
+                int status = LexActivator.IsProductGenuine();
+
                 Console.WriteLine("Product Status: " + status);
                 if(status != LexActivator.LA_OK)
                 {
@@ -720,6 +715,29 @@ namespace AdidasBot
             dataGridCustomHeaders.Items.Refresh();
         }
 
+        private async void buttonDeactivateLicense_Click(object sender, RoutedEventArgs e)
+        {
+            var setts = new MetroDialogSettings { AnimateHide = false };
+            var what = await this.ShowMessageAsync("Are you sure?", "Your license will be deactivated!", MessageDialogStyle.AffirmativeAndNegative, Manager.mdsQustion);
+
+            if (what != MessageDialogResult.Affirmative) return;
+
+            int status;
+            status = LexActivator.DeactivateProduct();
+            if (status == LexActivator.LA_OK)
+            {
+                await this.ShowMessageAsync("Success!", "Your license is successfully deactivated!", MessageDialogStyle.Affirmative, setts);
+                //Environment.Exit(0);
+                Application.Current.Shutdown();
+
+            }
+            else
+            {
+                await this.ShowMessageAsync("Error!" + status, "Error while deactivating your license!", MessageDialogStyle.Affirmative, setts);
+                Application.Current.Shutdown();
+            }
+        }
+
 
         // methods
         private void solveCaptcha(Job j)
@@ -1038,7 +1056,36 @@ namespace AdidasBot
             return status;
         }
 
+
+        private async void checkForUpdate()
+        {
+            Updater updater = new Updater();
+
+            while (true)
+            {
+                Thread.Sleep(60000);
+
+                bool status = await updater.checkForUpdates();
+
+                if(status == true)
+                {
+                    App.Current.Dispatcher.Invoke((Action)delegate
+                    {
+                        buttonUpdate.IsEnabled = true;
+                        textBlock10.Text = "New version available!";
+                        textBlock10.Foreground = Brushes.Red;
+                    });
+                    break;
+
+                }
+
+            }
+
+
+
+        }
        
+
         // Menu Buttons
         private void MenuButtonExit_Click(object sender, RoutedEventArgs e)
         {
@@ -1171,40 +1218,14 @@ namespace AdidasBot
             }
         }
 
-        private async void buttonDeactivateLicense_Click(object sender, RoutedEventArgs e)
+        private async void buttonUpdate_Click(object sender, RoutedEventArgs e)
         {
-            var setts = new MetroDialogSettings { AnimateHide = false };
-            var what = await this.ShowMessageAsync("Are you sure?", "Your license will be deactivated!", MessageDialogStyle.AffirmativeAndNegative, Manager.mdsQustion);
+            Updater updater = new Updater();
+            await updater.downloadUpdater();
 
-            if (what != MessageDialogResult.Affirmative) return;
-
-            int status;
-            status = LexActivator.DeactivateProduct();
-            if(status == LexActivator.LA_OK)
-            {
-                await this.ShowMessageAsync("Success!", "Your license is successfully deactivated!", MessageDialogStyle.Affirmative, setts);
-                //Environment.Exit(0);
-                Application.Current.Shutdown();
-
-            }else
-            {
-                await this.ShowMessageAsync("Error!" + status, "Error while deactivating your license!", MessageDialogStyle.Affirmative, setts);
-                Application.Current.Shutdown();
-            }
-        }
-
-        private void buttonUpdate_Click(object sender, RoutedEventArgs e)
-        {
-
-            MessageBox.Show(Updater.GetMD5());
-
-            //if (true) // if update available
-            //{
-            //    // then download updater.exe
-            //    // close this process 
-            //    // and run updater
-            //}
-
+            // open updater and close this process
+            Process.Start("updater.exe");
+            Application.Current.Shutdown();
         }
     }
 }
