@@ -221,6 +221,13 @@ namespace AdidasBot
             int status = LexActivator.GetExtraActivationData(sb, 256);
             if(status == LexActivator.LA_OK) Username = sb.ToString();
 
+            uint days = 0;
+            status = LexActivator.GetDaysLeftToExpiration(ref days);
+            if (status == LexActivator.LA_OK) ExpireDate = days.ToString() + " days";
+
+            LicenseType = "PRO";
+
+
         }
 
     }

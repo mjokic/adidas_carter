@@ -33,8 +33,8 @@ namespace AdidasCarterPro.Windows
                 bool status = checkUpdates();
                 if (status == false)
                 {
-                    checkLicense();
                     m.ReleaseMutex();
+                    checkLicense();
                 }
                 else
                 {
