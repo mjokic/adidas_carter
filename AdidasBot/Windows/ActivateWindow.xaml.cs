@@ -30,7 +30,16 @@ namespace AdidasCarterPro.Windows
 
         public ActivateWindow()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.StackTrace);
+                MessageBox.Show(ex.Source);
+                throw;
+            }
         }
 
         private async void buttonActivate_Click(object sender, RoutedEventArgs e)

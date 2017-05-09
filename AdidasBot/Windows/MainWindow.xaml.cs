@@ -45,7 +45,15 @@ namespace AdidasBot
 
             Manager.initialize();
 
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.StackTrace);
+                MessageBox.Show(ex.Source);
+                throw;
+            }
 
             loadVariables();
             radioButton2Captcha.IsChecked = true;
