@@ -1,6 +1,4 @@
 ﻿using AdidasBot;
-using CefSharp;
-using CefSharp.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,56 +97,56 @@ namespace AdidasCarterPro.Windows
                             ";
 
             string url = "http://www." + Manager.selectedProfile.Domain.Replace("global.", "");
-            chrome.LoadHtml(content + Manager.siteKey + part2, url);
+            //chrome.LoadHtml(content + Manager.siteKey + part2, url);
         }
 
-        private async void getSolution()
-        {
-            Thread.Sleep(500);
-            Regex r = new Regex("<!--(.*?)-->");
+        //private async void getSolution()
+        //{
+        //    Thread.Sleep(500);
+        //    Regex r = new Regex("<!--(.*?)-->");
 
-            while (true)
-            {
-                string source = null;
-                try
-                {
-                    source = await chrome.GetSourceAsync();
-                }
-                catch (Exception)
-                {
-                    return;
-                }
+        //    while (true)
+        //    {
+        //        string source = null;
+        //        try
+        //        {
+        //            source = await chrome.GetSourceAsync();
+        //        }
+        //        catch (Exception)
+        //        {
+        //            return;
+        //        }
 
-                var tmp = r.Matches(source);
-                try
-                {
-                    this.CaptchaSolution = tmp[1].Groups[1].Value;
-                    this.Job.CaptchaResponse = this.CaptchaSolution;
-                    this.Job.Status = "Got captcha response!";
-                    Console.WriteLine("FOUND?");
-                    // closing z window
-                    App.Current.Dispatcher.Invoke((Action)delegate {
-                        this.Close();
-                    });
-                    return;
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    Console.WriteLine("NOT FOUND!");
-                }
+        //        var tmp = r.Matches(source);
+        //        try
+        //        {
+        //            this.CaptchaSolution = tmp[1].Groups[1].Value;
+        //            this.Job.CaptchaResponse = this.CaptchaSolution;
+        //            this.Job.Status = "Got captcha response!";
+        //            Console.WriteLine("FOUND?");
+        //            // closing z window
+        //            App.Current.Dispatcher.Invoke((Action)delegate {
+        //                this.Close();
+        //            });
+        //            return;
+        //        }
+        //        catch (ArgumentOutOfRangeException)
+        //        {
+        //            Console.WriteLine("NOT FOUND!");
+        //        }
 
-                Thread.Sleep(500);
-            }
+        //        Thread.Sleep(500);
+        //    }
 
 
-        }
+        //}
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Thread.Sleep(500);
             loadPage();
 
-            Task t = Task.Run(() => getSolution());
+            //Task t = Task.Run(() => getSolution());
         }
 
         //private async void button_Click(object sender, RoutedEventArgs e)

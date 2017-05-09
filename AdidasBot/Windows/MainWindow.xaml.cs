@@ -6,7 +6,6 @@ using AdidasBot.SplashTool;
 using AdidasBot.Windows;
 using AdidasCarterPro.Model;
 using AdidasCarterPro.Windows;
-using CefSharp;
 using Cryptlex;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
@@ -1121,11 +1120,7 @@ namespace AdidasBot
            
             if(j != null)
             {
-                var settings = new CefSettings();
-                settings.BrowserSubprocessPath = @"x86\CefSharp.BrowserSubprocess.exe";
-
-                Cef.Initialize(settings, performDependencyCheck: false, browserProcessHandler: null);
-
+               
                 ManualCaptchaSolvingWindow mw = new ManualCaptchaSolvingWindow(j);
                 mw.Show();
             }

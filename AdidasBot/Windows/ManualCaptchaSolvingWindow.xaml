@@ -4,11 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AdidasCarterPro.Windows"
-        xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
         mc:Ignorable="d"
         Title="Manual Captcha" Height="491.062" Width="931.1" Loaded="Window_Loaded" >
     <Grid Name="myGrid">
-        <cefSharp:ChromiumWebBrowser Name="chrome" />
+        <!--<cefSharp:ChromiumWebBrowser Name="chrome" />-->
         <!--<Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="838,10,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>-->
     </Grid>
 </Window>
