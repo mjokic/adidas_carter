@@ -27,11 +27,19 @@ namespace AdidasCarterPro.Windows
 
         public string CaptchaSolution { get; set; }
         public Job Job { get; set; }
+        //private ChromiumWebBrowser chrome;
 
         public ManualCaptchaSolvingWindow(Job job)
         {
             this.Job = job;
             InitializeComponent();
+
+            //var settings = new CefSettings();
+            //settings.BrowserSubprocessPath = @"x86\CefSharp.BrowserSubprocess.exe";
+
+            //Cef.Initialize(settings, performDependencyCheck: false, browserProcessHandler: null);
+
+
         }
 
         private void loadPage()
@@ -143,31 +151,31 @@ namespace AdidasCarterPro.Windows
             Task t = Task.Run(() => getSolution());
         }
 
-        private async void button_Click(object sender, RoutedEventArgs e)
-        {
-            string source = await chrome.GetSourceAsync();
+        //private async void button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    string source = await chrome.GetSourceAsync();
 
-            //string source = "aaaa<!--mkflalfjaakfjakfmak-->a<!--marko-->aabbask";
+        //    //string source = "aaaa<!--mkflalfjaakfjakfmak-->a<!--marko-->aabbask";
 
-            Regex r = new Regex("<!--(.*?)-->");
+        //    Regex r = new Regex("<!--(.*?)-->");
 
-            var tmp = r.Matches(source);
-            try
-            {
-                this.CaptchaSolution = tmp[1].Groups[1].Value;
-                this.Job.CaptchaResponse = this.CaptchaSolution;
-                this.Job.Status = this.CaptchaSolution;
-                Console.WriteLine("FOUND");
-                this.Close();
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                Console.WriteLine("NOT FOUND!");
-            }
+        //    var tmp = r.Matches(source);
+        //    try
+        //    {
+        //        this.CaptchaSolution = tmp[1].Groups[1].Value;
+        //        this.Job.CaptchaResponse = this.CaptchaSolution;
+        //        this.Job.Status = this.CaptchaSolution;
+        //        Console.WriteLine("FOUND");
+        //        this.Close();
+        //    }
+        //    catch (ArgumentOutOfRangeException)
+        //    {
+        //        Console.WriteLine("NOT FOUND!");
+        //    }
 
-            Thread.Sleep(500);
+        //    Thread.Sleep(500);
 
-        }
+        //}
 
 
     }
