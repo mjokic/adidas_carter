@@ -25,20 +25,14 @@ namespace AdidasCarterPro.Windows
 
         public string CaptchaSolution { get; set; }
         public Job Job { get; set; }
-        //private ChromiumWebBrowser chrome;
 
         public ManualCaptchaSolvingWindow(Job job)
         {
             this.Job = job;
             InitializeComponent();
 
-            //var settings = new CefSettings();
-            //settings.BrowserSubprocessPath = @"x86\CefSharp.BrowserSubprocess.exe";
-
-            //Cef.Initialize(settings, performDependencyCheck: false, browserProcessHandler: null);
-
-
         }
+
 
         private void loadPage()
         {
@@ -99,82 +93,12 @@ namespace AdidasCarterPro.Windows
             string url = "http://www." + Manager.selectedProfile.Domain.Replace("global.", "");
             //chrome.LoadHtml(content + Manager.siteKey + part2, url);
         }
-
-        //private async void getSolution()
-        //{
-        //    Thread.Sleep(500);
-        //    Regex r = new Regex("<!--(.*?)-->");
-
-        //    while (true)
-        //    {
-        //        string source = null;
-        //        try
-        //        {
-        //            source = await chrome.GetSourceAsync();
-        //        }
-        //        catch (Exception)
-        //        {
-        //            return;
-        //        }
-
-        //        var tmp = r.Matches(source);
-        //        try
-        //        {
-        //            this.CaptchaSolution = tmp[1].Groups[1].Value;
-        //            this.Job.CaptchaResponse = this.CaptchaSolution;
-        //            this.Job.Status = "Got captcha response!";
-        //            Console.WriteLine("FOUND?");
-        //            // closing z window
-        //            App.Current.Dispatcher.Invoke((Action)delegate {
-        //                this.Close();
-        //            });
-        //            return;
-        //        }
-        //        catch (ArgumentOutOfRangeException)
-        //        {
-        //            Console.WriteLine("NOT FOUND!");
-        //        }
-
-        //        Thread.Sleep(500);
-        //    }
-
-
-        //}
+       
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Thread.Sleep(500);
-            loadPage();
 
-            //Task t = Task.Run(() => getSolution());
         }
-
-        //private async void button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    string source = await chrome.GetSourceAsync();
-
-        //    //string source = "aaaa<!--mkflalfjaakfjakfmak-->a<!--marko-->aabbask";
-
-        //    Regex r = new Regex("<!--(.*?)-->");
-
-        //    var tmp = r.Matches(source);
-        //    try
-        //    {
-        //        this.CaptchaSolution = tmp[1].Groups[1].Value;
-        //        this.Job.CaptchaResponse = this.CaptchaSolution;
-        //        this.Job.Status = this.CaptchaSolution;
-        //        Console.WriteLine("FOUND");
-        //        this.Close();
-        //    }
-        //    catch (ArgumentOutOfRangeException)
-        //    {
-        //        Console.WriteLine("NOT FOUND!");
-        //    }
-
-        //    Thread.Sleep(500);
-
-        //}
-
 
     }
 }

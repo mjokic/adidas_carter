@@ -1120,9 +1120,7 @@ namespace AdidasBot
            
             if(j != null)
             {
-               
-                ManualCaptchaSolvingWindow mw = new ManualCaptchaSolvingWindow(j);
-                mw.Show();
+                this.ShowMessageAsync("Error!", "Under developments", MessageDialogStyle.Affirmative);
             }
 
         }
