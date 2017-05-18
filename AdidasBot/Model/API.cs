@@ -10,7 +10,7 @@ namespace AdidasCarterPro.Model
 {
     public class API
     {
-        private string url = "https://strikecarts.com/carts.json";
+        private string url = "https://www.strikecarts.com/carts.json";
         private string username = "3492jsdj";
         private string password = "hard";
 

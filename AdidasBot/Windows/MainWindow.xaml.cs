@@ -1089,8 +1089,6 @@ namespace AdidasBot
 
             }
 
-
-
         }
        
 
@@ -1142,10 +1140,6 @@ namespace AdidasBot
             WebBrowserWindow wb = new WebBrowserWindow(selectedJob);
             Manager.openedBrowser.Add(wb);
             wb.Show();
-
-            //testWindow tw = new testWindow(selectedJob);
-            //tw.Show();
-
 
         }
 

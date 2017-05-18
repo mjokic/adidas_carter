@@ -41,10 +41,13 @@ namespace AdidasCarterPro.Model
                     JObject json = JObject.Parse(content);
 
                     bool update = bool.Parse(json.GetValue("update").ToString());
-                    string hash = json.GetValue("hash").ToString();
+                    string hash1 = json.GetValue("hash1").ToString();
+                    string hash2 = json.GetValue("hash2").ToString();
 
 
-                    if (update == true && hash != GetMD5())
+                    string checkHash = GetMD5();
+
+                    if (update == true && hash1 != checkHash && hash2 != checkHash)
                     {
                         status = true;
                     }
