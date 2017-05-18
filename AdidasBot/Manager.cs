@@ -21,8 +21,9 @@ namespace AdidasBot
         public static string siteKey { get; set; }
 
         public static string Username;
-        public static string ExpireDate;
+        public static DateTime ExpireDate;
         public static string LicenseType;
+        public static string daysLeft;
 
         public static string myKey = null;
         public static string api2CaptchaKey = null;
@@ -222,6 +223,20 @@ namespace AdidasBot
         {
             Username = TA.GetExtraData();
             LicenseType = "PRO";
+        }
+
+        public static bool dateCheck()
+        {
+            bool status = false;
+
+            ExpireDate = Convert.ToDateTime(TA.GetFeatureValue("expire"));
+            Console.WriteLine(ExpireDate);
+
+            DateTime today = DateTime.Today;
+
+            if ((ExpireDate - today).TotalDays <= 0) status = true;
+
+            return status;
         }
 
     }

@@ -58,6 +58,7 @@ namespace AdidasCarterPro.Windows
 
                 status = Manager.TA.CheckAndSavePKey(pKey);
 
+
                 if (status)
                 {
                     Manager.TA.Activate(alias);

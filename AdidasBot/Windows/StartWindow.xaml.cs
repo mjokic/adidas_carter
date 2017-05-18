@@ -26,7 +26,8 @@ namespace AdidasCarterPro.Windows
     {
         public StartWindow()
         {
-            //try { 
+            try
+            {
                 Mutex m = new Mutex(true, "{c1ac06c5-fd46-4423-8999-acfe7667d009}");
 
                 if (m.WaitOne(TimeSpan.Zero, true))
@@ -47,19 +48,20 @@ namespace AdidasCarterPro.Windows
                 {
                     App.Current.Shutdown();
                 }
-            //}catch(Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message);
-            //    MessageBox.Show(ex.StackTrace);
-            //    App.Current.Shutdown();
-            //}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.StackTrace);
+                App.Current.Shutdown();
+            }
         }
 
         private void checkLicense()
         {
             IsGenuineResult genuine = Manager.TA.IsGenuine(7, 7, true);
 
-            if (genuine == IsGenuineResult.Genuine)
+            if (genuine == IsGenuineResult.Genuine && Manager.dateCheck() == false)
             {
                 MainWindow mw = new MainWindow();
                 mw.Show();

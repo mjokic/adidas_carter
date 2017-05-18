@@ -55,7 +55,8 @@ namespace AdidasBot
                 throw;
             }
 
-            loadVariables();
+            //loadVariables();
+            loadServerVars();
             radioButton2Captcha.IsChecked = true;
 
             Task.Run(() => checkForUpdate());
@@ -320,7 +321,7 @@ namespace AdidasBot
                 IsGenuineResult status = Manager.TA.IsGenuine();
 
                 Console.WriteLine("Product Status: " + status);
-                if(status != IsGenuineResult.Genuine)
+                if(status != IsGenuineResult.Genuine || Manager.dateCheck() == true)
                 {
                     Environment.Exit(0);
                     return;
@@ -1022,7 +1023,7 @@ namespace AdidasBot
         private void loadVariables()
         {
             textBlockLoggedInUser.Text = Manager.Username;
-            textBlockExpires.Text = Manager.ExpireDate;
+            textBlockExpires.Text = Manager.daysLeft.Substring(0,2);
             textBlockLicenseType.Text = Manager.LicenseType;
             
             Manager.api2CaptchaKey = Manager.readFromRegistry("2captchaApiKey");
@@ -1032,7 +1033,7 @@ namespace AdidasBot
             Manager.siteKey = captchaSiteKey;
             textBoxSiteKey.Text = captchaSiteKey;
 
-            loadServerVars();
+            //loadServerVars();
 
         }
 
@@ -1043,6 +1044,10 @@ namespace AdidasBot
             Manager.addToCartFunction = Manager.TA.GetFeatureValue("addToCartFunction");
             Manager.atcUrl = Manager.TA.GetFeatureValue("atcUrl");
             Manager.atcUrlPart = Manager.TA.GetFeatureValue("atcUrlPart");
+            //Manager.ExpireDate = Convert.ToDateTime(Manager.TA.GetFeatureValue("expire"));
+            Manager.daysLeft = ((Manager.ExpireDate - DateTime.Today).TotalDays).ToString();
+
+            loadVariables();
         }
 
 
