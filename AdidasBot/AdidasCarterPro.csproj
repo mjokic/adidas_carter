@@ -37,12 +37,12 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;LA_ANY_CPU</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -182,7 +182,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="LexActivator.cs" />
     <Compile Include="Model\API.cs" />
     <Compile Include="Model\Captchas\2Captcha.cs" />
     <Compile Include="Model\Captchas\AntiCaptcha.cs" />
@@ -202,6 +201,7 @@
     <Compile Include="Model\News.cs" />
     <Compile Include="Model\SiteProfile.cs" />
     <Compile Include="Model\Updater.cs" />
+    <Compile Include="TurboActivate.cs" />
     <Compile Include="Windows\ActivateWindow.xaml.cs">
       <DependentUpon>ActivateWindow.xaml</DependentUpon>
     </Compile>

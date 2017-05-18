@@ -1,9 +1,9 @@
 ﻿using AdidasBot;
 using AdidasCarterPro.Model;
-using Cryptlex;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -15,7 +15,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using wyDay.TurboActivate;
 
 namespace AdidasCarterPro.Windows
 {
@@ -26,7 +26,7 @@ namespace AdidasCarterPro.Windows
     {
         public StartWindow()
         {
-            try { 
+            //try { 
                 Mutex m = new Mutex(true, "{c1ac06c5-fd46-4423-8999-acfe7667d009}");
 
                 if (m.WaitOne(TimeSpan.Zero, true))
@@ -47,25 +47,19 @@ namespace AdidasCarterPro.Windows
                 {
                     App.Current.Shutdown();
                 }
-            }catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                MessageBox.Show(ex.StackTrace);
-                App.Current.Shutdown();
-            }
+            //}catch(Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message);
+            //    MessageBox.Show(ex.StackTrace);
+            //    App.Current.Shutdown();
+            //}
         }
 
         private void checkLicense()
         {
-            LexActivator.SetVersionGUID("44F2F567-E715-1F19-93D5-E376D65434A5", LexActivator.PermissionFlags.LA_USER);
-            LexActivator.SetDayIntervalForServerCheck(1);
-            LexActivator.SetGracePeriodForNetworkError(1);
+            IsGenuineResult genuine = Manager.TA.IsGenuine(7, 7, true);
 
-            int statusG;
-            statusG = LexActivator.IsProductGenuine();
-            Console.WriteLine(statusG);
-
-            if (statusG == LexActivator.LA_OK)
+            if (genuine == IsGenuineResult.Genuine)
             {
                 MainWindow mw = new MainWindow();
                 mw.Show();

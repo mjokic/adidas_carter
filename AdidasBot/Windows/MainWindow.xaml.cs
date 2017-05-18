@@ -6,7 +6,6 @@ using AdidasBot.SplashTool;
 using AdidasBot.Windows;
 using AdidasCarterPro.Model;
 using AdidasCarterPro.Windows;
-using Cryptlex;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.CSharp;
@@ -31,6 +30,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using wyDay.TurboActivate;
 
 namespace AdidasBot
 {
@@ -317,10 +317,10 @@ namespace AdidasBot
             {
 
                 //int status = LexActivator.IsProductActivated();
-                int status = LexActivator.IsProductGenuine();
+                IsGenuineResult status = Manager.TA.IsGenuine();
 
                 Console.WriteLine("Product Status: " + status);
-                if(status != LexActivator.LA_OK)
+                if(status != IsGenuineResult.Genuine)
                 {
                     Environment.Exit(0);
                     return;
@@ -730,18 +730,15 @@ namespace AdidasBot
 
             if (what != MessageDialogResult.Affirmative) return;
 
-            int status;
-            status = LexActivator.DeactivateProduct();
-            if (status == LexActivator.LA_OK)
-            {
+
+            try { 
+                Manager.TA.Deactivate();
                 await this.ShowMessageAsync("Success!", "Your license is successfully deactivated!", MessageDialogStyle.Affirmative, setts);
-                //Environment.Exit(0);
                 Application.Current.Shutdown();
 
-            }
-            else
+            }catch(Exception ex)
             {
-                await this.ShowMessageAsync("Error!" + status, "Error while deactivating your license!", MessageDialogStyle.Affirmative, setts);
+                await this.ShowMessageAsync("Error!", "Error while deactivating your license!", MessageDialogStyle.Affirmative, setts);
                 Application.Current.Shutdown();
             }
         }
@@ -1042,13 +1039,10 @@ namespace AdidasBot
 
         private void loadServerVars()
         {
-            StringBuilder sb = new StringBuilder(256);
-
-            if (LexActivator.GetCustomLicenseField("302", sb, 256) == LexActivator.LA_OK) Manager.adidasVar = sb.ToString();
-            if (LexActivator.GetCustomLicenseField("303", sb, 256) == LexActivator.LA_OK) Manager.addToCartFunction = sb.ToString();
-            if (LexActivator.GetCustomLicenseField("304", sb, 256) == LexActivator.LA_OK) Manager.atcUrl = sb.ToString();
-            if (LexActivator.GetCustomLicenseField("305", sb, 256) == LexActivator.LA_OK) Manager.atcUrlPart = sb.ToString();
-
+            Manager.adidasVar = Manager.TA.GetFeatureValue("adidasVar");
+            Manager.addToCartFunction = Manager.TA.GetFeatureValue("addToCartFunction");
+            Manager.atcUrl = Manager.TA.GetFeatureValue("atcUrl");
+            Manager.atcUrlPart = Manager.TA.GetFeatureValue("atcUrlPart");
         }
 
 

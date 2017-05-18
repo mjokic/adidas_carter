@@ -1,7 +1,6 @@
 ﻿using AdidasBot.Model;
 using AdidasBot.Model.Captchas;
 using AdidasBot.Windows;
-using Cryptlex;
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -12,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using wyDay.TurboActivate;
 
 namespace AdidasBot
 {
@@ -55,6 +55,9 @@ namespace AdidasBot
         public static bool useAntiCaptcha = false;
 
         public static Dictionary<string, string> sizes = new Dictionary<string, string>();
+
+        public static TurboActivate TA = new TurboActivate("4de5d381591dfd48877143.36833305");
+
 
         #region Server Variables
         public static string addToCartFunction = null;
@@ -217,17 +220,8 @@ namespace AdidasBot
 
         public static void initialize()
         {
-            StringBuilder sb = new StringBuilder(256);
-            int status = LexActivator.GetExtraActivationData(sb, 256);
-            if(status == LexActivator.LA_OK) Username = sb.ToString();
-
-            uint days = 0;
-            status = LexActivator.GetDaysLeftToExpiration(ref days);
-            if (status == LexActivator.LA_OK) ExpireDate = days.ToString() + " days";
-
+            Username = TA.GetExtraData();
             LicenseType = "PRO";
-
-
         }
 
     }

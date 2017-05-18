@@ -1,5 +1,4 @@
 ﻿using AdidasBot;
-using Cryptlex;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
@@ -53,27 +52,29 @@ namespace AdidasCarterPro.Windows
                 return;
             }
 
-            int status;
-            LexActivator.SetExtraActivationData(alias);
-            
 
-            status = LexActivator.SetProductKey(pKey);
+            bool status;
+            try {
 
-            if(status == LexActivator.LA_OK)
-            {
-                if (LexActivator.ActivateProduct() == LexActivator.LA_OK)
+                status = Manager.TA.CheckAndSavePKey(pKey);
+
+                if (status)
                 {
+                    Manager.TA.Activate(alias);
                     await this.ShowMessageAsync("Success!", "License Activated! Run software again!", MessageDialogStyle.Affirmative, this.dialogSettings);
                     this.Close();
-                }else
+
+                }
+                else
                 {
                     await this.ShowMessageAsync("Error!", "License key is not valid!", MessageDialogStyle.Affirmative, this.dialogSettings);
                 }
 
             }
-            else
+            catch (Exception ex)
             {
-                await this.ShowMessageAsync("Error!", "License key is not valid!", MessageDialogStyle.Affirmative, this.dialogSettings);
+                await this.ShowMessageAsync("Error!", ex.Message, MessageDialogStyle.Affirmative, this.dialogSettings);
+                return;
             }
 
         }
