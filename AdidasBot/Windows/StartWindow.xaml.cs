@@ -26,27 +26,33 @@ namespace AdidasCarterPro.Windows
     {
         public StartWindow()
         {
-            Mutex m = new Mutex(true, "{c1ac06c5-fd46-4423-8999-acfe7667d009}");
+            try { 
+                Mutex m = new Mutex(true, "{c1ac06c5-fd46-4423-8999-acfe7667d009}");
 
-            if (m.WaitOne(TimeSpan.Zero, true))
-            {
-                bool status = checkUpdates();
-                if (status == false)
+                if (m.WaitOne(TimeSpan.Zero, true))
                 {
-                    m.ReleaseMutex();
-                    checkLicense();
-                }
-                else
+                    bool status = checkUpdates();
+                    if (status == false)
+                    {
+                        m.ReleaseMutex();
+                        checkLicense();
+                    }
+                    else
+                    {
+                        // open updater and close this process
+                        Process.Start("updater.exe");
+                        Application.Current.Shutdown();
+                    }
+                } else
                 {
-                    // open updater and close this process
-                    Process.Start("updater.exe");
-                    Application.Current.Shutdown();
+                    App.Current.Shutdown();
                 }
-            } else
+            }catch(Exception ex)
             {
+                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.StackTrace);
                 App.Current.Shutdown();
             }
-
         }
 
         private void checkLicense()
