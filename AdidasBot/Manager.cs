@@ -23,7 +23,7 @@ namespace AdidasBot
         public static string Username;
         public static DateTime ExpireDate;
         public static string LicenseType;
-        public static string daysLeft;
+        public static double daysLeft;
 
         public static string myKey = null;
         public static string api2CaptchaKey = null;
@@ -234,7 +234,8 @@ namespace AdidasBot
 
             DateTime today = DateTime.Today;
 
-            if ((ExpireDate - today).TotalDays <= 0) status = true;
+            daysLeft = Math.Round((ExpireDate - today).TotalDays);
+            if (daysLeft <= 0) status = true;
 
             return status;
         }
