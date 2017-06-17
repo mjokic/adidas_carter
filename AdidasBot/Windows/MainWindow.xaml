@@ -14,12 +14,12 @@
 
     <Grid>
 
-        <Menu>
+        <!--<Menu>
             <MenuItem Header="File" Margin="0">
                 <MenuItem Name="MenuButtonExit" Header="Exit" Click="MenuButtonExit_Click"/>
             </MenuItem>
             <MenuItem Name="MenuButtonSplashTool" Header="Splash Tool" Click="MenuButtonSplashTool_Click"/>
-        </Menu>
+        </Menu>-->
 
         <TextBlock x:Name="textBlockLoggedInUser" Margin="0,6,20,0" TextWrapping="NoWrap" TextAlignment="Center" VerticalAlignment="Top" Text="username" HorizontalAlignment="Right" Width="80"/>
         <TextBlock x:Name="textblockJustText" Margin="0,6,100,0" TextWrapping="NoWrap" TextAlignment="Left" VerticalAlignment="Top" Text="Logged in as" HorizontalAlignment="Right" Width="70"/>
@@ -91,7 +91,7 @@
                         <ColumnDefinition Width="30"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    
+
                     <Button x:Name="buttonImportAccs" Content="Import" Grid.Row="0" Grid.Column="0" Margin="20" MaxWidth="150" Click="buttonImportAccs_Click"/>
                     <Button x:Name="buttonRemoveAccounts" Content="Remove" Grid.Row="0" Grid.Column="1" Margin="20" MaxWidth="150" Click="buttonRemoveAccounts_Click"/>
                     <TextBlock x:Name="textBlockNumberOfAccounts" Grid.Row="0" Grid.Column="2"  Margin="0,0,10,0" TextAlignment="Right" VerticalAlignment="Bottom" Text="{Binding ElementName=dataGridAccounts, Path=Items.Count}" ToolTip="Number Of Accounts"/>
@@ -129,20 +129,47 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    
+
                     <Button x:Name="buttonImportProxies" Content="Import" Grid.Row="0" Grid.Column="0" Width="150" Height="20" Click="buttonImportProxies_Click"/>
                     <Button x:Name="buttonRemoveProxy" Content="Remove" Grid.Row="1" Grid.Column="0"  Width="150" Height="20" Click="buttonRemoveProxy_Click"/>
                     <Button x:Name="buttonRemoveFalse" Content="Remove Dead Proxies" Grid.Row="1" Grid.Column="1" Width="150" Height="20" HorizontalAlignment="Left" Click="buttonRemoveFalse_Click"/>
 
                     <Button x:Name="buttonCheckroxy" Content="Check Proxy" Grid.Row="1" Grid.Column="4" Height="20" Margin="30,10,30,0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="buttonCheckroxy_Click"/>
                     <Slider x:Name="sliderThreadsNumber" Grid.Row="0" Grid.Column="4" Margin="10,20" VerticalAlignment="Center" SmallChange="1" Minimum="1" Maximum="100" Value="1" LargeChange="10" IsSnapToTickEnabled="True" ToolTip="Number of threads"/>
-                    
+
                     <TextBlock x:Name="textBlock8" TextWrapping="NoWrap" Margin="10,0,0,0" Text="1" Grid.Row="0" Grid.Column="4" VerticalAlignment="Bottom"/>
                     <TextBlock x:Name="textBlock9" TextWrapping="NoWrap" Margin="0,0,10,0" Text="100"  Grid.Row="0" Grid.Column="4" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
                     <TextBlock x:Name="textBlockProxyCheckThreads" Text="{Binding ElementName=sliderThreadsNumber, Path=Value}"  Grid.Row="0" Grid.Column="4" HorizontalAlignment="Center" TextWrapping="NoWrap" VerticalAlignment="Bottom"/>
                     <!--<TextBlock x:Name="textBlock10" TextWrapping="NoWrap" Text="Number Of Threads" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Left"/>-->
 
                     <DataGrid x:Name="dataGridProxies" Grid.Row="2" Grid.ColumnSpan="4" Margin="10,20,10,10"/>
+
+                </Grid>
+            </Controls:MetroTabItem>
+
+            <Controls:MetroTabItem x:Name="SplashTab" Header="Splash Bypass">
+                <Grid Background="#FFE5E5E5">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <!--<ColumnDefinition Width="*"/>-->
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox x:Name="textBoxSplashBypassUrl" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="668"/>
+                    <Button Name="buttonStartSplashBypass" Content="Start" HorizontalAlignment="Left" Margin="706,9,0,0" VerticalAlignment="Top" Width="75"/>
+
+                    <TextBlock x:Name="textBlock11" HorizontalAlignment="Left" Margin="409,60,0,0" TextWrapping="Wrap" Text="Threads" VerticalAlignment="Top"/>
+                    <Slider Name="sliderSplashBypassThreads" HorizontalAlignment="Left" Margin="192,81,0,0" VerticalAlignment="Top" Height="18" Width="460"/>
+
+                    <TextBlock x:Name="textBlock18" HorizontalAlignment="Left" Margin="386,110,0,0" TextWrapping="Wrap" Text="Refresh time" VerticalAlignment="Top"/>
+                    <Slider Name="sliderSplashBypassRefreshTime" HorizontalAlignment="Left" Margin="192,128,0,0" VerticalAlignment="Top" Height="18" Width="460"/>
+
+                    <DataGrid Name="dataGridSplashTasks" Grid.Row="1" Grid.ColumnSpan="2"/>
+
 
                 </Grid>
             </Controls:MetroTabItem>
@@ -242,7 +269,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            
+
                             <TextBlock Name="textBlock10" Grid.Row="0" Text="Software is up to date!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             <Button Name="buttonUpdate" Grid.Row="1" Content="Update" Width="100" Height="20" VerticalAlignment="Top" Click="buttonUpdate_Click" IsEnabled="False"/>
                         </Grid>

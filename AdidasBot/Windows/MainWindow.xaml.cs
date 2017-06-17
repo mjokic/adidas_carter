@@ -48,7 +48,8 @@ namespace AdidasBot
             try
             {
                 InitializeComponent();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.StackTrace);
                 MessageBox.Show(ex.Source);
@@ -64,7 +65,7 @@ namespace AdidasBot
 
             #region Site Profiles
             Manager.siteProfiles.Add(new SiteProfile("United Kingdom", Manager.adidasVar + ".co.uk", "Sites-adidas-GB-Site", "en_GB", Manager.sizesEnglish));
-            Manager.siteProfiles.Add(new SiteProfile("United States", "global."+Manager.adidasVar+".com", "Sites-adidas-US-Site", "en_US", Manager.sizesAmerica));
+            Manager.siteProfiles.Add(new SiteProfile("United States", "global." + Manager.adidasVar + ".com", "Sites-adidas-US-Site", "en_US", Manager.sizesAmerica));
             Manager.siteProfiles.Add(new SiteProfile("Australia", Manager.adidasVar + ".com.au", "Sites-adidas-AU-Site", "en_AU", Manager.sizesAmerica));
             Manager.siteProfiles.Add(new SiteProfile("Canada", Manager.adidasVar + ".ca", "Sites-adidas-CA-Site", "en_CA", Manager.sizesAmerica));
 
@@ -88,7 +89,7 @@ namespace AdidasBot
             Manager.siteProfiles.Add(new SiteProfile("Sweeden", Manager.adidasVar + ".se", "Sites-adidas-SE-Site", "sv_SE", Manager.sizesEurope));
             #endregion
 
-            
+
             // setting up comboBoxSizes
             comboBoxSizes.ItemsSource = Manager.sizes.Keys;
 
@@ -249,6 +250,53 @@ namespace AdidasBot
             dataGridProxies.Columns.Add(c);
             #endregion
 
+            #region dataGrid SplashTasks
+            dataGridSplashTasks.ItemsSource = Manager.proxies;
+            dataGridSplashTasks.AutoGenerateColumns = false;
+            dataGridSplashTasks.IsReadOnly = true;
+            dataGridSplashTasks.SelectionMode = DataGridSelectionMode.Single;
+
+            c = new DataGridTextColumn();
+            c.Header = "IP";
+            c.Binding = new Binding("IP");
+            c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            dataGridSplashTasks.Columns.Add(c);
+
+            c = new DataGridTextColumn();
+            c.Header = "Port";
+            c.Binding = new Binding("Port");
+            c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            dataGridSplashTasks.Columns.Add(c);
+
+            c = new DataGridTextColumn();
+            c.Header = "Username";
+            c.Binding = new Binding("Username");
+            c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            dataGridSplashTasks.Columns.Add(c);
+
+            c = new DataGridTextColumn();
+            c.Header = "Password";
+            c.Binding = new Binding("Password");
+            c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            dataGridSplashTasks.Columns.Add(c);
+
+            c = new DataGridTextColumn();
+            c.Header = "Status";
+            c.Binding = new Binding("Status");
+            c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            dataGridSplashTasks.Columns.Add(c);
+
+            Binding binding = new Binding("PropertyName") { Mode = BindingMode.TwoWay };
+            DataGridTemplateColumn templateColumn = new DataGridTemplateColumn { CanUserReorder = false, Width = 85, CanUserSort = true };
+            BindingOperations.SetBinding(templateColumn, DataGridColumn.HeaderProperty, binding);
+            DataTemplate dataTemplate = new DataTemplate();
+            FrameworkElementFactory tmpButton = new FrameworkElementFactory(typeof(Button));
+            tmpButton.SetBinding(Button.NameProperty, binding);
+            dataTemplate.VisualTree = tmpButton;
+            templateColumn.CellTemplate = dataTemplate;
+            dataGridSplashTasks.Columns.Add(templateColumn);
+
+            #endregion
 
             #region dataGridCustomHeaders Settings
             dataGridCustomHeaders.ItemsSource = Manager.customHeaders;
@@ -321,14 +369,14 @@ namespace AdidasBot
                 IsGenuineResult status = Manager.TA.IsGenuine();
 
                 Console.WriteLine("Product Status: " + status);
-                if(status != IsGenuineResult.Genuine || Manager.dateCheck() == true)
+                if (status != IsGenuineResult.Genuine || Manager.dateCheck() == true)
                 {
                     Environment.Exit(0);
                     return;
                 }
 
                 // display error if site is not selected
-                if(Manager.selectedProfile == null) { this.ShowMessageAsync("Error!", "Please select site in options tab!", MessageDialogStyle.Affirmative); return; }
+                if (Manager.selectedProfile == null) { this.ShowMessageAsync("Error!", "Please select site in options tab!", MessageDialogStyle.Affirmative); return; }
 
                 Manager.stopAllTask = false;
                 buttonStart.Content = "Stop";
@@ -352,7 +400,7 @@ namespace AdidasBot
                         atcMethod.Invoke(this, new object[] { (Job)j });
 
                     }
-                    
+
 
                 }
 
@@ -383,11 +431,12 @@ namespace AdidasBot
         private async void buttonRemoveJobs_Click(object sender, RoutedEventArgs e)
         {
             Job selectedJob = dataGridJobs.SelectedItem as Job;
-            
-            if(selectedJob != null)
+
+            if (selectedJob != null)
             {
                 Manager.jobs.Remove(selectedJob);
-            }else
+            }
+            else
             {
 
                 var mb = await this.ShowMessageAsync("Are you sure?", "All tasks will be deleted", MessageDialogStyle.AffirmativeAndNegative, Manager.mdsQustion);
@@ -408,11 +457,12 @@ namespace AdidasBot
 
         private void buttonAssingProxiesWindow_Click(object sender, RoutedEventArgs e)
         {
-            if(Manager.proxies.Count == 0)
+            if (Manager.proxies.Count == 0)
             {
                 this.ShowMessageAsync("Error!", "You don't have proxies!", MessageDialogStyle.Affirmative);
                 return;
-            }else if(Manager.jobs.Count == 0)
+            }
+            else if (Manager.jobs.Count == 0)
             {
                 this.ShowMessageAsync("Error!", "You don't have tasks!", MessageDialogStyle.Affirmative);
                 return;
@@ -420,10 +470,11 @@ namespace AdidasBot
 
             AssingProxiesWindow apWindow;
             Job selectedJob = dataGridJobs.SelectedItem as Job;
-            if(selectedJob != null)
+            if (selectedJob != null)
             {
                 apWindow = new AssingProxiesWindow(selectedJob);
-            }else
+            }
+            else
             {
                 apWindow = new AssingProxiesWindow();
             }
@@ -435,7 +486,7 @@ namespace AdidasBot
 
         private void buttonAssingAccosWindow_Click(object sender, RoutedEventArgs e)
         {
-            if(Manager.accounts.Count == 0)
+            if (Manager.accounts.Count == 0)
             {
                 this.ShowMessageAsync("Error!", "You don't have any accounts!", MessageDialogStyle.Affirmative);
                 return;
@@ -526,7 +577,7 @@ namespace AdidasBot
             string email = textBoxAccountUsername.Text;
             string password = passBoxAccountPassword.Password;
 
-            if(email != "" && password != "")
+            if (email != "" && password != "")
             {
                 Manager.accounts.Add(new Account(email, password));
             }
@@ -598,7 +649,7 @@ namespace AdidasBot
         {
             foreach (Proxy proxy in Manager.proxies.ToList())
             {
-                if(proxy.Status == "False")
+                if (proxy.Status == "False")
                 {
                     Manager.proxies.Remove(proxy);
                 }
@@ -616,7 +667,7 @@ namespace AdidasBot
             // number of threads - make it customizable
             int tnum = int.Parse(textBlockProxyCheckThreads.Text);
 
-            for(int i = 0; i <= tnum; i++)
+            for (int i = 0; i <= tnum; i++)
             {
                 Thread t = new Thread(() => proxyCheckWorker(proxyQueue));
                 t.Start();
@@ -631,7 +682,7 @@ namespace AdidasBot
             }
 
         }
-       
+
 
         // OPTIONS TAB
         private void buttonSaveSettings_Click(object sender, RoutedEventArgs e)
@@ -643,7 +694,7 @@ namespace AdidasBot
                 Manager.api2CaptchaKey = textBoxCaptchaApiKey.Password;
                 Manager.myKey = Manager.api2CaptchaKey;
             }
-            else if(radioButtonAntiCaptcha.IsChecked == true)
+            else if (radioButtonAntiCaptcha.IsChecked == true)
             {
                 Manager.use2Captcha = false;
                 Manager.useAntiCaptcha = true;
@@ -689,10 +740,11 @@ namespace AdidasBot
             string customHeaderName = textBoxHeaderName.Text;
             string customHeaderValue = textBoxHeaderValue.Text;
 
-            if(Manager.customHeaders.ContainsKey(customHeaderName))
+            if (Manager.customHeaders.ContainsKey(customHeaderName))
             {
                 Manager.customHeaders[customHeaderName] = customHeaderValue;
-            }else
+            }
+            else
             {
                 Manager.customHeaders.Add(customHeaderName, customHeaderValue);
             }
@@ -711,7 +763,7 @@ namespace AdidasBot
             {
                 var mbr = await this.ShowMessageAsync("Are you sure?", "All custom headers will be removed", MessageDialogStyle.AffirmativeAndNegative, Manager.mdsQustion);
 
-                if(mbr == MessageDialogResult.Affirmative)
+                if (mbr == MessageDialogResult.Affirmative)
                 {
 
                     foreach (var key in Manager.customHeaders.Keys.ToList())
@@ -732,12 +784,14 @@ namespace AdidasBot
             if (what != MessageDialogResult.Affirmative) return;
 
 
-            try { 
+            try
+            {
                 Manager.TA.Deactivate();
                 await this.ShowMessageAsync("Success!", "Your license is successfully deactivated!", MessageDialogStyle.Affirmative, setts);
                 Application.Current.Shutdown();
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 await this.ShowMessageAsync("Error!", "Error while deactivating your license!", MessageDialogStyle.Affirmative, setts);
                 Application.Current.Shutdown();
@@ -757,7 +811,7 @@ namespace AdidasBot
                     _2Captcha captcha = new _2Captcha(Manager.myKey, Manager.siteKey);
                     captchaResponse = await captcha.solveCaptcha();
                 }
-                else if(Manager.useAntiCaptcha)
+                else if (Manager.useAntiCaptcha)
                 {
                     AntiCaptcha captcha = new AntiCaptcha(Manager.myKey, Manager.siteKey);
                     captchaResponse = await captcha.solveCaptcha();
@@ -865,7 +919,7 @@ namespace AdidasBot
                             {
                                 //API api = new API(j.Size, Manager.selectedProfile.Domain, j.Acc.Username, j.Acc.Password, j.PID);
                                 //if (await api.SendCart()) j.Status = "On Site";
-                                if(await sendToSite(j)) j.Status = "On Site";
+                                if (await sendToSite(j)) j.Status = "On Site";
 
 
                             }
@@ -900,11 +954,13 @@ namespace AdidasBot
             {
                 //j.Handler.CookieContainer = j.Acc.Handler.CookieContainer;
                 j.Status = "Logged in";
-            }else if (loginStatus == null)
+            }
+            else if (loginStatus == null)
             {
                 j.Status = "You've been blocked!";
                 j.Acc = null;
-            } else
+            }
+            else
             {
                 j.Status = "Failed login to " + j.Acc.ToString();
                 j.Acc = null;
@@ -934,13 +990,13 @@ namespace AdidasBot
 
             try
             {
-                if(proxyParts.Length == 4)
+                if (proxyParts.Length == 4)
                 {
                     username = proxyParts[2];
                     password = proxyParts[3];
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
@@ -969,7 +1025,7 @@ namespace AdidasBot
             {
                 return false;
             }
-            
+
             Account acc = new Account(username, password);
             Manager.accounts.Add(acc);
             return true;
@@ -1007,7 +1063,7 @@ namespace AdidasBot
                 title = "2Captcha";
 
             }
-            else if(radioButtonAntiCaptcha.IsChecked == true)
+            else if (radioButtonAntiCaptcha.IsChecked == true)
             {
                 AntiCaptcha antiCaptcha = new AntiCaptcha(Manager.myKey, Manager.siteKey);
                 balance = antiCaptcha.getBalance();
@@ -1025,7 +1081,7 @@ namespace AdidasBot
             textBlockLoggedInUser.Text = Manager.Username;
             textBlockExpires.Text = Manager.daysLeft.ToString();
             textBlockLicenseType.Text = Manager.LicenseType;
-            
+
             Manager.api2CaptchaKey = Manager.readFromRegistry("2captchaApiKey");
             Manager.apiAntiCaptchaKey = Manager.readFromRegistry("antiCaptchaApiKey");
 
@@ -1074,7 +1130,7 @@ namespace AdidasBot
 
                 bool status = await updater.checkForUpdates();
 
-                if(status == true)
+                if (status == true)
                 {
                     App.Current.Dispatcher.Invoke((Action)delegate
                     {
@@ -1089,7 +1145,7 @@ namespace AdidasBot
             }
 
         }
-       
+
 
         // Menu Buttons
         private void MenuButtonExit_Click(object sender, RoutedEventArgs e)
@@ -1114,8 +1170,8 @@ namespace AdidasBot
         private void dataGridJobs_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Job j = dataGridJobs.SelectedItem as Job;
-           
-            if(j != null)
+
+            if (j != null)
             {
                 this.ShowMessageAsync("Error!", "Under developments", MessageDialogStyle.Affirmative);
             }
@@ -1128,7 +1184,7 @@ namespace AdidasBot
             if (selectedJob == null) return;
 
             // if there's running browsers close them all
-            if(Manager.openedBrowser.Count != 0)
+            if (Manager.openedBrowser.Count != 0)
             {
                 foreach (WebBrowserWindow wbw in Manager.openedBrowser)
                 {
@@ -1147,7 +1203,8 @@ namespace AdidasBot
             e.Cancel = true;
             MessageDialogResult what;
 
-            MetroDialogSettings settings = new MetroDialogSettings {
+            MetroDialogSettings settings = new MetroDialogSettings
+            {
                 AnimateHide = false,
                 AffirmativeButtonText = "YES",
                 NegativeButtonText = "NO"
@@ -1209,10 +1266,11 @@ namespace AdidasBot
         {
             string selectedItem = comboBoxSizes.SelectedItem as string;
 
-            if(selectedItem == "Custom")
+            if (selectedItem == "Custom")
             {
                 textBoxCustomSize.Visibility = Visibility.Visible;
-            }else
+            }
+            else
             {
                 textBoxCustomSize.Visibility = Visibility.Hidden;
             }
@@ -1224,7 +1282,7 @@ namespace AdidasBot
             MessageDialogResult status = await this.ShowMessageAsync("Are you sure?", "You're about to update software",
                 MessageDialogStyle.AffirmativeAndNegative, Manager.mdsQustion);
 
-            if(status == MessageDialogResult.Affirmative)
+            if (status == MessageDialogResult.Affirmative)
             {
                 Updater updater = new Updater();
                 await updater.downloadUpdater();
