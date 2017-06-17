@@ -288,6 +288,7 @@
     </EmbeddedResource>
     <None Include="bin\Debug\myKej.pfx" />
     <None Include="bin\Debug\myKej.snk" />
+    <None Include="LicensingFiles\TurboActivate.dat" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -315,6 +316,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ToDo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LicensingFiles\TurboActivate.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
