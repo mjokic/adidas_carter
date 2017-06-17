@@ -20,13 +20,15 @@ namespace AdidasBot
             this.pid = pid;
             this.sizeCode = sizeCode;
             this.quantity = quantity;
+            this.cookieContainer = new CookieContainer();
             this.handler = new HttpClientHandler();
             this.handler.UseCookies = true;
-            this.handler.CookieContainer = new CookieContainer();
+            //this.handler.CookieContainer = new CookieContainer();
+            this.handler.CookieContainer = this.cookieContainer;
             //this.handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
             this.client = new HttpClient(this.handler);
             this.userAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:53.0) Gecko/20100101 Firefox/53.0";
-            this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+            //this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
             this.client.DefaultRequestHeaders.Add("Accept", "*/*");
             this.client.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
             this.client.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
@@ -137,6 +139,14 @@ namespace AdidasBot
             set { handler = value; }
         }
 
+        private CookieContainer cookieContainer;
+
+        public CookieContainer CookieContainer
+        {
+            get { return cookieContainer; }
+            set { cookieContainer = value; }
+        }
+
 
         private string status;
 
@@ -209,19 +219,36 @@ namespace AdidasBot
 
             var data = new FormUrlEncodedContent(dict);
 
+            // if there is user-agent in custom settings don't add default one
+            // custom user-agent will be added bellow in for loop
+            if(!Manager.customHeaders.ContainsKey("User-Agent"))
+            {
+                client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+            }
+
             // add custom headers here...
             foreach (string key in Manager.customHeaders.Keys)
             {
-                Console.WriteLine(key.ToLower());
+                Console.WriteLine(key.ToLower() + " <-- CUSTOM HEADERS");
                 if (key.ToLower() == "user-agent")
                 {
                     this.userAgent = Manager.customHeaders[key];
+                    client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+                    continue;
+                } else if (key.ToLower() == "cookie")
+                {
+                    // uradi za cookie sta treba
+                    String cookieString = Manager.customHeaders[key];
+                    //client.DefaultRequestHeaders.Add("Cookie", cookieString);
+                    prepareCookies(cookieString);
                     continue;
                 }
 
-                client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
 
+                client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
             }
+
+            Console.WriteLine("IZASO...!");
 
 
             //client.DefaultRequestHeaders.Add("Origin", "http://www.adidas.com");
@@ -282,6 +309,27 @@ namespace AdidasBot
         }
 
 
+        private void prepareCookies(String cookieString)
+        {
+
+            String[] tmp1 = cookieString.Split(';');
+            Console.WriteLine(tmp1.Length + "<--- lenght");
+
+            for (int i = 0; i < tmp1.Length - 1; i++)
+            {
+                //Console.WriteLine(item.Replace(" ", ""));
+                String[] tmp2 = tmp1[i].Replace(" ", "").Split(new char[] { '=' }, 2);
+
+                Console.WriteLine(tmp2[0] + " " + tmp2[1]);
+
+                // add this cookie to cookie container
+                Cookie cookie = 
+                    new Cookie(tmp2[0], tmp2[1], "/", Manager.selectedProfile.Domain);
+                this.cookieContainer.Add(cookie);
+
+            }
+
+        }
 
         public override string ToString()
         {
