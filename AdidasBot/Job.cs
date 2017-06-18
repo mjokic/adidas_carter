@@ -27,7 +27,7 @@ namespace AdidasBot
             this.handler.CookieContainer = this.cookieContainer;
             //this.handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
             this.client = new HttpClient(this.handler);
-            this.userAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:53.0) Gecko/20100101 Firefox/53.0";
+            this.userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36";
             //this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
             this.client.DefaultRequestHeaders.Add("Accept", "*/*");
             this.client.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
@@ -248,8 +248,6 @@ namespace AdidasBot
                 client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
             }
 
-            Console.WriteLine("IZASO...!");
-
 
             //client.DefaultRequestHeaders.Add("Origin", "http://www.adidas.com");
             //client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0");
@@ -313,14 +311,11 @@ namespace AdidasBot
         {
 
             String[] tmp1 = cookieString.Split(';');
-            Console.WriteLine(tmp1.Length + "<--- lenght");
 
             for (int i = 0; i < tmp1.Length - 1; i++)
             {
                 //Console.WriteLine(item.Replace(" ", ""));
                 String[] tmp2 = tmp1[i].Replace(" ", "").Split(new char[] { '=' }, 2);
-
-                Console.WriteLine(tmp2[0] + " " + tmp2[1]);
 
                 // add this cookie to cookie container
                 Cookie cookie = 
