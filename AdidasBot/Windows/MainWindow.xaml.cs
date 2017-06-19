@@ -1072,6 +1072,16 @@ namespace AdidasBot
             {
                 Thread.Sleep(600000);
 
+                //int status = LexActivator.IsProductActivated();
+                IsGenuineResult licenseStatus = Manager.TA.IsGenuine();
+
+                Console.WriteLine("Product Status: " + licenseStatus);
+                if (licenseStatus != IsGenuineResult.Genuine || Manager.dateCheck() == true)
+                {
+                    Environment.Exit(0);
+                    return;
+                }
+
                 bool status = await updater.checkForUpdates();
 
                 if(status == true)
