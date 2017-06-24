@@ -32,7 +32,8 @@ namespace AdidasBot
             this.client.DefaultRequestHeaders.Add("Accept", "*/*");
             this.client.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
             this.client.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
-            this.client.DefaultRequestHeaders.Add("Referer", "http://www.adidas.co.uk/" + this.pid + ".html");
+            //this.client.DefaultRequestHeaders.Add("Referer", "http://www.adidas.co.uk/" + this.pid + ".html");
+            this.client.DefaultRequestHeaders.Add("Referer", "http://www." + Manager.selectedProfile.Domain + "/" + this.pid + ".html");
             this.client.DefaultRequestHeaders.Add("Connection", "close");
 
             if (Manager.Username == "username")
@@ -202,6 +203,8 @@ namespace AdidasBot
         // Methods
         public async Task<Boolean> addToCart2()
         {
+            await getCookies();
+
             bool _status = false;
             string _url = Manager.atcUrl + Manager.selectedProfile.Domain.Replace("global.", "") +
                 "/on/demandware.store/" + Manager.selectedProfile.InUrlLong + "/" + Manager.selectedProfile.InUrlShort +
@@ -306,6 +309,17 @@ namespace AdidasBot
             }
         }
 
+        public async Task getCookies()
+        {
+            string homeUrl = "http://www." + Manager.selectedProfile.Domain;
+
+            this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+
+            using (HttpResponseMessage response = await this.client.GetAsync(homeUrl))
+            {
+                string content = await response.Content.ReadAsStringAsync();
+            }
+        }
 
         private void prepareCookies(String cookieString)
         {
