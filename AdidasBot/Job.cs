@@ -333,8 +333,9 @@ namespace AdidasBot
                 String[] tmp2 = tmp1[i].Replace(" ", "").Split(new char[] { '=' }, 2);
 
                 // add this cookie to cookie container
-                Cookie cookie = 
-                    new Cookie(tmp2[0], tmp2[1], "/", Manager.selectedProfile.Domain);
+                Cookie cookie =
+                    new Cookie(tmp2[0], tmp2[1], "/", Manager.selectedProfile.Domain.Replace("global", ""));
+
                 this.cookieContainer.Add(cookie);
 
             }
