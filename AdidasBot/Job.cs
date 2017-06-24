@@ -36,6 +36,34 @@ namespace AdidasBot
             this.client.DefaultRequestHeaders.Add("Referer", "http://www." + Manager.selectedProfile.Domain + "/" + this.pid + ".html");
             this.client.DefaultRequestHeaders.Add("Connection", "close");
 
+            // add custom headers here...
+            foreach (string key in Manager.customHeaders.Keys)
+            {
+                Console.WriteLine(key.ToLower() + " <-- CUSTOM HEADERS");
+                if (key.ToLower() == "user-agent")
+                {
+                    this.userAgent = Manager.customHeaders[key];
+                    client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+                    continue;
+                }
+                else if (key.ToLower() == "cookie")
+                {
+                    // uradi za cookie sta treba
+                    String cookieString = Manager.customHeaders[key];
+                    //client.DefaultRequestHeaders.Add("Cookie", cookieString);
+                    prepareCookies(cookieString);
+                    continue;
+                }
+
+
+                client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
+            }
+
+            if (!Manager.customHeaders.ContainsKey("User-Agent"))
+            {
+                this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+            }
+
             if (Manager.Username == "username")
             {
                 throw new Exception();
@@ -224,32 +252,32 @@ namespace AdidasBot
 
             // if there is user-agent in custom settings don't add default one
             // custom user-agent will be added bellow in for loop
-            if(!Manager.customHeaders.ContainsKey("User-Agent"))
-            {
-                client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
-            }
+            //if(!Manager.customHeaders.ContainsKey("User-Agent"))
+            //{
+            //    client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+            //}
 
-            // add custom headers here...
-            foreach (string key in Manager.customHeaders.Keys)
-            {
-                Console.WriteLine(key.ToLower() + " <-- CUSTOM HEADERS");
-                if (key.ToLower() == "user-agent")
-                {
-                    this.userAgent = Manager.customHeaders[key];
-                    client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
-                    continue;
-                } else if (key.ToLower() == "cookie")
-                {
-                    // uradi za cookie sta treba
-                    String cookieString = Manager.customHeaders[key];
-                    //client.DefaultRequestHeaders.Add("Cookie", cookieString);
-                    prepareCookies(cookieString);
-                    continue;
-                }
+            //// add custom headers here...
+            //foreach (string key in Manager.customHeaders.Keys)
+            //{
+            //    Console.WriteLine(key.ToLower() + " <-- CUSTOM HEADERS");
+            //    if (key.ToLower() == "user-agent")
+            //    {
+            //        this.userAgent = Manager.customHeaders[key];
+            //        client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+            //        continue;
+            //    } else if (key.ToLower() == "cookie")
+            //    {
+            //        // uradi za cookie sta treba
+            //        String cookieString = Manager.customHeaders[key];
+            //        //client.DefaultRequestHeaders.Add("Cookie", cookieString);
+            //        prepareCookies(cookieString);
+            //        continue;
+            //    }
 
 
-                client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
-            }
+            //    client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
+            //}
 
             await getCookies();
 
