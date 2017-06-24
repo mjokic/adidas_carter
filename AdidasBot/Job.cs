@@ -203,7 +203,7 @@ namespace AdidasBot
         // Methods
         public async Task<Boolean> addToCart2()
         {
-            await getCookies();
+            //await getCookies();
 
             bool _status = false;
             string _url = Manager.atcUrl + Manager.selectedProfile.Domain.Replace("global.", "") +
@@ -251,6 +251,7 @@ namespace AdidasBot
                 client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
             }
 
+            await getCookies();
 
             //client.DefaultRequestHeaders.Add("Origin", "http://www.adidas.com");
             //client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0");
@@ -313,7 +314,7 @@ namespace AdidasBot
         {
             string homeUrl = "http://www." + Manager.selectedProfile.Domain;
 
-            this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+            //this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
 
             using (HttpResponseMessage response = await this.client.GetAsync(homeUrl))
             {
