@@ -27,7 +27,9 @@ namespace AdidasCarterPro.Model
 
         public async Task StartDownload()
         {
-            _httpClient = new HttpClient { Timeout = TimeSpan.FromDays(1) };
+            _httpClient = 
+                new HttpClient(new HttpClientHandler() { UseProxy = false })
+                    { Timeout = TimeSpan.FromDays(1) };
 
             using (var response = await _httpClient.GetAsync(_downloadUrl, HttpCompletionOption.ResponseHeadersRead))
                 await DownloadFileFromHttpResponseMessage(response);
