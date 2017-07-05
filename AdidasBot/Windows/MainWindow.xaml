@@ -8,9 +8,9 @@
         mc:Ignorable="d"
         ShowIconOnTitleBar="False"
         TitleAlignment="Center"
-        MinHeight="500"
+        MinHeight="550"
         MinWidth="1000"
-        Title="Adidas Carter - PRO" Height="527.9" Width="1039.5" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
+        Title="Adidas Carter - PRO" Height="550" Width="1050" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
 
     <Grid>
 
@@ -161,7 +161,7 @@
                     </Grid.ColumnDefinitions>
 
 
-                    <GroupBox x:Name="groupBox" Grid.Row="0" Grid.Column="0" Header="Variables" >
+                    <GroupBox x:Name="groupBox" Grid.Row="0" Grid.Column="0" Header="Variables" Margin="5,5,5,196" Grid.RowSpan="2" >
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -169,6 +169,7 @@
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -189,12 +190,15 @@
                             <TextBlock x:Name="textBlock7" Grid.Row="3" Grid.Column="0" Text="Site:" VerticalAlignment="Center" HorizontalAlignment="Center" />
                             <ComboBox x:Name="comboBoxSites" Grid.Row="3" Grid.Column="1" Margin="50,5,50,0" VerticalAlignment="Center" />
 
-                            <Button x:Name="buttonTest" Grid.Row="4" Grid.ColumnSpan="2" Content="Check Balance" VerticalAlignment="Bottom" Margin="50,5,50,0" MaxWidth="400" Click="buttonTest_Click"/>
-                            <Button x:Name="buttonSaveSettings" Grid.Row="5" Grid.ColumnSpan="2" Content="Save" VerticalAlignment="Top" Margin="50,5,50,0" MaxWidth="400" Click="buttonSaveSettings_Click"/>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Custom Page:" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            <TextBox x:Name="textBoxCustomPage" Grid.Row="4" Grid.Column="1" Margin="50,5,50,0" VerticalAlignment="Center" />
+
+                            <Button x:Name="buttonTest" Grid.Row="5" Grid.ColumnSpan="2" Content="Check Balance" VerticalAlignment="Bottom" Margin="50,5,50,0" MaxWidth="400" Click="buttonTest_Click"/>
+                            <Button x:Name="buttonSaveSettings" Grid.Row="6" Grid.ColumnSpan="2" Content="Save" VerticalAlignment="Top" Margin="50,5,50,0" MaxWidth="400" Click="buttonSaveSettings_Click"/>
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="groupBox1" Grid.Row="0" Grid.Column="1" Header="Custom Headers" >
+                    <GroupBox x:Name="groupBox1" Grid.Row="0" Grid.Column="1" Header="Custom Headers" Margin="5,5,5,196" Grid.RowSpan="2" >
                         <Grid>
 
                             <Grid.RowDefinitions>
@@ -215,7 +219,7 @@
                             <DataGrid x:Name="dataGridCustomHeaders" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,5,0,0" MouseDoubleClick="dataGridCustomHeaders_MouseDoubleClick"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="groupBox2" Grid.Row="1" Grid.Column="0" Header="User Information" >
+                    <GroupBox x:Name="groupBox2" Grid.Row="1" Grid.Column="0" Header="User Information" Margin="5,30,5,5" >
                         <Grid>
                             <TextBlock x:Name="textBlock12" HorizontalAlignment="Left" Margin="56,22,0,0" TextWrapping="Wrap" Text="Username:" VerticalAlignment="Top"/>
                             <TextBlock x:Name="textBlock13" HorizontalAlignment="Left" Margin="127,22,0,0" TextWrapping="Wrap" Text="{Binding ElementName=textBlockLoggedInUser, Path=Text}" VerticalAlignment="Top"/>
@@ -231,7 +235,7 @@
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="groupBox3" Grid.Row="1" Grid.Column="1" Header="Updates" >
+                    <GroupBox x:Name="groupBox3" Grid.Row="1" Grid.Column="1" Header="Updates" Margin="5,30,5,5" >
                         <Grid>
 
                             <Grid.RowDefinitions>
