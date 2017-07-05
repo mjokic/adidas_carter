@@ -340,7 +340,7 @@ namespace AdidasBot
 
         public async Task getCookies()
         {
-            string homeUrl = "http://www." + Manager.selectedProfile.Domain;
+            string homeUrl = Manager.customPage;
 
             //this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
 

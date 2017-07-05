@@ -28,7 +28,7 @@ namespace AdidasBot
         public static string myKey = null;
         public static string api2CaptchaKey = null;
         public static string apiAntiCaptchaKey = null;
-
+        public static string customPage = null;
 
         public static bool stopAllTask = false;
 

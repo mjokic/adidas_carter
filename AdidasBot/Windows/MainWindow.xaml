@@ -188,10 +188,10 @@
                             <TextBox x:Name="textBoxSiteKey" Grid.Row="2" Grid.Column="1" Margin="10,5,10,0" VerticalAlignment="Center" />
 
                             <TextBlock x:Name="textBlock7" Grid.Row="3" Grid.Column="0" Text="Site:" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                            <ComboBox x:Name="comboBoxSites" Grid.Row="3" Grid.Column="1" Margin="50,5,50,0" VerticalAlignment="Center" />
+                            <ComboBox x:Name="comboBoxSites" Grid.Row="3" Grid.Column="1" Margin="50,5,50,0" VerticalAlignment="Center" SelectionChanged="comboBoxSites_SelectionChanged" />
 
                             <TextBlock Grid.Row="4" Grid.Column="0" Text="Custom Page:" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                            <TextBox x:Name="textBoxCustomPage" Grid.Row="4" Grid.Column="1" Margin="50,5,50,0" VerticalAlignment="Center" />
+                            <TextBox x:Name="textBoxCustomPage" Grid.Row="4" Grid.Column="1" Margin="10,5,10,0" VerticalAlignment="Center" />
 
                             <Button x:Name="buttonTest" Grid.Row="5" Grid.ColumnSpan="2" Content="Check Balance" VerticalAlignment="Bottom" Margin="50,5,50,0" MaxWidth="400" Click="buttonTest_Click"/>
                             <Button x:Name="buttonSaveSettings" Grid.Row="6" Grid.ColumnSpan="2" Content="Save" VerticalAlignment="Top" Margin="50,5,50,0" MaxWidth="400" Click="buttonSaveSettings_Click"/>

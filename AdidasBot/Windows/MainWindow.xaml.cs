@@ -668,6 +668,11 @@ namespace AdidasBot
 
             comboBoxSizes.ItemsSource = Manager.sizes.Keys;
 
+            Manager.customPage = textBoxCustomPage.Text;
+            if(Manager.customPage == null || Manager.customPage == string.Empty)
+            {
+                Manager.customPage = "http://www." + Manager.selectedProfile.Domain;
+            }
 
             Manager.saveToRegistry("siteKey", captchaSiteKey);
 
@@ -1226,6 +1231,13 @@ namespace AdidasBot
             {
                 textBoxCustomSize.Visibility = Visibility.Hidden;
             }
+        }
+
+        private void comboBoxSites_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SiteProfile siteProfile = (SiteProfile) comboBoxSites.SelectedItem;
+            string customPage = "http://www." + siteProfile.Domain;
+            textBoxCustomPage.Text = customPage;
         }
 
         private async void buttonUpdate_Click(object sender, RoutedEventArgs e)
