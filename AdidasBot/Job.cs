@@ -17,53 +17,55 @@ namespace AdidasBot
         // constructor without handler
         public Job(string pid, string sizeCode, int quantity)
         {
+            this.userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36";
+
             this.pid = pid;
             this.sizeCode = sizeCode;
             this.quantity = quantity;
             this.cookieContainer = new CookieContainer();
             this.handler = new HttpClientHandler();
             this.handler.UseCookies = true;
-            //this.handler.CookieContainer = new CookieContainer();
             this.handler.CookieContainer = this.cookieContainer;
+            //this.handler.CookieContainer = new CookieContainer();
             //this.handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-            this.client = new HttpClient(this.handler);
-            this.userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36";
             //this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+            //this.client.DefaultRequestHeaders.Add("Referer", "http://www.adidas.co.uk/" + this.pid + ".html");
+            this.client = new HttpClient(this.handler);
             this.client.DefaultRequestHeaders.Add("Accept", "*/*");
             this.client.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
             this.client.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
-            //this.client.DefaultRequestHeaders.Add("Referer", "http://www.adidas.co.uk/" + this.pid + ".html");
             this.client.DefaultRequestHeaders.Add("Referer", "http://www." + Manager.selectedProfile.Domain + "/" + this.pid + ".html");
             this.client.DefaultRequestHeaders.Add("Connection", "close");
 
-            // add custom headers here...
-            foreach (string key in Manager.customHeaders.Keys)
-            {
-                Console.WriteLine(key.ToLower() + " <-- CUSTOM HEADERS");
-                if (key.ToLower() == "user-agent")
-                {
-                    this.userAgent = Manager.customHeaders[key];
-                    client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
-                    continue;
-                }
-                else if (key.ToLower() == "cookie")
-                {
-                    // uradi za cookie sta treba
-                    String cookieString = Manager.customHeaders[key];
-                    //client.DefaultRequestHeaders.Add("Cookie", cookieString);
-                    prepareCookies(cookieString);
-                    continue;
-                }
+            //// add custom headers here...
+            //foreach (string key in Manager.customHeaders.Keys)
+            //{
+            //    Console.WriteLine(key.ToLower() + " <-- CUSTOM HEADERS");
+            //    if (key.ToLower() == "user-agent")
+            //    {
+            //        this.userAgent = Manager.customHeaders[key];
+            //        client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+            //        continue;
+            //    }
+            //    else if (key.ToLower() == "cookie")
+            //    {
+            //        // uradi za cookie sta treba
+            //        string cookieString = Manager.customHeaders[key];
+            //        //client.DefaultRequestHeaders.Add("Cookie", cookieString);
+            //        prepareCookies(cookieString);
+            //        continue;
+            //    }
 
 
-                client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
-            }
+            //    client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
+            //}
 
-            if (!Manager.customHeaders.ContainsKey("User-Agent"))
-            {
-                this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
-            }
+            //if (!Manager.customHeaders.ContainsKey("User-Agent"))
+            //{
+            //    this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+            //}
 
+            // security check
             if (Manager.Username == "username")
             {
                 throw new Exception();
@@ -250,43 +252,36 @@ namespace AdidasBot
 
             var data = new FormUrlEncodedContent(dict);
 
-            // if there is user-agent in custom settings don't add default one
-            // custom user-agent will be added bellow in for loop
-            //if(!Manager.customHeaders.ContainsKey("User-Agent"))
-            //{
-            //    client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
-            //}
-
-            //// add custom headers here...
-            //foreach (string key in Manager.customHeaders.Keys)
-            //{
-            //    Console.WriteLine(key.ToLower() + " <-- CUSTOM HEADERS");
-            //    if (key.ToLower() == "user-agent")
-            //    {
-            //        this.userAgent = Manager.customHeaders[key];
-            //        client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
-            //        continue;
-            //    } else if (key.ToLower() == "cookie")
-            //    {
-            //        // uradi za cookie sta treba
-            //        String cookieString = Manager.customHeaders[key];
-            //        //client.DefaultRequestHeaders.Add("Cookie", cookieString);
-            //        prepareCookies(cookieString);
-            //        continue;
-            //    }
+            // add custom headers here...
+            foreach (string key in Manager.customHeaders.Keys)
+            {
+                Console.WriteLine(key.ToLower() + " <-- CUSTOM HEADERS");
+                if (key.ToLower() == "user-agent")
+                {
+                    this.userAgent = Manager.customHeaders[key];
+                    client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+                    continue;
+                }
+                else if (key.ToLower() == "cookie")
+                {
+                    // uradi za cookie sta treba
+                    string cookieString = Manager.customHeaders[key];
+                    //client.DefaultRequestHeaders.Add("Cookie", cookieString);
+                    prepareCookies(cookieString);
+                    continue;
+                }
 
 
-            //    client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
-            //}
+                client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
+            }
+
+            if (!Manager.customHeaders.ContainsKey("User-Agent"))
+            {
+                this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+            }
 
             await getCookies();
-
-            //client.DefaultRequestHeaders.Add("Origin", "http://www.adidas.com");
-            //client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0");
-            //client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
-            //client.DefaultRequestHeaders.Add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-            //client.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
-            //client.DefaultRequestHeaders.Add("Connection", "close");
+            
 
             using (HttpResponseMessage response = await this.client.PostAsync(_url, data))
             {
@@ -309,7 +304,6 @@ namespace AdidasBot
                 }
                 else if(content.Contains("dwfrm_cart_checkoutShortcutPaypal"))
                 {
-                    //await openCart();
                     this.Status = "OK";
                     _status = true;
 
