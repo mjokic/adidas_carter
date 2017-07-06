@@ -459,7 +459,7 @@ namespace AdidasBot
             {
                 if (j.Status == "OK" && j.Acc != null)
                 {
-                    Task.Run(async () => await sendToSite(j));
+                    Task.Run(() => sendToSite(j));
                 }
             }
         }
@@ -785,32 +785,25 @@ namespace AdidasBot
             j.Retries += 1;
             bool _status = false;
 
-            Task t = Task.Run(async () =>
+            _status = j.addToCart2().Result;
+
+            if (_status)
             {
-                //_status = await j.addToCart();
-                _status = await j.addToCart2();
-
-                //if (_status && !Manager.stopAllTask)
-                if (_status)
+                App.Current.Dispatcher.Invoke((Action) delegate
                 {
-                    App.Current.Dispatcher.Invoke((Action)async delegate
+                    if (checkBoxSendToSite.IsChecked == true && j.Acc != null)
                     {
-                        if (checkBoxSendToSite.IsChecked == true && j.Acc != null)
-                        {
-                            if (await sendToSite(j)) j.Status = "On Site";
-                        }
+                        if (sendToSite(j))
+                            j.Status = "On Site";
+                    }
 
-                        Manager.jobs.Remove(j);
-                        Manager.inCartJobs.Add(j);
+                    Manager.jobs.Remove(j);
+                    Manager.inCartJobs.Add(j);
 
-                    });
+                });
 
-                }
+            }
 
-            });
-            //// here
-            //Manager.runningTasks.Add(t);
-            //t.ContinueWith(task => checkTasks());
 
             return _status;
 
@@ -818,7 +811,7 @@ namespace AdidasBot
 
 
         [ObfuscationAttribute(Exclude = true)]
-        private async void cartAfterCaptcha(Job j)
+        private void cartAfterCaptcha(Job j)
         {
             bool _status = false;
             //while (_status == false && !Manager.stopAllTask)
@@ -860,13 +853,13 @@ namespace AdidasBot
                     if (_status)
                     {
                         Console.WriteLine("STEP 2...");
-                        App.Current.Dispatcher.Invoke((Action)async delegate
+                        App.Current.Dispatcher.Invoke((Action) delegate
                         {
                             if (checkBoxSendToSite.IsChecked == true && j.Acc != null)
                             {
                                 //API api = new API(j.Size, Manager.selectedProfile.Domain, j.Acc.Username, j.Acc.Password, j.PID);
                                 //if (await api.SendCart()) j.Status = "On Site";
-                                if(await sendToSite(j)) j.Status = "On Site";
+                                if(sendToSite(j)) j.Status = "On Site";
 
 
                             }
@@ -1050,11 +1043,13 @@ namespace AdidasBot
         }
 
 
-        private async Task<bool> sendToSite(Job j)
+        private bool sendToSite(Job j)
         {
             bool status = false;
-            API api = new API(j.Size, Manager.selectedProfile.Domain, j.Acc.Username, j.Acc.Password, j.PID);
-            if (await api.SendCart())
+            API api =
+                new API(j.Size, Manager.selectedProfile.Domain, j.Acc.Username, j.Acc.Password, j.PID);
+
+            if (api.SendCart().Result)
             {
                 j.Status = "On Site";
             }
