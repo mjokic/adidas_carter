@@ -366,9 +366,7 @@ namespace AdidasBot
             // for each job solve captcha on new thread
             foreach (Job j in Manager.jobs)
             {
-
-                solveCaptcha(j);
-
+                Task.Run(() => solveCaptcha(j));
             }
 
         }
@@ -748,34 +746,32 @@ namespace AdidasBot
         {
             string captchaResponse = null;
             j.Status = "Getting captcha response...";
-            Task t = Task.Run(() =>
+
+            if (Manager.use2Captcha)
             {
-                if (Manager.use2Captcha)
-                {
-                    _2Captcha captcha = new _2Captcha(Manager.myKey, Manager.siteKey);
-                    captchaResponse = captcha.solveCaptcha();
-                }
-                else if(Manager.useAntiCaptcha)
-                {
-                    AntiCaptcha captcha = new AntiCaptcha(Manager.myKey, Manager.siteKey);
-                    captchaResponse = captcha.solveCaptcha();
-                }
+                _2Captcha captcha = new _2Captcha(Manager.myKey, Manager.siteKey);
+                captchaResponse = captcha.solveCaptcha();
+            }
+            else if(Manager.useAntiCaptcha)
+            {
+                AntiCaptcha captcha = new AntiCaptcha(Manager.myKey, Manager.siteKey);
+                captchaResponse = captcha.solveCaptcha();
+            }
 
 
-                if (captchaResponse == "false")
-                {
-                    j.Status = "Error Getting Captcha!";
+            if (captchaResponse == "false")
+            {
+                j.Status = "Error Getting Captcha!";
 
-                }
-                else
-                {
-                    //_status = true;
-                    j.Status = "Got captcha response!";
-                    j.CaptchaResponse = captchaResponse;
+            }
+            else
+            {
+                //_status = true;
+                j.Status = "Got captcha response!";
+                j.CaptchaResponse = captchaResponse;
 
-                }
+            }
 
-            });
 
         }
 
