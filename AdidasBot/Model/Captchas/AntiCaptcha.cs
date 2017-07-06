@@ -28,9 +28,9 @@ namespace AdidasBot.Model.Captchas
 
 
         [ObfuscationAttribute(Exclude = true)]
-        public async Task<string> solveCaptcha()
+        public string solveCaptcha()
         {
-            string captchaResponse = await getCaptchaResponse();
+            string captchaResponse = getCaptchaResponse().Result;
             if (captchaResponse == null) return "false";
 
             return captchaResponse;

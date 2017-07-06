@@ -75,6 +75,12 @@ namespace AdidasBot.Model.Captchas.AntiCaptchaAPI
         [ObfuscationAttribute(Exclude = true)]
         public bool WaitForResult(int maxSeconds = 120, int currentSecond = 0)
         {
+            // added this check so i can stop task while waiting for captcha
+            if (Manager.ct.IsCancellationRequested)
+            {
+                return false;
+            }
+
             if (currentSecond >= maxSeconds)
             {
                 DebugHelper.Out("Time's out.", DebugHelper.Type.Error);
