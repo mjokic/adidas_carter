@@ -343,6 +343,9 @@ namespace AdidasBot
                         {
                             _status = await cartAfterCaptcha(j);
                         });
+                        // here
+                        Manager.runningTasks.Add(t);
+                        t.ContinueWith(task => checkTasks());
 
                     }
                     else
@@ -814,6 +817,9 @@ namespace AdidasBot
                 }
 
             });
+            // here
+            Manager.runningTasks.Add(t);
+            t.ContinueWith(task => checkTasks());
 
             return _status;
 
@@ -1258,5 +1264,28 @@ namespace AdidasBot
 
         }
 
+
+        // here
+        private void checkTasks()
+        {
+            
+            for (int i = 0; i < Manager.runningTasks.Count; i++)
+            {
+                Task task = Manager.runningTasks[i];
+
+                if (task.IsCompleted)
+                {
+                    Manager.runningTasks.Remove(task);
+                }
+            }
+
+            if (Manager.runningTasks.Count == 0)
+            {
+                App.Current.Dispatcher.Invoke((Action) delegate
+                {
+                    buttonStart.Content = "Start";
+                });
+            }
+        }
     }
 }

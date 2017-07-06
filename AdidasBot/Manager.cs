@@ -32,6 +32,8 @@ namespace AdidasBot
 
         public static bool stopAllTask = false;
 
+        public static List<Task> runningTasks = new List<Task>();
+
         public static ObservableCollection<Job> jobs = new ObservableCollection<Job>();
         public static ObservableCollection<Job> inCartJobs = new ObservableCollection<Job>();
         public static ObservableCollection<Proxy> proxies = new ObservableCollection<Proxy>();
