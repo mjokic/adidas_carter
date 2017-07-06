@@ -813,31 +813,17 @@ namespace AdidasBot
             //while (_status == false && !Manager.stopAllTask)
             while (_status == false && !Manager.ct.IsCancellationRequested)
             {
-                string captchaResponse = null;
-
                 j.Status = "Getting captcha response...";
 
-                if (Manager.use2Captcha)
-                {
-                    _2Captcha captcha = new _2Captcha(Manager.myKey, Manager.siteKey);
-                    captchaResponse = captcha.solveCaptcha();
-                }
-                else if (Manager.useAntiCaptcha)
-                {
-                    AntiCaptcha captcha = new AntiCaptcha(Manager.myKey, Manager.siteKey);
-                    captchaResponse = captcha.solveCaptcha();
-                }
+                solveCaptcha(j);
 
-
-                if (captchaResponse == "false")
+                if (j.CaptchaResponse == "false")
                 {
                     j.Status = "Error Getting Captcha!";
-
                 }
                 else
                 {
                     j.Status = "Got captcha response!";
-                    j.CaptchaResponse = captchaResponse;
 
                     j.Retries += 1;
                     _status = j.addToCart2().Result;
@@ -853,12 +839,9 @@ namespace AdidasBot
                         {
                             if (checkBoxSendToSite.IsChecked == true && j.Acc != null)
                             {
-                                //API api = new API(j.Size, Manager.selectedProfile.Domain, j.Acc.Username, j.Acc.Password, j.PID);
-                                //if (await api.SendCart()) j.Status = "On Site";
                                 if(sendToSite(j)) j.Status = "On Site";
-
-
                             }
+
                             Manager.jobs.Remove(j);
                             Manager.inCartJobs.Add(j);
                             Console.WriteLine("KAO JE ODRADJENO!");
