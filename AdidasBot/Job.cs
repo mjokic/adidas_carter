@@ -17,22 +17,55 @@ namespace AdidasBot
         // constructor without handler
         public Job(string pid, string sizeCode, int quantity)
         {
+            this.userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36";
+
             this.pid = pid;
             this.sizeCode = sizeCode;
             this.quantity = quantity;
+            this.cookieContainer = new CookieContainer();
             this.handler = new HttpClientHandler();
             this.handler.UseCookies = true;
-            this.handler.CookieContainer = new CookieContainer();
+            this.handler.CookieContainer = this.cookieContainer;
+            //this.handler.CookieContainer = new CookieContainer();
             //this.handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            //this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+            //this.client.DefaultRequestHeaders.Add("Referer", "http://www.adidas.co.uk/" + this.pid + ".html");
             this.client = new HttpClient(this.handler);
-            this.userAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:53.0) Gecko/20100101 Firefox/53.0";
-            this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
             this.client.DefaultRequestHeaders.Add("Accept", "*/*");
             this.client.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
             this.client.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
-            this.client.DefaultRequestHeaders.Add("Referer", "http://www.adidas.co.uk/" + this.pid + ".html");
+            this.client.DefaultRequestHeaders.Add("Referer", "http://www." + Manager.selectedProfile.Domain + "/" + this.pid + ".html");
             this.client.DefaultRequestHeaders.Add("Connection", "close");
 
+            //// add custom headers here...
+            //foreach (string key in Manager.customHeaders.Keys)
+            //{
+            //    Console.WriteLine(key.ToLower() + " <-- CUSTOM HEADERS");
+            //    if (key.ToLower() == "user-agent")
+            //    {
+            //        this.userAgent = Manager.customHeaders[key];
+            //        client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+            //        continue;
+            //    }
+            //    else if (key.ToLower() == "cookie")
+            //    {
+            //        // uradi za cookie sta treba
+            //        string cookieString = Manager.customHeaders[key];
+            //        //client.DefaultRequestHeaders.Add("Cookie", cookieString);
+            //        prepareCookies(cookieString);
+            //        continue;
+            //    }
+
+
+            //    client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
+            //}
+
+            //if (!Manager.customHeaders.ContainsKey("User-Agent"))
+            //{
+            //    this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+            //}
+
+            // security check
             if (Manager.Username == "username")
             {
                 throw new Exception();
@@ -137,6 +170,14 @@ namespace AdidasBot
             set { handler = value; }
         }
 
+        private CookieContainer cookieContainer;
+
+        public CookieContainer CookieContainer
+        {
+            get { return cookieContainer; }
+            set { cookieContainer = value; }
+        }
+
 
         private string status;
 
@@ -192,6 +233,8 @@ namespace AdidasBot
         // Methods
         public async Task<Boolean> addToCart2()
         {
+            //await getCookies();
+
             bool _status = false;
             string _url = Manager.atcUrl + Manager.selectedProfile.Domain.Replace("global.", "") +
                 "/on/demandware.store/" + Manager.selectedProfile.InUrlLong + "/" + Manager.selectedProfile.InUrlShort +
@@ -212,24 +255,33 @@ namespace AdidasBot
             // add custom headers here...
             foreach (string key in Manager.customHeaders.Keys)
             {
-                Console.WriteLine(key.ToLower());
+                Console.WriteLine(key.ToLower() + " <-- CUSTOM HEADERS");
                 if (key.ToLower() == "user-agent")
                 {
                     this.userAgent = Manager.customHeaders[key];
+                    client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+                    continue;
+                }
+                else if (key.ToLower() == "cookie")
+                {
+                    // uradi za cookie sta treba
+                    string cookieString = Manager.customHeaders[key];
+                    //client.DefaultRequestHeaders.Add("Cookie", cookieString);
+                    prepareCookies(cookieString);
                     continue;
                 }
 
-                client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
 
+                client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
             }
 
+            if (!Manager.customHeaders.ContainsKey("User-Agent"))
+            {
+                this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+            }
 
-            //client.DefaultRequestHeaders.Add("Origin", "http://www.adidas.com");
-            //client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0");
-            //client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
-            //client.DefaultRequestHeaders.Add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-            //client.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
-            //client.DefaultRequestHeaders.Add("Connection", "close");
+            await getCookies();
+            
 
             using (HttpResponseMessage response = await this.client.PostAsync(_url, data))
             {
@@ -252,7 +304,6 @@ namespace AdidasBot
                 }
                 else if(content.Contains("dwfrm_cart_checkoutShortcutPaypal"))
                 {
-                    //await openCart();
                     this.Status = "OK";
                     _status = true;
 
@@ -281,7 +332,37 @@ namespace AdidasBot
             }
         }
 
+        public async Task getCookies()
+        {
+            string homeUrl = Manager.customPage;
 
+            //this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
+
+            using (HttpResponseMessage response = await this.client.GetAsync(homeUrl))
+            {
+                string content = await response.Content.ReadAsStringAsync();
+            }
+        }
+
+        private void prepareCookies(String cookieString)
+        {
+
+            String[] tmp1 = cookieString.Split(';');
+
+            for (int i = 0; i < tmp1.Length - 1; i++)
+            {
+                //Console.WriteLine(item.Replace(" ", ""));
+                String[] tmp2 = tmp1[i].Replace(" ", "").Split(new char[] { '=' }, 2);
+
+                // add this cookie to cookie container
+                Cookie cookie =
+                    new Cookie(tmp2[0], tmp2[1], "/", Manager.selectedProfile.Domain.Replace("global", ""));
+
+                this.cookieContainer.Add(cookie);
+
+            }
+
+        }
 
         public override string ToString()
         {

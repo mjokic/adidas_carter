@@ -365,11 +365,11 @@ namespace AdidasBot
             if (buttonStart.Content as string == "Start")
             {
 
-                //int status = LexActivator.IsProductActivated();
-                IsGenuineResult status = Manager.TA.IsGenuine();
+                ////int status = LexActivator.IsProductActivated();
+                //IsGenuineResult status = Manager.TA.IsGenuine();
 
                 Console.WriteLine("Product Status: " + status);
-                if (status != IsGenuineResult.Genuine || Manager.dateCheck() == true)
+                if(status != IsGenuineResult.Genuine || Manager.dateCheck() == true)
                 {
                     Environment.Exit(0);
                     return;
@@ -391,6 +391,9 @@ namespace AdidasBot
                         {
                             _status = await cartAfterCaptcha(j);
                         });
+                        // here
+                        Manager.runningTasks.Add(t);
+                        t.ContinueWith(task => checkTasks());
 
                     }
                     else
@@ -719,6 +722,11 @@ namespace AdidasBot
 
             comboBoxSizes.ItemsSource = Manager.sizes.Keys;
 
+            Manager.customPage = textBoxCustomPage.Text;
+            if(Manager.customPage == null || Manager.customPage == string.Empty)
+            {
+                Manager.customPage = "http://www." + Manager.selectedProfile.Domain;
+            }
 
             Manager.saveToRegistry("siteKey", captchaSiteKey);
 
@@ -863,6 +871,9 @@ namespace AdidasBot
                 }
 
             });
+            // here
+            Manager.runningTasks.Add(t);
+            t.ContinueWith(task => checkTasks());
 
             return _status;
 
@@ -1128,6 +1139,16 @@ namespace AdidasBot
             {
                 Thread.Sleep(600000);
 
+                //int status = LexActivator.IsProductActivated();
+                IsGenuineResult licenseStatus = Manager.TA.IsGenuine();
+
+                Console.WriteLine("Product Status: " + licenseStatus);
+                if (licenseStatus != IsGenuineResult.Genuine || Manager.dateCheck() == true)
+                {
+                    Environment.Exit(0);
+                    return;
+                }
+
                 bool status = await updater.checkForUpdates();
 
                 if (status == true)
@@ -1276,6 +1297,13 @@ namespace AdidasBot
             }
         }
 
+        private void comboBoxSites_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SiteProfile siteProfile = (SiteProfile) comboBoxSites.SelectedItem;
+            string customPage = "http://www." + siteProfile.Domain;
+            textBoxCustomPage.Text = customPage;
+        }
+
         private async void buttonUpdate_Click(object sender, RoutedEventArgs e)
         {
 
@@ -1294,5 +1322,28 @@ namespace AdidasBot
 
         }
 
+
+        // here
+        private void checkTasks()
+        {
+            
+            for (int i = 0; i < Manager.runningTasks.Count; i++)
+            {
+                Task task = Manager.runningTasks[i];
+
+                if (task.IsCompleted)
+                {
+                    Manager.runningTasks.Remove(task);
+                }
+            }
+
+            if (Manager.runningTasks.Count == 0)
+            {
+                App.Current.Dispatcher.Invoke((Action) delegate
+                {
+                    buttonStart.Content = "Start";
+                });
+            }
+        }
     }
 }

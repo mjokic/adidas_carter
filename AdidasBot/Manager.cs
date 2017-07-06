@@ -28,9 +28,11 @@ namespace AdidasBot
         public static string myKey = null;
         public static string api2CaptchaKey = null;
         public static string apiAntiCaptchaKey = null;
-
+        public static string customPage = null;
 
         public static bool stopAllTask = false;
+
+        public static List<Task> runningTasks = new List<Task>();
 
         public static ObservableCollection<Job> jobs = new ObservableCollection<Job>();
         public static ObservableCollection<Job> inCartJobs = new ObservableCollection<Job>();

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -17,7 +18,10 @@ namespace AdidasCarterPro.Model
 
         public Updater()
         {
-            this.client = new HttpClient();
+            HttpClientHandler handler = new HttpClientHandler();
+            handler.UseProxy = false;
+            //handler.Proxy = new WebProxy();
+            this.client = new HttpClient(handler);
         }
 
 
