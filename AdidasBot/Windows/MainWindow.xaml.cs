@@ -776,12 +776,17 @@ namespace AdidasBot
         }
 
         [ObfuscationAttribute(Exclude = true)]
-        public bool addToCart(Job j)
+        public async Task<bool> addToCart(Job j)
         {
             j.Retries += 1;
             bool _status = false;
 
-            _status = j.addToCart2().Result;
+            _status = await j.addToCart2();
+            //_status = j.addToCart2().Result;
+            //Task.Run(async () => {
+            //    _status = await j.addToCart2();
+            //});
+
 
             if (_status)
             {
