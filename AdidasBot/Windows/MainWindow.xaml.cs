@@ -368,12 +368,12 @@ namespace AdidasBot
                 ////int status = LexActivator.IsProductActivated();
                 //IsGenuineResult status = Manager.TA.IsGenuine();
 
-                Console.WriteLine("Product Status: " + status);
-                if(status != IsGenuineResult.Genuine || Manager.dateCheck() == true)
-                {
-                    Environment.Exit(0);
-                    return;
-                }
+                //Console.WriteLine("Product Status: " + status);
+                //if(status != IsGenuineResult.Genuine || Manager.dateCheck() == true)
+                //{
+                //    Environment.Exit(0);
+                //    return;
+                //}
 
                 // display error if site is not selected
                 if (Manager.selectedProfile == null) { this.ShowMessageAsync("Error!", "Please select site in options tab!", MessageDialogStyle.Affirmative); return; }
