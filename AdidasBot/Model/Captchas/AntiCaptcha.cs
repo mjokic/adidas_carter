@@ -30,7 +30,7 @@ namespace AdidasBot.Model.Captchas
         [ObfuscationAttribute(Exclude = true)]
         public string solveCaptcha()
         {
-            string captchaResponse = getCaptchaResponse().Result;
+            string captchaResponse = getCaptchaResponse();
             if (captchaResponse == null) return "false";
 
             return captchaResponse;
@@ -38,7 +38,7 @@ namespace AdidasBot.Model.Captchas
 
 
         [ObfuscationAttribute(Exclude = true)]
-        private async Task<string> getCaptchaResponse()
+        private string getCaptchaResponse()
         {
             string captchaResponse = null;
 

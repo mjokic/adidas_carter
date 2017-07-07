@@ -332,13 +332,13 @@ namespace AdidasBot
                     if (Manager.cartAfterCaptcha)
                     {
                         // cartAfterCaptcha Option
-                        t = Task.Run(() => cartAfterCaptcha(j), Manager.ct);
+                        t = Task.Run(async () => await cartAfterCaptcha(j), Manager.ct);
 
                     }
                     else
                     {
                         // normal cart Option
-                        t = Task.Run(() => addToCart(j), Manager.ct);
+                        t = Task.Run(async () => await addToCart(j), Manager.ct);
 
                     }
 
@@ -366,7 +366,7 @@ namespace AdidasBot
             // for each job solve captcha on new thread
             foreach (Job j in Manager.jobs)
             {
-                Task.Run(() => solveCaptcha(j));
+                Task.Run( async () => await solveCaptcha(j));
             }
 
         }
@@ -742,7 +742,7 @@ namespace AdidasBot
 
 
         // methods
-        private void solveCaptcha(Job j)
+        private async Task solveCaptcha(Job j)
         {
             string captchaResponse = null;
             j.Status = "Getting captcha response...";
@@ -750,7 +750,7 @@ namespace AdidasBot
             if (Manager.use2Captcha)
             {
                 _2Captcha captcha = new _2Captcha(Manager.myKey, Manager.siteKey);
-                captchaResponse = captcha.solveCaptcha();
+                captchaResponse = await captcha.solveCaptcha();
             }
             else if(Manager.useAntiCaptcha)
             {
@@ -782,10 +782,6 @@ namespace AdidasBot
             bool _status = false;
 
             _status = await j.addToCart2();
-            //_status = j.addToCart2().Result;
-            //Task.Run(async () => {
-            //    _status = await j.addToCart2();
-            //});
 
 
             if (_status)
@@ -812,15 +808,14 @@ namespace AdidasBot
 
 
         [ObfuscationAttribute(Exclude = true)]
-        private void cartAfterCaptcha(Job j)
+        private async Task cartAfterCaptcha(Job j)
         {
             bool _status = false;
-            //while (_status == false && !Manager.stopAllTask)
             while (_status == false && !Manager.ct.IsCancellationRequested)
             {
                 j.Status = "Getting captcha response...";
 
-                solveCaptcha(j);
+                await solveCaptcha(j);
 
                 if (j.CaptchaResponse == "false")
                 {
@@ -831,15 +826,11 @@ namespace AdidasBot
                     j.Status = "Got captcha response!";
 
                     j.Retries += 1;
-                    _status = j.addToCart2().Result;
+                    _status = await j.addToCart2();
 
 
-                    Console.WriteLine("TREBA JOB DA SE ODRADI...!");
-                    Console.WriteLine(_status);
-                    //if (_status && !Manager.stopAllTask)
                     if (_status)
                     {
-                        Console.WriteLine("STEP 2...");
                         App.Current.Dispatcher.Invoke((Action) delegate
                         {
                             if (checkBoxSendToSite.IsChecked == true && j.Acc != null)
@@ -849,7 +840,6 @@ namespace AdidasBot
 
                             Manager.jobs.Remove(j);
                             Manager.inCartJobs.Add(j);
-                            Console.WriteLine("KAO JE ODRADJENO!");
 
                         });
 

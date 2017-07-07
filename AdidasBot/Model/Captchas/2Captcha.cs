@@ -26,10 +26,11 @@ namespace AdidasBot.Model.Captchas
         }
 
 
-        public string solveCaptcha()
+        public async Task<string> solveCaptcha()
         {
 
-            string captchaID = getCaptchaId().Result;
+            //string captchaID = getCaptchaId().Result;
+            string captchaID = await getCaptchaId();
             Console.WriteLine("Captcha id: " + captchaID);
 
             if (captchaID == null) return "false";
