@@ -687,12 +687,7 @@ namespace AdidasBot
 
             foreach (SplashTask st in Manager.splashTasks)
             {
-                // start tast..
-                // on success bypass start time like bellow
-                //st.timer.Start();
-
-                st.startTask();
-
+                Task.Run(new Action(st.startTask));
             }
 
         }
@@ -706,7 +701,9 @@ namespace AdidasBot
         private void buttonSplashAction_Click(object sender, RoutedEventArgs e)
         {
             // open headfull browser when splash bypassed with cookies and user-agent
-            
+            // or
+            // apply cookies and user-agent to custom headers
+               
             //for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
             //{
             //    Button button = null;

@@ -171,6 +171,12 @@
                     <Slider Name="sliderSplashBypassRefreshTime" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top" Height="18" Width="329"/>
 
                     <DataGrid Name="dataGridSplashTasks" SelectionMode="Single" IsReadOnly="True" AutoGenerateColumns="False" Margin="10" Grid.Row="0" Grid.Column="1">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Open Browser"/>
+                                <MenuItem Header="Show Cookies"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="IP" Width="*" Binding="{Binding Proxy.IP}"/>
                             <DataGridTextColumn Header="PORT" Width="*" Binding="{Binding Proxy.Port}"/>

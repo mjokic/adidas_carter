@@ -2,6 +2,7 @@
 using AdidasBot.Model;
 using NHtmlUnit;
 using NHtmlUnit.Html;
+using NHtmlUnit.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,6 +34,10 @@ namespace AdidasCarterPro.Model
         public void startTask()
         {
             // starting splash bypass stuff
+
+
+            // if successfully bypassed splash, start timer
+            this.timer.Start();
         }
 
         private void timer_tick(object sender, EventArgs e)
