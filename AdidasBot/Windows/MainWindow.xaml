@@ -152,23 +152,40 @@
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
+                        <!--<RowDefinition Height="*"/>-->
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
-                        <!--<ColumnDefinition Width="*"/>-->
                     </Grid.ColumnDefinitions>
 
-                    <TextBox x:Name="textBoxSplashBypassUrl" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="668"/>
-                    <Button Name="buttonStartSplashBypass" Content="Start" HorizontalAlignment="Left" Margin="706,9,0,0" VerticalAlignment="Top" Width="75"/>
+                    <TextBox x:Name="textBoxSplashBypassUrl" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="320" RenderTransformOrigin="0.5,0.5"/>
 
-                    <TextBlock x:Name="textBlock11" HorizontalAlignment="Left" Margin="409,60,0,0" TextWrapping="Wrap" Text="Threads" VerticalAlignment="Top"/>
-                    <Slider Name="sliderSplashBypassThreads" HorizontalAlignment="Left" Margin="192,81,0,0" VerticalAlignment="Top" Height="18" Width="460"/>
+                    <Button Name="buttonStartSplashBypass" Content="Start" HorizontalAlignment="Left" Margin="346,10,0,0" VerticalAlignment="Top" Width="75" Click="buttonStartSplashBypass_Click"/>
+                    <Button Name="buttonCreateLocalTask" Content="Create local task" HorizontalAlignment="Left" Margin="196,97,0,0" VerticalAlignment="Top" Width="128" Click="buttonCreateLocalTask_Click"/>
 
-                    <TextBlock x:Name="textBlock18" HorizontalAlignment="Left" Margin="386,110,0,0" TextWrapping="Wrap" Text="Refresh time" VerticalAlignment="Top"/>
-                    <Slider Name="sliderSplashBypassRefreshTime" HorizontalAlignment="Left" Margin="192,128,0,0" VerticalAlignment="Top" Height="18" Width="460"/>
+                    <TextBlock x:Name="textBlock11" HorizontalAlignment="Left" Margin="227,210,0,0" TextWrapping="Wrap" Text="Threads" VerticalAlignment="Top"/>
+                    <Slider Name="sliderSplashBypassThreads" HorizontalAlignment="Left" Margin="10,228,0,0" VerticalAlignment="Top" Height="21" Width="329"/>
 
-                    <DataGrid Name="dataGridSplashTasks" Grid.Row="1" Grid.ColumnSpan="2"/>
+                    <TextBlock x:Name="textBlock18" HorizontalAlignment="Left" Margin="227,169,0,0" TextWrapping="Wrap" Text="Refresh time" VerticalAlignment="Top"/>
+                    <Slider Name="sliderSplashBypassRefreshTime" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top" Height="18" Width="329"/>
+
+                    <DataGrid Name="dataGridSplashTasks" SelectionMode="Single" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Path=Manager.proxies}" Margin="10" Grid.Row="0" Grid.Column="1">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="IP" Width="*" Binding="{Binding IP}"/>
+                            <DataGridTextColumn Header="PORT" Width="*" Binding="{Binding Port}"/>
+                            <DataGridTextColumn Header="USERNAME" Width="*" Binding="{Binding Username}"/>
+                            <DataGridTextColumn Header="PASSWORD" Width="*" Binding="{Binding Password}"/>
+
+                            <DataGridTemplateColumn Header="Action" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Name="buttonSplashAction" Content="00:00" IsEnabled="True" Click="buttonSplashAction_Click"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
 
 
                 </Grid>

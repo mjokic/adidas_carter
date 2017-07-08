@@ -10,6 +10,9 @@ using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.CSharp;
 using Microsoft.Win32;
+using NHtmlUnit;
+using NHtmlUnit.Html;
+using NHtmlUnit.Util;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections;
@@ -250,53 +253,53 @@ namespace AdidasBot
             dataGridProxies.Columns.Add(c);
             #endregion
 
-            #region dataGrid SplashTasks
+            //#region dataGridSplashTasks Settings
             dataGridSplashTasks.ItemsSource = Manager.proxies;
-            dataGridSplashTasks.AutoGenerateColumns = false;
-            dataGridSplashTasks.IsReadOnly = true;
-            dataGridSplashTasks.SelectionMode = DataGridSelectionMode.Single;
+            //dataGridSplashTasks.AutoGenerateColumns = false;
+            //dataGridSplashTasks.IsReadOnly = true;
+            //dataGridSplashTasks.SelectionMode = DataGridSelectionMode.Single;
 
-            c = new DataGridTextColumn();
-            c.Header = "IP";
-            c.Binding = new Binding("IP");
-            c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-            dataGridSplashTasks.Columns.Add(c);
+            //c = new DataGridTextColumn();
+            //c.Header = "IP";
+            //c.Binding = new Binding("IP");
+            //c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            //dataGridSplashTasks.Columns.Add(c);
 
-            c = new DataGridTextColumn();
-            c.Header = "Port";
-            c.Binding = new Binding("Port");
-            c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-            dataGridSplashTasks.Columns.Add(c);
+            //c = new DataGridTextColumn();
+            //c.Header = "Port";
+            //c.Binding = new Binding("Port");
+            //c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            //dataGridSplashTasks.Columns.Add(c);
 
-            c = new DataGridTextColumn();
-            c.Header = "Username";
-            c.Binding = new Binding("Username");
-            c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-            dataGridSplashTasks.Columns.Add(c);
+            //c = new DataGridTextColumn();
+            //c.Header = "Username";
+            //c.Binding = new Binding("Username");
+            //c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            //dataGridSplashTasks.Columns.Add(c);
 
-            c = new DataGridTextColumn();
-            c.Header = "Password";
-            c.Binding = new Binding("Password");
-            c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-            dataGridSplashTasks.Columns.Add(c);
+            //c = new DataGridTextColumn();
+            //c.Header = "Password";
+            //c.Binding = new Binding("Password");
+            //c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            //dataGridSplashTasks.Columns.Add(c);
 
-            c = new DataGridTextColumn();
-            c.Header = "Status";
-            c.Binding = new Binding("Status");
-            c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-            dataGridSplashTasks.Columns.Add(c);
+            //c = new DataGridTextColumn();
+            //c.Header = "Status";
+            //c.Binding = new Binding("Status");
+            //c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            //dataGridSplashTasks.Columns.Add(c);
 
-            Binding binding = new Binding("PropertyName") { Mode = BindingMode.TwoWay };
-            DataGridTemplateColumn templateColumn = new DataGridTemplateColumn { CanUserReorder = false, Width = 85, CanUserSort = true };
-            BindingOperations.SetBinding(templateColumn, DataGridColumn.HeaderProperty, binding);
-            DataTemplate dataTemplate = new DataTemplate();
-            FrameworkElementFactory tmpButton = new FrameworkElementFactory(typeof(Button));
-            tmpButton.SetBinding(Button.NameProperty, binding);
-            dataTemplate.VisualTree = tmpButton;
-            templateColumn.CellTemplate = dataTemplate;
-            dataGridSplashTasks.Columns.Add(templateColumn);
+            ////Binding binding = new Binding("PropertyName") { Mode = BindingMode.TwoWay };
+            ////DataGridTemplateColumn templateColumn = new DataGridTemplateColumn { CanUserReorder = false, Width = 85, CanUserSort = true };
+            ////BindingOperations.SetBinding(templateColumn, DataGridColumn.HeaderProperty, binding);
+            ////DataTemplate dataTemplate = new DataTemplate();
+            ////FrameworkElementFactory tmpButton = new FrameworkElementFactory(typeof(Button));
+            ////tmpButton.SetBinding(Button.NameProperty, binding);
+            ////dataTemplate.VisualTree = tmpButton;
+            ////templateColumn.CellTemplate = dataTemplate;
+            ////dataGridSplashTasks.Columns.Add(templateColumn);
 
-            #endregion
+            //#endregion
 
             #region dataGridCustomHeaders Settings
             dataGridCustomHeaders.ItemsSource = Manager.customHeaders;
@@ -673,6 +676,81 @@ namespace AdidasBot
             }
 
         }
+
+
+        // SPLASH BYPASS
+        private void buttonStartSplashBypass_Click(object sender, RoutedEventArgs e)
+        {
+            string url = textBoxSplashBypassUrl.Text;
+
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    Task.Run(() => runIt(url));
+            //}
+
+        }
+
+        private void buttonCreateLocalTask_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
+        private void buttonSplashAction_Click(object sender, RoutedEventArgs e)
+        {
+            for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
+            {
+                if (vis is DataGridRow)
+                {
+                    var row = (DataGridRow)vis;
+                    if (row.Item is Proxy)
+                    {
+                        Proxy p = row.Item as Proxy;
+                        Console.WriteLine(p);
+                    }
+                }
+            }
+        }
+
+        // temp
+        private void runIt(string url)
+        {
+            WebClient webClient = new WebClient(BrowserVersion.CHROME);
+            webClient.Options.JavaScriptEnabled = true;
+            webClient.Options.CssEnabled = false;
+            webClient.Options.AppletEnabled = false;
+            webClient.Options.Timeout = 30000;
+            webClient.Options.RedirectEnabled = true;
+            webClient.Options.ThrowExceptionOnFailingStatusCode = false;
+            webClient.Options.ThrowExceptionOnScriptError = false;
+            Console.WriteLine(webClient.CookieManager.IsCookiesEnabled());
+
+            HtmlPage page = webClient.GetPage("http://adidas.co.uk") as HtmlPage;
+
+            //Manager.debugSave("page.html", page.AsXml());
+            //Manager.debugSave("page_"+ new Random(99999).NextDouble()+".html", page.WebResponse.ContentAsString);
+
+            var cookiez = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
+            Console.WriteLine(cookiez.Count);
+
+
+            HtmlPage page2 =(HtmlPage) webClient.GetPage(url);
+            var cookiez1 = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
+            Console.WriteLine(cookiez.Count);
+
+
+            ICollection<Cookie> map = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
+            Console.WriteLine(map.Count + "map size");
+            foreach (var item in map)
+            {
+                Console.WriteLine(item);
+            }
+
+            Manager.debugSave("page2.html", page2.AsXml());
+
+            Console.WriteLine("DONE!");
+        }
+
 
 
         // OPTIONS TAB
@@ -1302,5 +1380,6 @@ namespace AdidasBot
                 });
             }
         }
+
     }
 }
