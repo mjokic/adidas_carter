@@ -323,6 +323,7 @@
     <Compile Include="Model\Dummy.cs" />
     <Compile Include="Model\News.cs" />
     <Compile Include="Model\SiteProfile.cs" />
+    <Compile Include="Model\SplashTask.cs" />
     <Compile Include="Model\Updater.cs" />
     <Compile Include="TurboActivate.cs" />
     <Compile Include="Windows\ActivateWindow.xaml.cs">

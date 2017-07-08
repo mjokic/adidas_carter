@@ -33,6 +33,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using wyDay.TurboActivate;
 
 namespace AdidasBot
@@ -700,6 +701,9 @@ namespace AdidasBot
         {
             for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
             {
+                Button button = null;
+                if (sender is Button) button = sender as Button;
+
                 if (vis is DataGridRow)
                 {
                     var row = (DataGridRow)vis;
@@ -707,10 +711,16 @@ namespace AdidasBot
                     {
                         Proxy p = row.Item as Proxy;
                         Console.WriteLine(p);
+                        button.Content = "HEY!";
+
+                        SplashTask st = new SplashTask(p);
+                        st.btn = button;
+                        st.timer.Start();
                     }
                 }
             }
         }
+
 
         // temp
         private void runIt(string url)
@@ -750,7 +760,6 @@ namespace AdidasBot
 
             Console.WriteLine("DONE!");
         }
-
 
 
         // OPTIONS TAB
