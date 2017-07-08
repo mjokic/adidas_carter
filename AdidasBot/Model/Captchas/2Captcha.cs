@@ -29,15 +29,17 @@ namespace AdidasBot.Model.Captchas
         public async Task<string> solveCaptcha()
         {
 
+            //string captchaID = getCaptchaId().Result;
             string captchaID = await getCaptchaId();
             Console.WriteLine("Captcha id: " + captchaID);
 
             if (captchaID == null) return "false";
 
             string captchaResponse = null;
-            while (captchaResponse == null && !Manager.stopAllTask)
+            //while (captchaResponse == null && !Manager.stopAllTask)
+            while (captchaResponse == null && !Manager.ct.IsCancellationRequested)
             {
-                captchaResponse = await getCaptchaResponse(captchaID);
+                captchaResponse = getCaptchaResponse(captchaID).Result;
                 Console.WriteLine(captchaResponse);
                 if (captchaResponse != null) break;
 

@@ -66,7 +66,7 @@
                     <GroupBox x:Name="groupBox5" Header="Aditional Options" Margin="806,10,10,0" VerticalAlignment="Top" Height="108">
                         <Grid>
                             <CheckBox x:Name="checkBoxCartAfterCaptcha" Content="Cart After Success Captcha" HorizontalAlignment="Left" VerticalAlignment="Top" Click="checkBoxCartAfterCaptcha_Click"/>
-                            <CheckBox x:Name="checkBoxRetryOutOfStock" Content="Retry when out of stock" HorizontalAlignment="Left" Margin="0,23,0,0" VerticalAlignment="Top" Width="146" Click="checkBoxRetryOutOfStock_Click" IsEnabled="False"/>
+                            <CheckBox x:Name="checkBoxRetryOutOfStock" Content="Retry when out of stock" HorizontalAlignment="Left" Margin="0,23,0,0" VerticalAlignment="Top" Width="150" Click="checkBoxRetryOutOfStock_Click" IsEnabled="False"/>
                             <CheckBox x:Name="checkBoxSendToSite" Content="Send To Site" HorizontalAlignment="Left" Margin="0,46,0,0" VerticalAlignment="Top" Width="143"/>
                         </Grid>
                     </GroupBox>

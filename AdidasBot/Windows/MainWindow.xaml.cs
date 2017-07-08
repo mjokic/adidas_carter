@@ -365,44 +365,33 @@ namespace AdidasBot
             if (buttonStart.Content as string == "Start")
             {
 
-                ////int status = LexActivator.IsProductActivated();
-                //IsGenuineResult status = Manager.TA.IsGenuine();
-
-                //Console.WriteLine("Product Status: " + status);
-                //if(status != IsGenuineResult.Genuine || Manager.dateCheck() == true)
-                //{
-                //    Environment.Exit(0);
-                //    return;
-                //}
-
                 // display error if site is not selected
-                if (Manager.selectedProfile == null) { this.ShowMessageAsync("Error!", "Please select site in options tab!", MessageDialogStyle.Affirmative); return; }
-
-                Manager.stopAllTask = false;
+                if(Manager.selectedProfile == null) { this.ShowMessageAsync("Error!", "Please select site in options tab!", MessageDialogStyle.Affirmative); return; }
+                if(Manager.jobs.Count == 0) { this.ShowMessageAsync("Error!", "No tasks to run!", MessageDialogStyle.Affirmative); return; }
                 buttonStart.Content = "Stop";
+
+                Manager.cts = new CancellationTokenSource();
+                Manager.ct = Manager.cts.Token;
 
                 foreach (Job j in Manager.jobs)
                 {
-                    bool _status = false;
+                    Task t = null;
+
                     if (Manager.cartAfterCaptcha)
                     {
-                        //cartAfterCaptcha(j);
-                        Task t = Task.Run(async () =>
-                        {
-                            _status = await cartAfterCaptcha(j);
-                        });
-                        // here
-                        Manager.runningTasks.Add(t);
-                        t.ContinueWith(task => checkTasks());
+                        // cartAfterCaptcha Option
+                        t = Task.Run(async () => await cartAfterCaptcha(j), Manager.ct);
 
                     }
                     else
                     {
-                        //addToCart(j);
-                        MethodInfo atcMethod = GetType().GetMethod(Manager.addToCartFunction);
-                        atcMethod.Invoke(this, new object[] { (Job)j });
+                        // normal cart Option
+                        t = Task.Run(async () => await addToCart(j), Manager.ct);
 
                     }
+
+                    Manager.runningTasks.Add(t);
+                    t.ContinueWith(task => checkTasks());
 
 
                 }
@@ -410,8 +399,9 @@ namespace AdidasBot
             }
             else
             {
+                // stop all tasks here
+                Manager.cts.Cancel();
                 buttonStart.Content = "Start";
-                Manager.stopAllTask = true;
 
             }
 
@@ -419,14 +409,12 @@ namespace AdidasBot
 
         private void buttonSolveCaptchas_Click(object sender, RoutedEventArgs e)
         {
-            Manager.stopAllTask = false;
+            //Manager.stopAllTask = false;
 
             // for each job solve captcha on new thread
             foreach (Job j in Manager.jobs)
             {
-
-                solveCaptcha(j);
-
+                Task.Run( async () => await solveCaptcha(j));
             }
 
         }
@@ -520,7 +508,7 @@ namespace AdidasBot
             {
                 if (j.Status == "OK" && j.Acc != null)
                 {
-                    Task.Run(async () => await sendToSite(j));
+                    Task.Run(() => sendToSite(j));
                 }
             }
         }
@@ -808,72 +796,65 @@ namespace AdidasBot
 
 
         // methods
-        private void solveCaptcha(Job j)
+        private async Task solveCaptcha(Job j)
         {
             string captchaResponse = null;
             j.Status = "Getting captcha response...";
-            Task t = Task.Run(async () =>
+
+            if (Manager.use2Captcha)
             {
-                if (Manager.use2Captcha)
-                {
-                    _2Captcha captcha = new _2Captcha(Manager.myKey, Manager.siteKey);
-                    captchaResponse = await captcha.solveCaptcha();
-                }
-                else if (Manager.useAntiCaptcha)
-                {
-                    AntiCaptcha captcha = new AntiCaptcha(Manager.myKey, Manager.siteKey);
-                    captchaResponse = await captcha.solveCaptcha();
-                }
+                _2Captcha captcha = new _2Captcha(Manager.myKey, Manager.siteKey);
+                captchaResponse = await captcha.solveCaptcha();
+            }
+            else if(Manager.useAntiCaptcha)
+            {
+                AntiCaptcha captcha = new AntiCaptcha(Manager.myKey, Manager.siteKey);
+                captchaResponse = captcha.solveCaptcha();
+            }
 
 
-                if (captchaResponse == "false")
-                {
-                    j.Status = "Error Getting Captcha!";
+            if (captchaResponse == "false")
+            {
+                j.Status = "Error Getting Captcha!";
 
-                }
-                else
-                {
-                    //_status = true;
-                    j.Status = "Got captcha response!";
-                    j.CaptchaResponse = captchaResponse;
+            }
+            else
+            {
+                //_status = true;
+                j.Status = "Got captcha response!";
+                j.CaptchaResponse = captchaResponse;
 
-                }
+            }
 
-            });
 
         }
 
         [ObfuscationAttribute(Exclude = true)]
-        public bool addToCart(Job j)
+        public async Task<bool> addToCart(Job j)
         {
             j.Retries += 1;
             bool _status = false;
 
-            Task t = Task.Run(async () =>
+            _status = await j.addToCart2();
+
+
+            if (_status)
             {
-                //_status = await j.addToCart();
-                _status = await j.addToCart2();
-
-                if (_status && !Manager.stopAllTask)
+                App.Current.Dispatcher.Invoke((Action) delegate
                 {
-                    App.Current.Dispatcher.Invoke((Action)async delegate
+                    if (checkBoxSendToSite.IsChecked == true && j.Acc != null)
                     {
-                        if (checkBoxSendToSite.IsChecked == true && j.Acc != null)
-                        {
-                            if (await sendToSite(j)) j.Status = "On Site";
-                        }
+                        if (sendToSite(j))
+                            j.Status = "On Site";
+                    }
 
-                        Manager.jobs.Remove(j);
-                        Manager.inCartJobs.Add(j);
+                    Manager.jobs.Remove(j);
+                    Manager.inCartJobs.Add(j);
 
-                    });
+                });
 
-                }
+            }
 
-            });
-            // here
-            Manager.runningTasks.Add(t);
-            t.ContinueWith(task => checkTasks());
 
             return _status;
 
@@ -881,75 +862,49 @@ namespace AdidasBot
 
 
         [ObfuscationAttribute(Exclude = true)]
-        private async Task<bool> cartAfterCaptcha(Job j)
+        private async Task cartAfterCaptcha(Job j)
         {
             bool _status = false;
-            while (_status == false && !Manager.stopAllTask)
+            while (_status == false && !Manager.ct.IsCancellationRequested)
             {
-                string captchaResponse = null;
-
                 j.Status = "Getting captcha response...";
 
-                if (Manager.use2Captcha)
-                {
-                    _2Captcha captcha = new _2Captcha(Manager.myKey, Manager.siteKey);
-                    captchaResponse = await captcha.solveCaptcha();
-                }
-                else if (Manager.useAntiCaptcha)
-                {
-                    AntiCaptcha captcha = new AntiCaptcha(Manager.myKey, Manager.siteKey);
-                    captchaResponse = await captcha.solveCaptcha();
-                }
+                await solveCaptcha(j);
 
-
-                if (captchaResponse == "false")
+                if (j.CaptchaResponse == "false")
                 {
                     j.Status = "Error Getting Captcha!";
-
                 }
                 else
                 {
                     j.Status = "Got captcha response!";
-                    j.CaptchaResponse = captchaResponse;
 
-                    //Task.Run(async () =>
-                    //{
                     j.Retries += 1;
-                    //_status = await j.addToCart();
                     _status = await j.addToCart2();
 
 
-                    Console.WriteLine("TREBA JOB DA SE ODRADI...!");
-                    Console.WriteLine(_status);
-                    if (_status && !Manager.stopAllTask)
+                    if (_status)
                     {
-                        Console.WriteLine("STEP 2...");
-                        App.Current.Dispatcher.Invoke((Action)async delegate
+                        App.Current.Dispatcher.Invoke((Action) delegate
                         {
                             if (checkBoxSendToSite.IsChecked == true && j.Acc != null)
                             {
-                                //API api = new API(j.Size, Manager.selectedProfile.Domain, j.Acc.Username, j.Acc.Password, j.PID);
-                                //if (await api.SendCart()) j.Status = "On Site";
-                                if (await sendToSite(j)) j.Status = "On Site";
-
-
+                                if(sendToSite(j)) j.Status = "On Site";
                             }
+
                             Manager.jobs.Remove(j);
                             Manager.inCartJobs.Add(j);
-                            Console.WriteLine("KAO JE ODRADJENO!");
 
                         });
 
                     }
-
-                    //});
 
                     if (!Manager.retryOutOfStock) break;
 
                 }
             }
 
-            return _status;
+            //return _status;
 
         }
 
@@ -1118,11 +1073,13 @@ namespace AdidasBot
         }
 
 
-        private async Task<bool> sendToSite(Job j)
+        private bool sendToSite(Job j)
         {
             bool status = false;
-            API api = new API(j.Size, Manager.selectedProfile.Domain, j.Acc.Username, j.Acc.Password, j.PID);
-            if (await api.SendCart())
+            API api =
+                new API(j.Size, Manager.selectedProfile.Domain, j.Acc.Username, j.Acc.Password, j.PID);
+
+            if (api.SendCart().Result)
             {
                 j.Status = "On Site";
             }
