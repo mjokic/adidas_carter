@@ -2,7 +2,6 @@
 using AdidasBot.Model.Captchas;
 using AdidasBot.Model.Captchas.AntiCaptchaAPI.Api;
 using AdidasBot.Model.Captchas.AntiCaptchaAPI.Helper;
-using AdidasBot.SplashTool;
 using AdidasBot.Windows;
 using AdidasCarterPro.Model;
 using AdidasCarterPro.Windows;
@@ -255,7 +254,8 @@ namespace AdidasBot
             #endregion
 
             //#region dataGridSplashTasks Settings
-            dataGridSplashTasks.ItemsSource = Manager.proxies;
+            dataGridSplashTasks.ItemsSource = Manager.splashTasks;
+            //dataGridSplashTasks.ItemsSource = Manager.proxies;
             //dataGridSplashTasks.AutoGenerateColumns = false;
             //dataGridSplashTasks.IsReadOnly = true;
             //dataGridSplashTasks.SelectionMode = DataGridSelectionMode.Single;
@@ -682,84 +682,53 @@ namespace AdidasBot
         // SPLASH BYPASS
         private void buttonStartSplashBypass_Click(object sender, RoutedEventArgs e)
         {
+            // start splash tasks
             string url = textBoxSplashBypassUrl.Text;
 
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    Task.Run(() => runIt(url));
-            //}
+            foreach (SplashTask st in Manager.splashTasks)
+            {
+                // start tast..
+                // on success bypass start time like bellow
+                //st.timer.Start();
+
+                st.startTask();
+
+            }
 
         }
 
         private void buttonCreateLocalTask_Click(object sender, RoutedEventArgs e)
         {
-
+            // create SplashTask without proxy
         }
 
 
         private void buttonSplashAction_Click(object sender, RoutedEventArgs e)
         {
-            for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
-            {
-                Button button = null;
-                if (sender is Button) button = sender as Button;
+            // open headfull browser when splash bypassed with cookies and user-agent
+            
+            //for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
+            //{
+            //    Button button = null;
+            //    if (sender is Button) button = sender as Button;
 
-                if (vis is DataGridRow)
-                {
-                    var row = (DataGridRow)vis;
-                    if (row.Item is Proxy)
-                    {
-                        Proxy p = row.Item as Proxy;
-                        Console.WriteLine(p);
-                        button.Content = "HEY!";
+            //    if (vis is DataGridRow)
+            //    {
+            //        var row = (DataGridRow)vis;
+            //        if (row.Item is Proxy)
+            //        {
+            //            Proxy p = row.Item as Proxy;
+            //            Console.WriteLine(p);
+            //            button.Content = "HEY!";
 
-                        SplashTask st = new SplashTask(p);
-                        st.btn = button;
-                        st.timer.Start();
-                    }
-                }
-            }
+            //            SplashTask st = new SplashTask(p);
+            //            st.btn = button;
+            //            st.timer.Start();
+            //        }
+            //    }
+            //}
         }
 
-
-        // temp
-        private void runIt(string url)
-        {
-            WebClient webClient = new WebClient(BrowserVersion.CHROME);
-            webClient.Options.JavaScriptEnabled = true;
-            webClient.Options.CssEnabled = false;
-            webClient.Options.AppletEnabled = false;
-            webClient.Options.Timeout = 30000;
-            webClient.Options.RedirectEnabled = true;
-            webClient.Options.ThrowExceptionOnFailingStatusCode = false;
-            webClient.Options.ThrowExceptionOnScriptError = false;
-            Console.WriteLine(webClient.CookieManager.IsCookiesEnabled());
-
-            HtmlPage page = webClient.GetPage("http://adidas.co.uk") as HtmlPage;
-
-            //Manager.debugSave("page.html", page.AsXml());
-            //Manager.debugSave("page_"+ new Random(99999).NextDouble()+".html", page.WebResponse.ContentAsString);
-
-            var cookiez = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
-            Console.WriteLine(cookiez.Count);
-
-
-            HtmlPage page2 =(HtmlPage) webClient.GetPage(url);
-            var cookiez1 = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
-            Console.WriteLine(cookiez.Count);
-
-
-            ICollection<Cookie> map = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
-            Console.WriteLine(map.Count + "map size");
-            foreach (var item in map)
-            {
-                Console.WriteLine(item);
-            }
-
-            Manager.debugSave("page2.html", page2.AsXml());
-
-            Console.WriteLine("DONE!");
-        }
 
 
         // OPTIONS TAB
@@ -1056,7 +1025,11 @@ namespace AdidasBot
 
 
             Proxy p = new Proxy(ip, port, username, password);
+            SplashTask st = new SplashTask(p);
+            
             Manager.proxies.Add(p);
+            Manager.splashTasks.Add(st);
+
             return true;
 
 
@@ -1218,18 +1191,6 @@ namespace AdidasBot
             this.Close();
         }
 
-        private void MenuButtonSplashTool_Click(object sender, RoutedEventArgs e)
-        {
-
-            var n = MessageBox.Show("Under development!", "Do not use it!", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-            if (n == MessageBoxResult.OK)
-            {
-                SplashToolWindow stw = new SplashToolWindow();
-                stw.Show();
-            }
-
-        }
-
 
         // events
         private void dataGridJobs_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -1389,6 +1350,6 @@ namespace AdidasBot
                 });
             }
         }
-
+        
     }
 }

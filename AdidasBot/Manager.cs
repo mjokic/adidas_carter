@@ -1,6 +1,7 @@
 ﻿using AdidasBot.Model;
 using AdidasBot.Model.Captchas;
 using AdidasBot.Windows;
+using AdidasCarterPro.Model;
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,7 @@ namespace AdidasBot
 
         public static List<WebBrowserWindow> openedBrowser = new List<WebBrowserWindow>();
 
-        public static ObservableCollection<Thread> splashTasks = new ObservableCollection<Thread>();
+        public static ObservableCollection<SplashTask> splashTasks = new ObservableCollection<SplashTask>();
 
         public static SiteProfile selectedProfile;
 

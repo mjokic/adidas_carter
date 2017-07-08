@@ -332,9 +332,6 @@
     <Compile Include="Windows\ManualCaptchaSolvingWindow.xaml.cs">
       <DependentUpon>ManualCaptchaSolvingWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\SplashToolWindow.xaml.cs">
-      <DependentUpon>SplashToolWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\StartWindow.xaml.cs">
       <DependentUpon>StartWindow.xaml</DependentUpon>
     </Compile>
@@ -371,10 +368,6 @@
     <Page Include="Windows\ManualCaptchaSolvingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\SplashToolWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\StartWindow.xaml">
       <SubType>Designer</SubType>

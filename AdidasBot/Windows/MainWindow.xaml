@@ -170,17 +170,17 @@
                     <TextBlock x:Name="textBlock18" HorizontalAlignment="Left" Margin="227,169,0,0" TextWrapping="Wrap" Text="Refresh time" VerticalAlignment="Top"/>
                     <Slider Name="sliderSplashBypassRefreshTime" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top" Height="18" Width="329"/>
 
-                    <DataGrid Name="dataGridSplashTasks" SelectionMode="Single" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Path=Manager.proxies}" Margin="10" Grid.Row="0" Grid.Column="1">
+                    <DataGrid Name="dataGridSplashTasks" SelectionMode="Single" IsReadOnly="True" AutoGenerateColumns="False" Margin="10" Grid.Row="0" Grid.Column="1">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="IP" Width="*" Binding="{Binding IP}"/>
-                            <DataGridTextColumn Header="PORT" Width="*" Binding="{Binding Port}"/>
-                            <DataGridTextColumn Header="USERNAME" Width="*" Binding="{Binding Username}"/>
-                            <DataGridTextColumn Header="PASSWORD" Width="*" Binding="{Binding Password}"/>
+                            <DataGridTextColumn Header="IP" Width="*" Binding="{Binding Proxy.IP}"/>
+                            <DataGridTextColumn Header="PORT" Width="*" Binding="{Binding Proxy.Port}"/>
+                            <DataGridTextColumn Header="USERNAME" Width="*" Binding="{Binding Proxy.Username}"/>
+                            <DataGridTextColumn Header="PASSWORD" Width="*" Binding="{Binding Proxy.Password}"/>
 
                             <DataGridTemplateColumn Header="Action" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Name="buttonSplashAction" Content="00:00" IsEnabled="True" Click="buttonSplashAction_Click"/>
+                                        <Button Name="buttonSplashAction" Content="{Binding BtnContent}" IsEnabled="True" Click="buttonSplashAction_Click"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
