@@ -687,7 +687,7 @@ namespace AdidasBot
 
             foreach (SplashTask st in Manager.splashTasks)
             {
-                Task.Run(new Action(st.startTask));
+                Task.Run(() => st.startTask(url));
             }
 
         }
@@ -1324,6 +1324,25 @@ namespace AdidasBot
 
         }
 
+        private void menuItemOpenBrowser_Click(object sender, RoutedEventArgs e)
+        {
+            // open default browser
+            Process.Start("http://google.com");
+        }
+
+        private void menuItemShowCookie_Click(object sender, RoutedEventArgs e)
+        {
+            // show cookies of splash task
+            //string cookies = "cklajfdlafj";
+
+            SplashTask st = (SplashTask) dataGridSplashTasks.SelectedItem;
+
+            if (st == null || st.CookieString == null) return;
+
+            CookieWindow cw = new CookieWindow(st.CookieString);
+            cw.ShowDialog();
+        }
+
 
         // here
         private void checkTasks()
@@ -1347,6 +1366,6 @@ namespace AdidasBot
                 });
             }
         }
-        
+
     }
 }

@@ -8,8 +8,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace AdidasCarterPro.Model
@@ -19,6 +21,7 @@ namespace AdidasCarterPro.Model
 
         public SplashTask(Proxy proxy)
         {
+            this.TextColor = Brushes.Red;
             this.seconds = 600;
             this.btnContent = "00:00";
 
@@ -31,13 +34,50 @@ namespace AdidasCarterPro.Model
         }
 
 
-        public void startTask()
+        public void startTask(string url)
         {
             // starting splash bypass stuff
+            WebClient webClient = new WebClient(BrowserVersion.CHROME);
+            ProxyConfig proxyConfig = new ProxyConfig(this.Proxy.IP, int.Parse(this.Proxy.Port));
+            webClient.Options.ProxyConfig = proxyConfig;
+            webClient.Options.JavaScriptEnabled = true;
+            webClient.Options.CssEnabled = false;
+            webClient.Options.AppletEnabled = false;
+            webClient.Options.Timeout = 60000;
+            webClient.Options.RedirectEnabled = true;
+            webClient.Options.ThrowExceptionOnFailingStatusCode = false;
+            webClient.Options.ThrowExceptionOnScriptError = false;
+            Console.WriteLine(webClient.CookieManager.IsCookiesEnabled());
 
+            HtmlPage page = webClient.GetPage("http://adidas.co.uk") as HtmlPage;
+            //HtmlPage page = webClient.GetPage("https://www.whatismyip.com") as HtmlPage;
+
+            //Manager.debugSave("test_" + this.Proxy.IP + "_" + this.Proxy.Port + ".html", page.AsXml());
+
+
+            HtmlPage page2 = (HtmlPage)webClient.GetPage(url);
+            
+
+            bool status = runIt(page2, url);
+
+            while (!status)
+            {
+                status = runIt(page2, url);
+            }
+
+            ICollection<Cookie> cookies = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
+            Console.WriteLine(cookies.Count + "map size");
+
+            this.CookieString = "";
+            foreach (Cookie cookie in cookies)
+            {
+                this.CookieString += cookie.Name + "=" + cookie.Value + ";";
+                Console.WriteLine(cookie);
+            }
 
             // if successfully bypassed splash, start timer
             this.timer.Start();
+            this.TextColor = Brushes.Green;
         }
 
         private void timer_tick(object sender, EventArgs e)
@@ -56,50 +96,55 @@ namespace AdidasCarterPro.Model
         }
 
         // temp
-        private void runIt(string url)
+        private bool runIt(HtmlPage page, string url)
         {
-            WebClient webClient = new WebClient(BrowserVersion.CHROME);
-            webClient.Options.JavaScriptEnabled = true;
-            webClient.Options.CssEnabled = false;
-            webClient.Options.AppletEnabled = false;
-            webClient.Options.Timeout = 30000;
-            webClient.Options.RedirectEnabled = true;
-            webClient.Options.ThrowExceptionOnFailingStatusCode = false;
-            webClient.Options.ThrowExceptionOnScriptError = false;
-            Console.WriteLine(webClient.CookieManager.IsCookiesEnabled());
+            //HtmlPage page2 = (HtmlPage)webClient.GetPage(url);
+            //var cookiez1 = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
+            //Console.WriteLine(cookiez1.Count);
 
-            HtmlPage page = webClient.GetPage("http://adidas.co.uk") as HtmlPage;
+            //ICollection<Cookie> map = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
+            //Console.WriteLine(map.Count + "map size");
+            //foreach (var item in map)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            page.Refresh();
+            Console.WriteLine("PAge refreSHed!");
 
-            //Manager.debugSave("page.html", page.AsXml());
-            //Manager.debugSave("page_"+ new Random(99999).NextDouble()+".html", page.WebResponse.ContentAsString);
+            //Manager.debugSave("page_" + new Random(int.MaxValue).Next() + ".html", page.AsXml());
 
-            var cookiez = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
-            Console.WriteLine(cookiez.Count);
+            Regex r = new Regex("data-sitekey=\"(.*?)\"");
+            MatchCollection mc = r.Matches(page.AsXml());
 
-
-            HtmlPage page2 = (HtmlPage)webClient.GetPage(url);
-            var cookiez1 = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
-            Console.WriteLine(cookiez.Count);
-
-
-            ICollection<Cookie> map = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
-            Console.WriteLine(map.Count + "map size");
-            foreach (var item in map)
+            string siteKey;
+            try
             {
-                Console.WriteLine(item);
+                siteKey = mc[0].Groups[1].Value;
+            }catch(ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine("DO IT AGAIN!");
+                return false;
             }
 
-            Manager.debugSave("page2.html", page2.AsXml());
+            if (siteKey != null)
+            {
+                Console.WriteLine("SITE KEY FOUND, splash bypassed?!");
+                return true;
+            }
 
-            Console.WriteLine("DONE!");
+            Console.WriteLine("DO IT AGAIN!");
+            return false;
+            // check for site key..
+            // data-sitekey="(.*?)"
+
         }
-
 
 
         #region Properties
         public int seconds { get; set; }
         public Proxy Proxy { get; set; }
         public DispatcherTimer timer { get; set; }
+        public string CookieString { get; set; }
 
         private string btnContent;
 
@@ -112,6 +157,18 @@ namespace AdidasCarterPro.Model
                 OnPropertyChanged("BtnContent");
             }
         }
+
+        private Brush textColor;
+
+        public Brush TextColor
+        {
+            get { return textColor; }
+            set {
+                textColor = value;
+                OnPropertyChanged("TextColor");
+            }
+        }
+
         #endregion
 
         #region Data binding stuff

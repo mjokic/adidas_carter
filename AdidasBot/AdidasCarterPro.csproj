@@ -329,6 +329,9 @@
     <Compile Include="Windows\ActivateWindow.xaml.cs">
       <DependentUpon>ActivateWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\CookieWindow.xaml.cs">
+      <DependentUpon>CookieWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ManualCaptchaSolvingWindow.xaml.cs">
       <DependentUpon>ManualCaptchaSolvingWindow.xaml</DependentUpon>
     </Compile>
@@ -346,6 +349,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AssingProxiesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\CookieWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

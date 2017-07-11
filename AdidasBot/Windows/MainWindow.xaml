@@ -173,8 +173,8 @@
                     <DataGrid Name="dataGridSplashTasks" SelectionMode="Single" IsReadOnly="True" AutoGenerateColumns="False" Margin="10" Grid.Row="0" Grid.Column="1">
                         <DataGrid.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Open Browser"/>
-                                <MenuItem Header="Show Cookies"/>
+                                <MenuItem Name="menuItemOpenBrowser" Header="Open Browser" Click="menuItemOpenBrowser_Click"/>
+                                <MenuItem Name="menuItemShowCookie" Header="Show Cookies" Click="menuItemShowCookie_Click"/>
                             </ContextMenu>
                         </DataGrid.ContextMenu>
                         <DataGrid.Columns>
@@ -186,7 +186,7 @@
                             <DataGridTemplateColumn Header="Action" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Name="buttonSplashAction" Content="{Binding BtnContent}" IsEnabled="True" Click="buttonSplashAction_Click"/>
+                                        <Button Name="buttonSplashAction" Foreground="{Binding TextColor}" Content="{Binding BtnContent}" IsEnabled="True" Click="buttonSplashAction_Click"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
