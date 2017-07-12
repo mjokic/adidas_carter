@@ -5,13 +5,13 @@ using AdidasBot.Model.Captchas.AntiCaptchaAPI.Helper;
 using AdidasBot.Windows;
 using AdidasCarterPro.Model;
 using AdidasCarterPro.Windows;
+using CefSharp;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.CSharp;
 using Microsoft.Win32;
 using NHtmlUnit;
 using NHtmlUnit.Html;
-using NHtmlUnit.Util;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections;
@@ -1326,8 +1326,27 @@ namespace AdidasBot
 
         private void menuItemOpenBrowser_Click(object sender, RoutedEventArgs e)
         {
-            // open default browser
-            Process.Start("http://google.com");
+
+            SplashTask st = (SplashTask)dataGridSplashTasks.SelectedItem;
+            Proxy proxy = st.Proxy;
+
+            ICollection<Cookie> cookies = new List<Cookie>();
+
+            foreach (var cooki in st.Cookies)
+            {
+                Cookie c = new Cookie();
+                c.Domain = cooki.Domain;
+                c.Name = cooki.Name;
+                c.Value = cooki.Value;
+                c.Path = cooki.Path;
+                c.HttpOnly = cooki.IsHttpOnly();
+
+                cookies.Add(c);
+            }
+
+
+            NewBrowserWindow nvw = new NewBrowserWindow(proxy, cookies);
+            nvw.Show();
         }
 
         private void menuItemShowCookie_Click(object sender, RoutedEventArgs e)

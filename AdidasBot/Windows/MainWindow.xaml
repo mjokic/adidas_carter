@@ -159,7 +159,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox x:Name="textBoxSplashBypassUrl" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="320" RenderTransformOrigin="0.5,0.5"/>
+                    <TextBox x:Name="textBoxSplashBypassUrl" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="320" RenderTransformOrigin="0.5,0.5"/>
 
                     <Button Name="buttonStartSplashBypass" Content="Start" HorizontalAlignment="Left" Margin="346,10,0,0" VerticalAlignment="Top" Width="75" Click="buttonStartSplashBypass_Click"/>
                     <Button Name="buttonCreateLocalTask" Content="Create local task" HorizontalAlignment="Left" Margin="196,97,0,0" VerticalAlignment="Top" Width="128" Click="buttonCreateLocalTask_Click"/>

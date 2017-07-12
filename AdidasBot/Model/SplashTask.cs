@@ -92,6 +92,7 @@ namespace AdidasCarterPro.Model
             }
 
             ICollection<Cookie> cookies = webClient.GetCookies(new java.net.URL("http://adidas.com"));
+            this.Cookies = cookies;
             Console.WriteLine(cookies.Count + "map size");
 
             this.CookieString = "";
@@ -172,6 +173,7 @@ namespace AdidasCarterPro.Model
         public Proxy Proxy { get; set; }
         public DispatcherTimer timer { get; set; }
         public string CookieString { get; set; }
+        public ICollection<Cookie> Cookies { get; set; }
 
         private string status;
 

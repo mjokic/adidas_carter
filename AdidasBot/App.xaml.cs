@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CefSharp;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -14,6 +15,10 @@ namespace AdidasBot
     /// </summary>
     public partial class App : Application
     {
-
+        public App()
+        {
+            CefSettings settings = new CefSettings();
+            Cef.Initialize(settings);
+        }
     }
 }
