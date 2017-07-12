@@ -34,8 +34,10 @@ namespace AdidasCarterPro.Model
         }
 
 
-        public void startTask(string url)
+        public async Task startTask(string url)
         {
+            this.Status = "Running..";
+
             // starting splash bypass stuff
             WebClient webClient = new WebClient(BrowserVersion.CHROME);
             ProxyConfig proxyConfig = new ProxyConfig(this.Proxy.IP, int.Parse(this.Proxy.Port));
@@ -43,20 +45,44 @@ namespace AdidasCarterPro.Model
             webClient.Options.JavaScriptEnabled = true;
             webClient.Options.CssEnabled = false;
             webClient.Options.AppletEnabled = false;
-            webClient.Options.Timeout = 60000;
+            webClient.Options.Timeout = 30000;
             webClient.Options.RedirectEnabled = true;
             webClient.Options.ThrowExceptionOnFailingStatusCode = false;
             webClient.Options.ThrowExceptionOnScriptError = false;
             Console.WriteLine(webClient.CookieManager.IsCookiesEnabled());
 
-            HtmlPage page = webClient.GetPage("http://adidas.co.uk") as HtmlPage;
+            HtmlPage page = null;
+            try
+            {
+                page = webClient.GetPage("http://adidas.com") as HtmlPage;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                Console.WriteLine(ex.Message);
+                this.Status = "Something fuckd up!";
+                return;
+            }
+
             //HtmlPage page = webClient.GetPage("https://www.whatismyip.com") as HtmlPage;
 
             //Manager.debugSave("test_" + this.Proxy.IP + "_" + this.Proxy.Port + ".html", page.AsXml());
 
 
-            HtmlPage page2 = (HtmlPage)webClient.GetPage(url);
-            
+            HtmlPage page2 = null;
+            try
+            {
+                page2 = (HtmlPage)webClient.GetPage(url);
+
+            }catch(InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                Console.WriteLine(ex.Message);
+                this.Status = "Something fuckd up!";
+                return;
+            }
+
+
 
             bool status = runIt(page2, url);
 
@@ -65,7 +91,7 @@ namespace AdidasCarterPro.Model
                 status = runIt(page2, url);
             }
 
-            ICollection<Cookie> cookies = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
+            ICollection<Cookie> cookies = webClient.GetCookies(new java.net.URL("http://adidas.com"));
             Console.WriteLine(cookies.Count + "map size");
 
             this.CookieString = "";
@@ -76,6 +102,7 @@ namespace AdidasCarterPro.Model
             }
 
             // if successfully bypassed splash, start timer
+            this.Status = "Bypassed!";
             this.timer.Start();
             this.TextColor = Brushes.Green;
         }
@@ -145,6 +172,17 @@ namespace AdidasCarterPro.Model
         public Proxy Proxy { get; set; }
         public DispatcherTimer timer { get; set; }
         public string CookieString { get; set; }
+
+        private string status;
+
+        public string Status
+        {
+            get { return status; }
+            set { status = value;
+                OnPropertyChanged("Status");
+            }
+        }
+
 
         private string btnContent;
 

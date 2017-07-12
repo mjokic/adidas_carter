@@ -180,8 +180,9 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="IP" Width="*" Binding="{Binding Proxy.IP}"/>
                             <DataGridTextColumn Header="PORT" Width="*" Binding="{Binding Proxy.Port}"/>
-                            <DataGridTextColumn Header="USERNAME" Width="*" Binding="{Binding Proxy.Username}"/>
-                            <DataGridTextColumn Header="PASSWORD" Width="*" Binding="{Binding Proxy.Password}"/>
+                            <DataGridTextColumn Header="USERNAME" Width="Auto" Binding="{Binding Proxy.Username}"/>
+                            <DataGridTextColumn Header="PASSWORD" Width="Auto" Binding="{Binding Proxy.Password}"/>
+                            <DataGridTextColumn Header="STATUS" Width="*" Binding="{Binding Status}"/>
 
                             <DataGridTemplateColumn Header="Action" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>

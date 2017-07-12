@@ -687,7 +687,7 @@ namespace AdidasBot
 
             foreach (SplashTask st in Manager.splashTasks)
             {
-                Task.Run(() => st.startTask(url));
+                Task.Run(async () => await st.startTask(url));
             }
 
         }
