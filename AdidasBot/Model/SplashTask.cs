@@ -1,11 +1,11 @@
 ﻿using AdidasBot;
 using AdidasBot.Model;
-using NHtmlUnit;
-using NHtmlUnit.Html;
-using NHtmlUnit.Util;
+using CefSharp;
+using CefSharp.OffScreen;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,11 +13,16 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Threading;
+using System.Diagnostics;
+using System.Windows;
 
 namespace AdidasCarterPro.Model
 {
     public class SplashTask : INotifyPropertyChanged
     {
+
+        public ChromiumWebBrowser browser { get; set; }
 
         public SplashTask(Proxy proxy)
         {
@@ -36,48 +41,57 @@ namespace AdidasCarterPro.Model
 
         public void startTask(string url)
         {
+
+            string url1 = "https://www.iplocation.net/find-ip-address";
+
             // starting splash bypass stuff
-            WebClient webClient = new WebClient(BrowserVersion.CHROME);
-            ProxyConfig proxyConfig = new ProxyConfig(this.Proxy.IP, int.Parse(this.Proxy.Port));
-            webClient.Options.ProxyConfig = proxyConfig;
-            webClient.Options.JavaScriptEnabled = true;
-            webClient.Options.CssEnabled = false;
-            webClient.Options.AppletEnabled = false;
-            webClient.Options.Timeout = 60000;
-            webClient.Options.RedirectEnabled = true;
-            webClient.Options.ThrowExceptionOnFailingStatusCode = false;
-            webClient.Options.ThrowExceptionOnScriptError = false;
-            Console.WriteLine(webClient.CookieManager.IsCookiesEnabled());
 
-            HtmlPage page = webClient.GetPage("http://adidas.co.uk") as HtmlPage;
-            //HtmlPage page = webClient.GetPage("https://www.whatismyip.com") as HtmlPage;
-
-            //Manager.debugSave("test_" + this.Proxy.IP + "_" + this.Proxy.Port + ".html", page.AsXml());
+            //RequestContext rc = new RequestContext();
+            //var dict = new Dictionary<string, object>();
+            //dict["mode"] = "fixed_servers";
+            //dict["server"] = "scheme://" + this.Proxy.IP + ":" + this.Proxy.Port;
+            //string error;
+            //rc.SetPreference("proxy", dict, out error);
 
 
-            HtmlPage page2 = (HtmlPage)webClient.GetPage(url);
-            
+            browser = new ChromiumWebBrowser(url1);
+            //browser.BrowserInitialized += Browser_BrowserInitialized;
+            browser.LoadingStateChanged += BrowserLoadingStateChanged;
 
-            bool status = runIt(page2, url);
 
-            while (!status)
-            {
-                status = runIt(page2, url);
-            }
+            //Console.WriteLine(browser.IsBrowserInitialized);
 
-            ICollection<Cookie> cookies = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
-            Console.WriteLine(cookies.Count + "map size");
+            //while (!browser.IsBrowserInitialized)
+            //{
+            //    Thread.Sleep(500);
+            //    Console.WriteLine("Not Initialized");
+            //}
 
-            this.CookieString = "";
-            foreach (Cookie cookie in cookies)
-            {
-                this.CookieString += cookie.Name + "=" + cookie.Value + ";";
-                Console.WriteLine(cookie);
-            }
+            //Thread.Sleep(1000);
 
-            // if successfully bypassed splash, start timer
-            this.timer.Start();
-            this.TextColor = Brushes.Green;
+
+            //await Cef.UIThreadTaskFactory.StartNew(delegate
+            //{
+            //    string ip = this.Proxy.IP;
+            //    string port = this.Proxy.Port;
+            //    var rc = this.browser.GetBrowser().GetHost().RequestContext;
+            //    var dict = new Dictionary<string, object>();
+            //    dict.Add("mode", "fixed_servers");
+            //    dict.Add("server", "" + ip + ":" + port + "");
+            //    string error;
+            //    bool success = rc.SetPreference("proxy", dict, out error);
+
+            //});
+
+
+
+        }
+
+        private void Browser_BrowserInitialized(object sender, EventArgs e)
+        {
+            //throw new NotImplementedException();
+            Console.WriteLine("Browser initialized!?");
+
         }
 
         private void timer_tick(object sender, EventArgs e)
@@ -96,47 +110,11 @@ namespace AdidasCarterPro.Model
         }
 
         // temp
-        private bool runIt(HtmlPage page, string url)
+        private async void runIt()
         {
-            //HtmlPage page2 = (HtmlPage)webClient.GetPage(url);
-            //var cookiez1 = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
-            //Console.WriteLine(cookiez1.Count);
-
-            //ICollection<Cookie> map = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
-            //Console.WriteLine(map.Count + "map size");
-            //foreach (var item in map)
-            //{
-            //    Console.WriteLine(item);
-            //}
-            page.Refresh();
-            Console.WriteLine("PAge refreSHed!");
-
-            //Manager.debugSave("page_" + new Random(int.MaxValue).Next() + ".html", page.AsXml());
-
-            Regex r = new Regex("data-sitekey=\"(.*?)\"");
-            MatchCollection mc = r.Matches(page.AsXml());
-
-            string siteKey;
-            try
-            {
-                siteKey = mc[0].Groups[1].Value;
-            }catch(ArgumentOutOfRangeException ex)
-            {
-                Console.WriteLine("DO IT AGAIN!");
-                return false;
-            }
-
-            if (siteKey != null)
-            {
-                Console.WriteLine("SITE KEY FOUND, splash bypassed?!");
-                return true;
-            }
-
-            Console.WriteLine("DO IT AGAIN!");
-            return false;
             // check for site key..
             // data-sitekey="(.*?)"
-
+            
         }
 
 
@@ -185,6 +163,38 @@ namespace AdidasCarterPro.Model
 
         }
         #endregion
+
+
+
+
+        private async void BrowserLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
+        {
+            // Check to see if loading is complete - this event is called twice, one when loading starts
+            // second time when it's finished
+            // (rather than an iframe within the main frame).
+            if (!e.IsLoading)
+            {
+                // Remove the load event handler, because we only want one snapshot of the initial page.
+                //browser.LoadingStateChanged -= BrowserLoadingStateChanged;
+
+                var task = browser.GetSourceAsync();
+
+                await task.ContinueWith(response =>
+                 {
+                     Manager.debugSave("aaa_" + this.Proxy.IP + "_" + this.Proxy.Port + ".html", response.Result);
+
+                     App.Current.Dispatcher.Invoke((Action)delegate
+                     {
+                         Cef.Shutdown();
+                     });
+
+                     // if successfully bypassed splash, start timer
+                     this.timer.Start();
+                     this.TextColor = Brushes.Green;
+                 });
+
+            }
+        }
 
     }
 }

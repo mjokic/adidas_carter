@@ -1,0 +1,13 @@
+﻿<Window x:Class="AdidasCarterPro.Windows.CefBrowserWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AdidasCarterPro.Windows"
+        xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+        mc:Ignorable="d"
+        Title="CefBrowserWindow" Height="307.732" Width="688.144">
+    <Grid>
+        <cefSharp:ChromiumWebBrowser Name="browser1" Address="https://google.com"/>
+    </Grid>
+</Window>

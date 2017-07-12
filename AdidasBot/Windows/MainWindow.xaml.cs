@@ -9,9 +9,6 @@ using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.CSharp;
 using Microsoft.Win32;
-using NHtmlUnit;
-using NHtmlUnit.Html;
-using NHtmlUnit.Util;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections;
@@ -695,6 +692,8 @@ namespace AdidasBot
         private void buttonCreateLocalTask_Click(object sender, RoutedEventArgs e)
         {
             // create SplashTask without proxy
+
+           
         }
 
 
