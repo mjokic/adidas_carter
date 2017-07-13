@@ -21,9 +21,7 @@ namespace AdidasCarterPro.Model
 {
     public class SplashTask : INotifyPropertyChanged
     {
-
         private ChromiumWebBrowser browser;
-        public string url { get; private set; }
 
         public SplashTask(Proxy proxy)
         {
@@ -42,10 +40,13 @@ namespace AdidasCarterPro.Model
 
         public void startTask(string url)
         {
+            this.Status = "Initializing...";
+
             this.url = url;
 
             // starting splash bypass stuff
             this.browser = new ChromiumWebBrowser(requestContext: new RequestContext());
+            var r = new RequestContextSettings();
 
             browser.BrowserInitialized += Browser_BrowserInitialized;
             browser.LoadingStateChanged += BrowserLoadingStateChanged;
@@ -98,7 +99,7 @@ namespace AdidasCarterPro.Model
 
         private void Browser_BrowserInitialized(object sender, EventArgs e)
         {
-            Console.WriteLine("Browser initialized!?");
+            this.Status = "Initialization Completed!";
 
             //this.browser.Load("https://www.whatismyip.com/");
             this.browser.Load(url);
@@ -138,6 +139,18 @@ namespace AdidasCarterPro.Model
 
                      Console.WriteLine(status + "<-- status...");
 
+                     if (status)
+                     {
+                         var t = this.browser.EvaluateScriptAsync("document.cookie");
+                         t.ContinueWith(resp =>
+                         {
+                             this.CookieString = resp.Result.Result as string;
+                             Console.WriteLine(this.CookieString);
+                         });
+
+                     }
+
+
                      // if successfully bypassed splash, start timer
                      this.timer.Start();
                      this.TextColor = Brushes.Green;
@@ -149,10 +162,21 @@ namespace AdidasCarterPro.Model
 
 
         #region Properties
+        public string url { get; private set; }
         public int seconds { get; set; }
         public Proxy Proxy { get; set; }
         public DispatcherTimer timer { get; set; }
         public string CookieString { get; set; }
+
+        private string status;
+
+        public string Status
+        {
+            get { return status; }
+            set { status = value;
+                OnPropertyChanged("Status");
+            }
+        }
 
         private string btnContent;
 

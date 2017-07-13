@@ -1328,15 +1328,14 @@ namespace AdidasBot
         {
             SplashTask st = (SplashTask)dataGridSplashTasks.SelectedItem;
 
-            CefBrowserWindow cbw = new CefBrowserWindow(st.url);
+            if (st == null || st.CookieString == null) return;
+
+            CefBrowserWindow cbw = new CefBrowserWindow(st.url, st.CookieString);
             cbw.Show();
         }
 
         private void menuItemShowCookie_Click(object sender, RoutedEventArgs e)
         {
-            // show cookies of splash task
-            //string cookies = "cklajfdlafj";
-
             SplashTask st = (SplashTask) dataGridSplashTasks.SelectedItem;
 
             if (st == null || st.CookieString == null) return;

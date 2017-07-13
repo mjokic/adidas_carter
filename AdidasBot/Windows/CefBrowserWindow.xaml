@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         Title="CefBrowserWindow" Height="307.732" Width="688.144">
     <Grid>
-        <cefSharp:ChromiumWebBrowser Name="browser1" Address="https://google.com"/>
+        <Button x:Name="button" Content="Show Cookies" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="108" Click="button_Click"/>
+        <cefSharp:ChromiumWebBrowser Name="browser1" Address="https://google.com" Margin="0,42,0,0" LoadingStateChanged="browser1_LoadingStateChanged" FrameLoadEnd="browser1_FrameLoadEnd"/>
     </Grid>
 </Window>
