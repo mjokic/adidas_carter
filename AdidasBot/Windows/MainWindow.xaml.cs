@@ -5,6 +5,7 @@ using AdidasBot.Model.Captchas.AntiCaptchaAPI.Helper;
 using AdidasBot.Windows;
 using AdidasCarterPro.Model;
 using AdidasCarterPro.Windows;
+using CefSharp;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.CSharp;
@@ -1366,5 +1367,9 @@ namespace AdidasBot
             }
         }
 
+        private void MetroWindow_Closed(object sender, EventArgs e)
+        {
+            Cef.Shutdown();
+        }
     }
 }
