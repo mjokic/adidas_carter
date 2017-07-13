@@ -1,4 +1,5 @@
 ﻿using CefSharp;
+using CefSharp.OffScreen;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -20,7 +21,7 @@ namespace AdidasBot
             CefSettings settings = new CefSettings();
             //settings.MultiThreadedMessageLoop = false;
             //Cef.Initialize(settings, performDependencyCheck: false, browserProcessHandler: null);
-            Cef.Initialize(settings);
+            Cef.Initialize(settings, true, null);
         }
 
     }
