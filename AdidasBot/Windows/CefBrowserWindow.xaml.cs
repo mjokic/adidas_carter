@@ -20,11 +20,11 @@ namespace AdidasCarterPro.Windows
     /// </summary>
     public partial class CefBrowserWindow : Window
     {
-        public CefBrowserWindow()
+        public CefBrowserWindow(string url)
         {
             InitializeComponent();
 
-            browser1.Address = "http://adidas.co.uk";
+            browser1.Address = url;
 
         }
     }

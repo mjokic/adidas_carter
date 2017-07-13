@@ -23,6 +23,7 @@ namespace AdidasCarterPro.Model
     {
 
         private ChromiumWebBrowser browser;
+        public string url { get; private set; }
 
         public SplashTask(Proxy proxy)
         {
@@ -41,12 +42,9 @@ namespace AdidasCarterPro.Model
 
         public void startTask(string url)
         {
-
-            string url1 = "https://www.whatismyip.com/";
+            this.url = url;
 
             // starting splash bypass stuff
-
-            //this.browser = new ChromiumWebBrowser();
             this.browser = new ChromiumWebBrowser(requestContext: new RequestContext());
 
             browser.BrowserInitialized += Browser_BrowserInitialized;
@@ -54,41 +52,6 @@ namespace AdidasCarterPro.Model
 
         }
 
-        private void Browser_BrowserInitialized(object sender, EventArgs e)
-        {
-            //throw new NotImplementedException();
-            Console.WriteLine("Browser initialized!?");
-
-            this.browser.Load("https://www.whatismyip.com/");
-
-            //browser.RequestContext.RegisterSchemeHandlerFactory(CefSharpSchemeHandlerFactory.SchemeName, null, new CefSharpSchemeHandlerFactory());
-
-            Cef.UIThreadTaskFactory.StartNew(delegate
-            {
-                string ip = this.Proxy.IP;
-                string port = this.Proxy.Port;
-                var rc = this.browser.GetBrowser().GetHost().RequestContext;
-                var dict = new Dictionary<string, object>();
-                dict.Add("mode", "fixed_servers");
-                dict.Add("server", "" + ip + ":" + port + "");
-                string error;
-                bool success = rc.SetPreference("proxy", dict, out error);
-
-            });
-
-            //Cef.UIThreadTaskFactory.StartNew(delegate {
-            //    var rc = this.browser.GetBrowser().GetHost().RequestContext;
-            //    var v = new Dictionary<string, object>();
-            //    v["mode"] = "fixed_servers";
-            //    v["server"] = "scheme://" + this.Proxy.IP + ":" + this.Proxy.Port;
-            //    string error;
-            //    bool success = rc.SetPreference("proxy", v, out error);
-            //    //success=true,error=""
-            //});
-
-
-
-        }
 
         private void timer_tick(object sender, EventArgs e)
         {
@@ -105,13 +68,84 @@ namespace AdidasCarterPro.Model
             seconds--;
         }
 
-        // temp
-        private async void runIt()
+        private bool findSiteKey(string html)
         {
-            // check for site key..
-            // data-sitekey="(.*?)"
-            
+            Regex r = new Regex("data-sitekey=\"(.*?)\"");
+            MatchCollection mc = r.Matches(html);
+
+            string siteKey;
+            try
+            {
+                siteKey = mc[0].Groups[1].Value;
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine("DO IT AGAIN!");
+                return false;
+            }
+
+            if (siteKey != null)
+            {
+                Console.WriteLine("SITE KEY FOUND, splash bypassed?!");
+                return true;
+            }
+
+            Console.WriteLine("DO IT AGAIN!");
+            return false;
         }
+
+
+
+        private void Browser_BrowserInitialized(object sender, EventArgs e)
+        {
+            Console.WriteLine("Browser initialized!?");
+
+            //this.browser.Load("https://www.whatismyip.com/");
+            this.browser.Load(url);
+
+            Cef.UIThreadTaskFactory.StartNew(delegate
+            {
+                string ip = this.Proxy.IP;
+                string port = this.Proxy.Port;
+                var rc = this.browser.GetBrowser().GetHost().RequestContext;
+                var dict = new Dictionary<string, object>();
+                dict.Add("mode", "fixed_servers");
+                dict.Add("server", "" + ip + ":" + port + "");
+                string error;
+                bool success = rc.SetPreference("proxy", dict, out error);
+
+            });
+
+        }
+
+        private void BrowserLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
+        {
+            // Check to see if loading is complete - this event is called twice, one when loading starts
+            // second time when it's finished
+            // (rather than an iframe within the main frame).
+            if (!e.IsLoading)
+            {
+                // Remove the load event handler, because we only want one snapshot of the initial page.
+                this.browser.LoadingStateChanged -= BrowserLoadingStateChanged;
+
+                var task = this.browser.GetSourceAsync();
+
+                task.ContinueWith(response =>
+                 {
+                     //Manager.debugSave("aaa_" + this.Proxy.IP + "_" + this.Proxy.Port + ".html", response.Result);
+
+                     bool status = findSiteKey(response.Result);
+
+                     Console.WriteLine(status + "<-- status...");
+
+                     // if successfully bypassed splash, start timer
+                     this.timer.Start();
+                     this.TextColor = Brushes.Green;
+                 });
+
+            }
+        }
+
 
 
         #region Properties
@@ -137,7 +171,8 @@ namespace AdidasCarterPro.Model
         public Brush TextColor
         {
             get { return textColor; }
-            set {
+            set
+            {
                 textColor = value;
                 OnPropertyChanged("TextColor");
             }
@@ -161,36 +196,6 @@ namespace AdidasCarterPro.Model
         #endregion
 
 
-
-
-        private void BrowserLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
-        {
-            // Check to see if loading is complete - this event is called twice, one when loading starts
-            // second time when it's finished
-            // (rather than an iframe within the main frame).
-            if (!e.IsLoading)
-            {
-                // Remove the load event handler, because we only want one snapshot of the initial page.
-                this.browser.LoadingStateChanged -= BrowserLoadingStateChanged;
-
-                var task = this.browser.GetSourceAsync();
-
-                task.ContinueWith(response =>
-                 {
-                     Manager.debugSave("aaa_" + this.Proxy.IP + "_" + this.Proxy.Port + ".html", response.Result);
-
-                     //App.Current.Dispatcher.Invoke((Action)delegate
-                     //{
-                     //    Cef.Shutdown();
-                     //});
-
-                     // if successfully bypassed splash, start timer
-                     this.timer.Start();
-                     this.TextColor = Brushes.Green;
-                 });
-
-            }
-        }
 
     }
 }

@@ -1326,8 +1326,10 @@ namespace AdidasBot
 
         private void menuItemOpenBrowser_Click(object sender, RoutedEventArgs e)
         {
-            // open default browser
-            Process.Start("http://google.com");
+            SplashTask st = (SplashTask)dataGridSplashTasks.SelectedItem;
+
+            CefBrowserWindow cbw = new CefBrowserWindow(st.url);
+            cbw.Show();
         }
 
         private void menuItemShowCookie_Click(object sender, RoutedEventArgs e)
