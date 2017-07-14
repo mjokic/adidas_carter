@@ -23,51 +23,66 @@ namespace AdidasCarterPro.Windows
     {
 
         private string url;
-        private string cookieString;
+        private List<Cookie> cookies;
 
-        public CefBrowserWindow(string url, string cookieString)
+        public CefBrowserWindow(string url, List<Cookie> cookies, RequestContext rc)
         {
             this.url = url;
-            this.cookieString = cookieString;
 
             InitializeComponent();
 
-            //ICookieManager cookieManager = Cef.GetGlobalCookieManager();
+            Cef.UIThreadTaskFactory.StartNew(delegate
+            {
+                browser1.RequestContext = rc;
+                Console.WriteLine("RC set up!");
 
-            //string[] tmp1 = cookieString.Split(';');
+            });
 
-            //for (int i = 0; i < tmp1.Length - 1; i++)
+            //browser1.RequestContext = new RequestContext();
+            //var CM = browser1.RequestContext.GetDefaultCookieManager(null);
+
+            //foreach (Cookie cookie in cookies)
             //{
-            //    string[] tmp2 = tmp1[i].Replace(" ", "").Split(new char[] { '=' }, 2);
-
-            //    // add this cookie to cookie container
-            //    //Cookie cookie =
-            //    //    new Cookie(tmp2[0], tmp2[1], "/", Manager.selectedProfile.Domain.Replace("global", ""));
-
-            //    Cookie c = new Cookie();
-            //    c.Name = tmp2[0];
-            //    c.Value = tmp2[1];
-            //    c.Path = "/";
-            //    c.Domain = Manager.selectedProfile.Domain.Replace("global", "");
-
-            //    cookieManager.SetCookie(c.Domain, c);
+            //    CM.SetCookieAsync("adidas.com", cookie);
             //}
 
-            browser1.Address = url;
+            //Console.WriteLine("COOKIES SET!");
 
-           
+            browser1.Address = url;
 
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            var t = browser1.EvaluateScriptAsync("document.cookie");
-            t.ContinueWith(resp =>
+            //var t = browser1.EvaluateScriptAsync("document.cookie");
+            //t.ContinueWith(resp =>
+            //{
+            //    string resultat = resp.Result.Result as string;
+            //    Console.WriteLine(resultat + "<-- RESULTAT");
+            //});
+
+            var CM = browser1.RequestContext.GetDefaultCookieManager(null);
+
+            var t = CM.VisitAllCookiesAsync();
+            t.ContinueWith(x =>
             {
-                string resultat = resp.Result.Result as string;
-                Console.WriteLine(resultat + "<-- RESULTAT");
+                Console.WriteLine("===");
+                List<Cookie> cookies = t.Result;
+                foreach (Cookie c in cookies)
+                {
+                    Console.WriteLine(c.Name + "=" + c.Value + ";");
+                }
+                Console.WriteLine("===");
             });
+
+
         }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            browser1.Load("http://whatismyip.com/");
+        }
+
 
         private void browser1_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
         {
@@ -94,9 +109,10 @@ namespace AdidasCarterPro.Windows
             {
 
                 browser1.FrameLoadEnd -= browser1_FrameLoadEnd;
-                
+
                 // execute javascript to loadcookies
-                var task = browser1.EvaluateScriptAsync("document.cookie = " + cookieString);
+                //var task = browser1.EvaluateScriptAsync("document.cookie = " + cookieString);
+                var task = browser1.EvaluateScriptAsync("document.cookie = ");
 
                 task.ContinueWith(respon =>
                 {
@@ -112,5 +128,6 @@ namespace AdidasCarterPro.Windows
                 });
             }
         }
+
     }
 }

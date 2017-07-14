@@ -1328,9 +1328,9 @@ namespace AdidasBot
         {
             SplashTask st = (SplashTask)dataGridSplashTasks.SelectedItem;
 
-            if (st == null || st.CookieString == null) return;
+            if (st == null || st.Cookies == null) return;
 
-            CefBrowserWindow cbw = new CefBrowserWindow(st.url, st.CookieString);
+            CefBrowserWindow cbw = new CefBrowserWindow(st.url, st.Cookies, st.RC);
             cbw.Show();
         }
 
@@ -1338,9 +1338,9 @@ namespace AdidasBot
         {
             SplashTask st = (SplashTask) dataGridSplashTasks.SelectedItem;
 
-            if (st == null || st.CookieString == null) return;
+            if (st == null || st.Cookies == null) return;
 
-            CookieWindow cw = new CookieWindow(st.CookieString);
+            CookieWindow cw = new CookieWindow(st.Cookies);
             cw.ShowDialog();
         }
 

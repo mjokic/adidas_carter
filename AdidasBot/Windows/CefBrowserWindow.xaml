@@ -10,5 +10,6 @@
     <Grid>
         <Button x:Name="button" Content="Show Cookies" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="108" Click="button_Click"/>
         <cefSharp:ChromiumWebBrowser Name="browser1" Address="https://google.com" Margin="0,42,0,0" LoadingStateChanged="browser1_LoadingStateChanged" FrameLoadEnd="browser1_FrameLoadEnd"/>
+        <Button x:Name="button1" Content="Check my IP" HorizontalAlignment="Left" Margin="134,10,0,0" VerticalAlignment="Top" Width="110" Click="button1_Click"/>
     </Grid>
 </Window>

@@ -141,12 +141,28 @@ namespace AdidasCarterPro.Model
 
                      if (status)
                      {
-                         var t = this.browser.EvaluateScriptAsync("document.cookie");
-                         t.ContinueWith(resp =>
+                         this.RC = this.browser.RequestContext;
+
+                         var cm = this.browser.RequestContext.GetDefaultCookieManager(null);
+                         var tt = cm.VisitAllCookiesAsync();
+                         tt.ContinueWith(x =>
                          {
-                             this.CookieString = resp.Result.Result as string;
-                             Console.WriteLine(this.CookieString);
+                             List<Cookie> listaKolaca = x.Result;
+                             this.Cookies = listaKolaca;
+
+                             foreach (Cookie kolac in listaKolaca)
+                             {
+                                 Console.WriteLine(kolac.Name + "=" + kolac.Value + ";");
+                             }
                          });
+
+
+                         //var t = this.browser.EvaluateScriptAsync("document.cookie");
+                         //t.ContinueWith(resp =>
+                         //{
+                         //    this.CookieString = resp.Result.Result as string;
+                         //    Console.WriteLine(this.CookieString);
+                         //});
 
                      }
 
@@ -166,7 +182,8 @@ namespace AdidasCarterPro.Model
         public int seconds { get; set; }
         public Proxy Proxy { get; set; }
         public DispatcherTimer timer { get; set; }
-        public string CookieString { get; set; }
+        public List<Cookie> Cookies { get; set; }
+        public RequestContext RC { get; set; }
 
         private string status;
 
