@@ -14,13 +14,6 @@
 
     <Grid>
 
-        <!--<Menu>
-            <MenuItem Header="File" Margin="0">
-                <MenuItem Name="MenuButtonExit" Header="Exit" Click="MenuButtonExit_Click"/>
-            </MenuItem>
-            <MenuItem Name="MenuButtonSplashTool" Header="Splash Tool" Click="MenuButtonSplashTool_Click"/>
-        </Menu>-->
-
         <TextBlock x:Name="textBlockLoggedInUser" Margin="0,6,20,0" TextWrapping="NoWrap" TextAlignment="Center" VerticalAlignment="Top" Text="username" HorizontalAlignment="Right" Width="80"/>
         <TextBlock x:Name="textblockJustText" Margin="0,6,100,0" TextWrapping="NoWrap" TextAlignment="Left" VerticalAlignment="Top" Text="Logged in as" HorizontalAlignment="Right" Width="70"/>
 
@@ -151,26 +144,27 @@
                 <Grid Background="#FFE5E5E5">
 
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
-                        <!--<RowDefinition Height="*"/>-->
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox x:Name="textBoxSplashBypassUrl" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="320" RenderTransformOrigin="0.5,0.5"/>
+                    <TextBox x:Name="textBoxSplashBypassUrl" Grid.Row="0" Grid.Column="0" Height="23" Margin="10" TextWrapping="NoWrap"/>
 
-                    <Button Name="buttonStartSplashBypass" Content="Start" HorizontalAlignment="Left" Margin="346,10,0,0" VerticalAlignment="Top" Width="75" Click="buttonStartSplashBypass_Click"/>
-                    <Button Name="buttonCreateLocalTask" Content="Create local task" HorizontalAlignment="Left" Margin="196,97,0,0" VerticalAlignment="Top" Width="128" Click="buttonCreateLocalTask_Click"/>
+                    <Button Name="buttonStartSplashBypass" Content="Start" Grid.Row="0" Grid.Column="1" Margin="10" Click="buttonStartSplashBypass_Click"/>
+                    <Button Name="buttonCreateLocalTask" Content="Create local task" Grid.Row="0" Grid.Column="2" Margin="10" Click="buttonCreateLocalTask_Click"/>
 
-                    <TextBlock x:Name="textBlock11" HorizontalAlignment="Left" Margin="227,210,0,0" TextWrapping="Wrap" Text="Threads" VerticalAlignment="Top"/>
-                    <Slider Name="sliderSplashBypassThreads" HorizontalAlignment="Left" Margin="10,228,0,0" VerticalAlignment="Top" Height="21" Width="329"/>
+                    <TextBlock x:Name="textBlock18" Text="Refresh time" Grid.Row="0" Grid.Column="3" Width="100" TextAlignment="Center"/>
+                    <TextBlock x:Name="textBlock19" Text="0" Grid.Row="0" Grid.Column="3" Width="100" Margin="10,0,0,0" TextAlignment="Left" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="textBlock20" Text="120" Grid.Row="0" Grid.Column="3" Width="100" Margin="0,0,10,0" TextAlignment="Right" HorizontalAlignment="Right"/>
+                    <Slider Name="sliderSplashBypassRefreshTime" Grid.Row="0" Grid.Column="3" Height="18" Margin="10"/>
 
-                    <TextBlock x:Name="textBlock18" HorizontalAlignment="Left" Margin="227,169,0,0" TextWrapping="Wrap" Text="Refresh time" VerticalAlignment="Top"/>
-                    <Slider Name="sliderSplashBypassRefreshTime" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top" Height="18" Width="329"/>
-
-                    <DataGrid Name="dataGridSplashTasks" SelectionMode="Single" IsReadOnly="True" AutoGenerateColumns="False" Margin="10" Grid.Row="0" Grid.Column="1">
+                    <DataGrid Name="dataGridSplashTasks" Grid.Row="1" Grid.ColumnSpan="4" SelectionMode="Single" IsReadOnly="True" AutoGenerateColumns="False">
                         <DataGrid.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Name="menuItemOpenBrowser" Header="Open Browser" Click="menuItemOpenBrowser_Click"/>
@@ -184,7 +178,7 @@
                             <DataGridTextColumn Header="PASS" Width="Auto" Binding="{Binding Proxy.Password}"/>
                             <DataGridTextColumn Header="STATUS" Width="*" Binding="{Binding Status}"/>
 
-                            <DataGridTemplateColumn Header="TIMER" Width="*">
+                            <DataGridTemplateColumn Header="TIMER" Width="Auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <!--<Button Name="buttonSplashAction" Foreground="{Binding TextColor}" Content="{Binding BtnContent}" IsEnabled="True" Click="buttonSplashAction_Click"/>-->
