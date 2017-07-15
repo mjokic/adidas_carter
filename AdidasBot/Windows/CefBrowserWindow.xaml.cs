@@ -46,7 +46,8 @@ namespace AdidasCarterPro.Windows
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            browser1.Load(this.url);
+            //browser1.Load(this.url);
+            browser1.Address = url;
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
