@@ -678,7 +678,8 @@ namespace AdidasBot
         private void buttonCreateLocalTask_Click(object sender, RoutedEventArgs e)
         {
             // create SplashTask without proxy
-
+            SplashTask splashTask = new SplashTask(new Proxy("local", "/", null, null));
+            Manager.splashTasks.Add(splashTask);
            
         }
 

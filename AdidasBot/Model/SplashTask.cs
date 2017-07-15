@@ -109,18 +109,21 @@ namespace AdidasCarterPro.Model
             //this.browser.Load("https://www.whatismyip.com/");
             //this.browser.Load(url);
 
-            Cef.UIThreadTaskFactory.StartNew(delegate
+            if(this.Proxy.IP != "local")
             {
-                string ip = this.Proxy.IP;
-                string port = this.Proxy.Port;
-                var rc = this.browser.GetBrowser().GetHost().RequestContext;
-                var dict = new Dictionary<string, object>();
-                dict.Add("mode", "fixed_servers");
-                dict.Add("server", "" + ip + ":" + port + "");
-                string error;
-                bool success = rc.SetPreference("proxy", dict, out error);
+                Cef.UIThreadTaskFactory.StartNew(delegate
+                {
+                    string ip = this.Proxy.IP;
+                    string port = this.Proxy.Port;
+                    var rc = this.browser.GetBrowser().GetHost().RequestContext;
+                    var dict = new Dictionary<string, object>();
+                    dict.Add("mode", "fixed_servers");
+                    dict.Add("server", "" + ip + ":" + port + "");
+                    string error;
+                    bool success = rc.SetPreference("proxy", dict, out error);
 
-            });
+                });
+            }
             
 
         }
