@@ -1,5 +1,7 @@
 ﻿using AdidasBot;
+using AdidasCarterPro.Model;
 using CefSharp;
+using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,13 +21,12 @@ namespace AdidasCarterPro.Windows
     /// <summary>
     /// Interaction logic for CefBrowserWindow.xaml
     /// </summary>
-    public partial class CefBrowserWindow : Window
+    public partial class CefBrowserWindow : MetroWindow
     {
 
         private string url;
-        private List<Cookie> cookies;
 
-        public CefBrowserWindow(string url, List<Cookie> cookies, RequestContext rc)
+        public CefBrowserWindow(string url, SplashTask st)
         {
             this.url = url;
 
@@ -33,20 +34,11 @@ namespace AdidasCarterPro.Windows
 
             Cef.UIThreadTaskFactory.StartNew(delegate
             {
-                browser1.RequestContext = rc;
+                browser1.RequestContext = st.RC;
                 Console.WriteLine("RC set up!");
 
             });
 
-            //browser1.RequestContext = new RequestContext();
-            //var CM = browser1.RequestContext.GetDefaultCookieManager(null);
-
-            //foreach (Cookie cookie in cookies)
-            //{
-            //    CM.SetCookieAsync("adidas.com", cookie);
-            //}
-
-            //Console.WriteLine("COOKIES SET!");
 
             browser1.Address = url;
 
@@ -54,28 +46,7 @@ namespace AdidasCarterPro.Windows
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            //var t = browser1.EvaluateScriptAsync("document.cookie");
-            //t.ContinueWith(resp =>
-            //{
-            //    string resultat = resp.Result.Result as string;
-            //    Console.WriteLine(resultat + "<-- RESULTAT");
-            //});
-
-            var CM = browser1.RequestContext.GetDefaultCookieManager(null);
-
-            var t = CM.VisitAllCookiesAsync();
-            t.ContinueWith(x =>
-            {
-                Console.WriteLine("===");
-                List<Cookie> cookies = t.Result;
-                foreach (Cookie c in cookies)
-                {
-                    Console.WriteLine(c.Name + "=" + c.Value + ";");
-                }
-                Console.WriteLine("===");
-            });
-
-
+            browser1.Load(this.url);
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
@@ -83,51 +54,10 @@ namespace AdidasCarterPro.Windows
             browser1.Load("http://whatismyip.com/");
         }
 
-
-        private void browser1_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
+        private void button2_Click(object sender, RoutedEventArgs e)
         {
-            if(!e.IsLoading)
-            {
-                browser1.LoadingStateChanged -= browser1_LoadingStateChanged;
-
-                // execute javascript to loadcookies
-                //var task = browser1.EvaluateScriptAsync("document.cookie = " + cookieString);
-
-                //task.ContinueWith(respon =>
-                //{
-                //    browser1.Address = url;
-                //});
-
-
-            }
+            // refresh page
+            browser1.Reload(true);
         }
-
-        private void browser1_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
-        {
-
-           if(e.Frame.IsMain)
-            {
-
-                browser1.FrameLoadEnd -= browser1_FrameLoadEnd;
-
-                // execute javascript to loadcookies
-                //var task = browser1.EvaluateScriptAsync("document.cookie = " + cookieString);
-                var task = browser1.EvaluateScriptAsync("document.cookie = ");
-
-                task.ContinueWith(respon =>
-                {
-
-                    respon.ContinueWith(x =>
-                    {
-                        App.Current.Dispatcher.Invoke((Action)delegate
-                        {
-                            browser1.Address = url;
-                            Console.WriteLine("SHOULD BE READY NOW!");
-                        });
-                    });
-                });
-            }
-        }
-
     }
 }

@@ -14,6 +14,7 @@ using System;
 using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -251,54 +252,8 @@ namespace AdidasBot
             dataGridProxies.Columns.Add(c);
             #endregion
 
-            //#region dataGridSplashTasks Settings
             dataGridSplashTasks.ItemsSource = Manager.splashTasks;
-            //dataGridSplashTasks.ItemsSource = Manager.proxies;
-            //dataGridSplashTasks.AutoGenerateColumns = false;
-            //dataGridSplashTasks.IsReadOnly = true;
-            //dataGridSplashTasks.SelectionMode = DataGridSelectionMode.Single;
 
-            //c = new DataGridTextColumn();
-            //c.Header = "IP";
-            //c.Binding = new Binding("IP");
-            //c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-            //dataGridSplashTasks.Columns.Add(c);
-
-            //c = new DataGridTextColumn();
-            //c.Header = "Port";
-            //c.Binding = new Binding("Port");
-            //c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-            //dataGridSplashTasks.Columns.Add(c);
-
-            //c = new DataGridTextColumn();
-            //c.Header = "Username";
-            //c.Binding = new Binding("Username");
-            //c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-            //dataGridSplashTasks.Columns.Add(c);
-
-            //c = new DataGridTextColumn();
-            //c.Header = "Password";
-            //c.Binding = new Binding("Password");
-            //c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-            //dataGridSplashTasks.Columns.Add(c);
-
-            //c = new DataGridTextColumn();
-            //c.Header = "Status";
-            //c.Binding = new Binding("Status");
-            //c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-            //dataGridSplashTasks.Columns.Add(c);
-
-            ////Binding binding = new Binding("PropertyName") { Mode = BindingMode.TwoWay };
-            ////DataGridTemplateColumn templateColumn = new DataGridTemplateColumn { CanUserReorder = false, Width = 85, CanUserSort = true };
-            ////BindingOperations.SetBinding(templateColumn, DataGridColumn.HeaderProperty, binding);
-            ////DataTemplate dataTemplate = new DataTemplate();
-            ////FrameworkElementFactory tmpButton = new FrameworkElementFactory(typeof(Button));
-            ////tmpButton.SetBinding(Button.NameProperty, binding);
-            ////dataTemplate.VisualTree = tmpButton;
-            ////templateColumn.CellTemplate = dataTemplate;
-            ////dataGridSplashTasks.Columns.Add(templateColumn);
-
-            //#endregion
 
             #region dataGridCustomHeaders Settings
             dataGridCustomHeaders.ItemsSource = Manager.customHeaders;
@@ -389,7 +344,6 @@ namespace AdidasBot
                     {
                         // normal cart Option
                         t = Task.Run(async () => await addToCart(j), Manager.ct);
-
                     }
 
                     Manager.runningTasks.Add(t);
@@ -626,16 +580,29 @@ namespace AdidasBot
                     foreach (Proxy p in Manager.proxies.ToList())
                     {
                         Manager.proxies.Remove(p);
-
                     }
+
+                    deleteSplashTask(selectedProxy);
                 }
 
             }
             else
             {
                 Manager.proxies.Remove(selectedProxy);
+                deleteSplashTask(selectedProxy);
             }
 
+        }
+
+        private void deleteSplashTask(Proxy proxy)
+        {
+            foreach (SplashTask st in Manager.splashTasks.ToList())
+            {
+                if(st.Proxy == proxy || proxy == null)
+                {
+                    Manager.splashTasks.Remove(st);
+                }
+            }
         }
 
         private void buttonRemoveFalse_Click(object sender, RoutedEventArgs e)
@@ -645,6 +612,7 @@ namespace AdidasBot
                 if (proxy.Status == "False")
                 {
                     Manager.proxies.Remove(proxy);
+                    deleteSplashTask(proxy);
                 }
             }
         }
@@ -680,13 +648,30 @@ namespace AdidasBot
         // SPLASH BYPASS
         private void buttonStartSplashBypass_Click(object sender, RoutedEventArgs e)
         {
+
+            if("Stop" == buttonStartSplashBypass.Content as string)
+            {
+                // stop all tasks...
+                buttonStartSplashBypass.Content = "Start";
+                Manager.ctsSplashTask.Cancel();
+                return;
+            }
+
+            buttonStartSplashBypass.Content = "Stop";
+
+            Manager.ctsSplashTask = new CancellationTokenSource();
+            Manager.ctSplashTask = Manager.ctsSplashTask.Token;
+
             // start splash tasks
             string url = textBoxSplashBypassUrl.Text;
 
             foreach (SplashTask st in Manager.splashTasks)
             {
-                Task.Run(() => st.startTask(url));
+                var t = Task.Run(() => st.startTask(url, Manager.ctSplashTask), Manager.ctSplashTask);
+                Manager.runningSplashTasks.Add(t);
             }
+
+            // make it change button text after tasks completed
 
         }
 
@@ -697,34 +682,6 @@ namespace AdidasBot
            
         }
 
-
-        private void buttonSplashAction_Click(object sender, RoutedEventArgs e)
-        {
-            // open headfull browser when splash bypassed with cookies and user-agent
-            // or
-            // apply cookies and user-agent to custom headers
-               
-            //for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
-            //{
-            //    Button button = null;
-            //    if (sender is Button) button = sender as Button;
-
-            //    if (vis is DataGridRow)
-            //    {
-            //        var row = (DataGridRow)vis;
-            //        if (row.Item is Proxy)
-            //        {
-            //            Proxy p = row.Item as Proxy;
-            //            Console.WriteLine(p);
-            //            button.Content = "HEY!";
-
-            //            SplashTask st = new SplashTask(p);
-            //            st.btn = button;
-            //            st.timer.Start();
-            //        }
-            //    }
-            //}
-        }
 
 
 
@@ -1330,7 +1287,7 @@ namespace AdidasBot
 
             if (st == null || st.Cookies == null) return;
 
-            CefBrowserWindow cbw = new CefBrowserWindow(st.url, st.Cookies, st.RC);
+            CefBrowserWindow cbw = new CefBrowserWindow(st.url, st);
             cbw.Show();
         }
 
@@ -1367,6 +1324,26 @@ namespace AdidasBot
                 });
             }
         }
+
+        private void checkSplashTasks()
+        {
+            foreach (Task sTask in Manager.runningSplashTasks.ToList())
+            {
+                if (sTask.IsCompleted || sTask.IsCanceled)
+                {
+                    Manager.runningSplashTasks.Remove(sTask);
+                }
+            }
+
+            if (Manager.runningSplashTasks.Count == 0)
+            {
+                App.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    buttonStartSplashBypass.Content = "Start";
+                });
+            }
+        }
+
 
         private void MetroWindow_Closed(object sender, EventArgs e)
         {

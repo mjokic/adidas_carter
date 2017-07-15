@@ -147,7 +147,7 @@
                 </Grid>
             </Controls:MetroTabItem>
 
-            <Controls:MetroTabItem x:Name="SplashTab" Header="Splash Bypass">
+            <Controls:MetroTabItem x:Name="SplashTab" Header="Splash Tool">
                 <Grid Background="#FFE5E5E5">
 
                     <Grid.RowDefinitions>
@@ -184,13 +184,17 @@
                             <DataGridTextColumn Header="PASS" Width="Auto" Binding="{Binding Proxy.Password}"/>
                             <DataGridTextColumn Header="STATUS" Width="*" Binding="{Binding Status}"/>
 
-                            <DataGridTemplateColumn Header="Action" Width="*">
+                            <DataGridTemplateColumn Header="TIMER" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Name="buttonSplashAction" Foreground="{Binding TextColor}" Content="{Binding BtnContent}" IsEnabled="True" Click="buttonSplashAction_Click"/>
+                                        <!--<Button Name="buttonSplashAction" Foreground="{Binding TextColor}" Content="{Binding BtnContent}" IsEnabled="True" Click="buttonSplashAction_Click"/>-->
+                                        <TextBlock Foreground="{Binding TextColor}" Text="{Binding BtnContent}" HorizontalAlignment="Center"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+
+                            <DataGridTextColumn Header="Tries" Width="Auto" Binding="{Binding Retries}" />
+
                         </DataGrid.Columns>
                     </DataGrid>
 
