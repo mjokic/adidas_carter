@@ -1,11 +1,11 @@
 ﻿using AdidasBot;
 using AdidasBot.Model;
-using NHtmlUnit;
-using NHtmlUnit.Html;
-using NHtmlUnit.Util;
+using CefSharp;
+using CefSharp.OffScreen;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,11 +13,16 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Threading;
+using System.Diagnostics;
+using System.Windows;
 
 namespace AdidasCarterPro.Model
 {
     public class SplashTask : INotifyPropertyChanged
     {
+        private ChromiumWebBrowser browser;
+        public CancellationToken token { get; set; }
 
         public SplashTask(Proxy proxy)
         {
@@ -34,78 +39,22 @@ namespace AdidasCarterPro.Model
         }
 
 
-        public async Task startTask(string url)
+        public void startTask(string url, CancellationToken token)
         {
-            this.Status = "Running..";
+            this.Retries = 0;
+            this.Status = "Initializing...";
+
+            this.url = url;
+            this.token = token;
 
             // starting splash bypass stuff
-            WebClient webClient = new WebClient(BrowserVersion.CHROME);
-            ProxyConfig proxyConfig = new ProxyConfig(this.Proxy.IP, int.Parse(this.Proxy.Port));
-            webClient.Options.ProxyConfig = proxyConfig;
-            webClient.Options.JavaScriptEnabled = true;
-            webClient.Options.CssEnabled = false;
-            webClient.Options.AppletEnabled = false;
-            webClient.Options.Timeout = 30000;
-            webClient.Options.RedirectEnabled = true;
-            webClient.Options.ThrowExceptionOnFailingStatusCode = false;
-            webClient.Options.ThrowExceptionOnScriptError = false;
-            Console.WriteLine(webClient.CookieManager.IsCookiesEnabled());
+            this.browser = new ChromiumWebBrowser(address: this.url, requestContext: new RequestContext());
 
-            HtmlPage page = null;
-            try
-            {
-                page = webClient.GetPage("http://adidas.com") as HtmlPage;
-            }
-            catch (InvalidOperationException ex)
-            {
-                Console.WriteLine(ex.StackTrace);
-                Console.WriteLine(ex.Message);
-                this.Status = "Something fuckd up!";
-                return;
-            }
-
-            //HtmlPage page = webClient.GetPage("https://www.whatismyip.com") as HtmlPage;
-
-            //Manager.debugSave("test_" + this.Proxy.IP + "_" + this.Proxy.Port + ".html", page.AsXml());
-
-
-            HtmlPage page2 = null;
-            try
-            {
-                page2 = (HtmlPage)webClient.GetPage(url);
-
-            }catch(InvalidOperationException ex)
-            {
-                Console.WriteLine(ex.StackTrace);
-                Console.WriteLine(ex.Message);
-                this.Status = "Something fuckd up!";
-                return;
-            }
-
-
-
-            bool status = runIt(page2, url);
-
-            while (!status)
-            {
-                status = runIt(page2, url);
-            }
-
-            ICollection<Cookie> cookies = webClient.GetCookies(new java.net.URL("http://adidas.com"));
-            Console.WriteLine(cookies.Count + "map size");
-
-            this.CookieString = "";
-            foreach (Cookie cookie in cookies)
-            {
-                this.CookieString += cookie.Name + "=" + cookie.Value + ";";
-                Console.WriteLine(cookie);
-            }
-
-            // if successfully bypassed splash, start timer
-            this.Status = "Bypassed!";
-            this.timer.Start();
-            this.TextColor = Brushes.Green;
+            browser.BrowserInitialized += Browser_BrowserInitialized;
+            browser.LoadingStateChanged += BrowserLoadingStateChanged;
+            
         }
+
 
         private void timer_tick(object sender, EventArgs e)
         {
@@ -122,56 +71,148 @@ namespace AdidasCarterPro.Model
             seconds--;
         }
 
-        // temp
-        private bool runIt(HtmlPage page, string url)
+        private bool findSiteKey(string html)
         {
-            //HtmlPage page2 = (HtmlPage)webClient.GetPage(url);
-            //var cookiez1 = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
-            //Console.WriteLine(cookiez1.Count);
-
-            //ICollection<Cookie> map = webClient.GetCookies(new java.net.URL("http://adidas.co.uk"));
-            //Console.WriteLine(map.Count + "map size");
-            //foreach (var item in map)
-            //{
-            //    Console.WriteLine(item);
-            //}
-            page.Refresh();
-            Console.WriteLine("PAge refreSHed!");
-
-            //Manager.debugSave("page_" + new Random(int.MaxValue).Next() + ".html", page.AsXml());
+            this.Retries++;
 
             Regex r = new Regex("data-sitekey=\"(.*?)\"");
-            MatchCollection mc = r.Matches(page.AsXml());
+            MatchCollection mc = r.Matches(html);
 
-            string siteKey;
+            string siteKey = null;
             try
             {
                 siteKey = mc[0].Groups[1].Value;
-            }catch(ArgumentOutOfRangeException ex)
+            }
+            catch (ArgumentOutOfRangeException ex)
             {
                 Console.WriteLine("DO IT AGAIN!");
-                return false;
+                //this.Status = "FAIL!";
             }
 
             if (siteKey != null)
             {
                 Console.WriteLine("SITE KEY FOUND, splash bypassed?!");
+                //this.Status = "SITE KEY FOUND, splash bypassed?!";
                 return true;
             }
 
-            Console.WriteLine("DO IT AGAIN!");
+            this.Status = "Attempting to pass splash...";
             return false;
-            // check for site key..
-            // data-sitekey="(.*?)"
+        }
 
+
+
+        private void Browser_BrowserInitialized(object sender, EventArgs e)
+        {
+            this.Status = "Initialization Completed!";
+
+            //this.browser.Load("https://www.whatismyip.com/");
+            //this.browser.Load(url);
+
+            if(this.Proxy.IP != "local")
+            {
+                Cef.UIThreadTaskFactory.StartNew(delegate
+                {
+                    string ip = this.Proxy.IP;
+                    string port = this.Proxy.Port;
+                    var rc = this.browser.GetBrowser().GetHost().RequestContext;
+                    var dict = new Dictionary<string, object>();
+                    dict.Add("mode", "fixed_servers");
+                    dict.Add("server", "" + ip + ":" + port + "");
+                    string error;
+                    bool success = rc.SetPreference("proxy", dict, out error);
+
+                });
+            }
+            
+
+        }
+
+        private void BrowserLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
+        {
+            // Check to see if loading is complete - this event is called twice, one when loading starts
+            // second time when it's finished
+            // (rather than an iframe within the main frame).
+            if (!e.IsLoading)
+            {
+
+                if(token.IsCancellationRequested)
+                {
+                    this.browser.LoadingStateChanged -= BrowserLoadingStateChanged;
+                    this.Status = "Stopped!";
+                    return;
+                }
+
+                // Remove the load event handler, because we only want one snapshot of the initial page.
+                //this.browser.LoadingStateChanged -= BrowserLoadingStateChanged;
+
+                var task = this.browser.GetSourceAsync();
+
+                task.ContinueWith(response =>
+                  {
+                      bool status = findSiteKey(response.Result);
+
+                      Console.WriteLine(status + "<-- status...");
+
+                      if (status)
+                      {
+
+                          var cm = this.browser.RequestContext.GetDefaultCookieManager(null);
+                          var tt = cm.VisitAllCookiesAsync();
+                          tt.ContinueWith(x =>
+                          {
+                              List<Cookie> listaKolaca = x.Result;
+                              this.Cookies = listaKolaca;
+                             
+                              // if successfully bypassed splash, start timer
+                              this.timer.Start();
+                              this.TextColor = Brushes.Green;
+
+                              this.Status = "Past Splash!";
+
+                          });
+                          
+                        this.RC = this.browser.RequestContext;
+                        this.browser.LoadingStateChanged -= BrowserLoadingStateChanged;
+                        return;
+                      }
+
+                      //// pausing task..
+                      //if(RefreshTime != 0)
+                      //{
+                      //    this.Status = "Waiting for " + RefreshTime + " seconds...";
+                      //    Thread.Sleep(RefreshTime * 1000);
+                      //}
+
+                      Console.WriteLine("sleeping doesn't worki...");
+                      this.browser.Reload(true);
+                      return;
+                      
+                  });
+
+            }
         }
 
 
         #region Properties
+        public string url { get; private set; }
         public int seconds { get; set; }
+        public int RefreshTime { get; set; }
         public Proxy Proxy { get; set; }
         public DispatcherTimer timer { get; set; }
-        public string CookieString { get; set; }
+        public List<Cookie> Cookies { get; set; }
+        public RequestContext RC { get; set; }
+
+        private int retries;
+
+        public int Retries
+        {
+            get { return retries; }
+            set { retries = value;
+                OnPropertyChanged("Retries");
+            }
+        }
+
 
         private string status;
 
@@ -182,7 +223,6 @@ namespace AdidasCarterPro.Model
                 OnPropertyChanged("Status");
             }
         }
-
 
         private string btnContent;
 
@@ -201,7 +241,8 @@ namespace AdidasCarterPro.Model
         public Brush TextColor
         {
             get { return textColor; }
-            set {
+            set
+            {
                 textColor = value;
                 OnPropertyChanged("TextColor");
             }
@@ -223,6 +264,7 @@ namespace AdidasCarterPro.Model
 
         }
         #endregion
+
 
     }
 }

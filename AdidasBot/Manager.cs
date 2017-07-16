@@ -31,11 +31,16 @@ namespace AdidasBot
         public static string apiAntiCaptchaKey = null;
         public static string customPage = null;
 
-        //public static bool stopAllTask = false;
 
         public static List<Task> runningTasks = new List<Task>();
+        public static List<Task> runningSplashTasks = new List<Task>();
+
         public static CancellationTokenSource cts = null;
         public static CancellationToken ct;
+
+        public static CancellationTokenSource ctsSplashTask = null;
+        public static CancellationToken ctSplashTask;
+
 
         public static ObservableCollection<Job> jobs = new ObservableCollection<Job>();
         public static ObservableCollection<Job> inCartJobs = new ObservableCollection<Job>();
