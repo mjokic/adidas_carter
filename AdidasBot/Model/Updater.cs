@@ -31,7 +31,7 @@ namespace AdidasCarterPro.Model
             string url = "http://adidascarter.club/check.php";
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
-            dict.Add("type", "pro");
+            dict.Add("type", "eco");
 
             var data = new FormUrlEncodedContent(dict);
 
@@ -67,7 +67,7 @@ namespace AdidasCarterPro.Model
 
         public async Task<bool> downloadUpdater()
         {
-            var downloadFileUrl = "http://adidascarter.club/adidas_pro/updater/AdidasCarterUpdater.exe";
+            var downloadFileUrl = "http://adidascarter.club/adidas_eco/updater/AdidasCarterUpdater.exe";
             var destinationFilePath = Path.GetFullPath("updater.exe");
 
             using (var client = new Download(downloadFileUrl, destinationFilePath))
