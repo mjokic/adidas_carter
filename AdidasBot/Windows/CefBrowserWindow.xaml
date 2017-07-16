@@ -23,7 +23,7 @@
         <Button x:Name="button" Grid.Row="0" Grid.Column="0" Margin="10" Content="Home" Click="button_Click"/>
         <Button x:Name="button1" Grid.Row="0" Grid.Column="1" Margin="10" Content="Check my IP" Click="button1_Click"/>
         <Button x:Name="button2" Grid.Row="0" Grid.Column="2" Margin="10" HorizontalAlignment="Right" Click="button2_Click">
-            <Image Source="/AdidasCarterPro;component/images/refresh.png" HorizontalAlignment="Center"/>
+            <Image Source="/AdidasCarter;component/images/refresh.png" HorizontalAlignment="Center"/>
         </Button>
 
         <cefSharp:ChromiumWebBrowser Grid.Row="1" Grid.ColumnSpan="3" Name="browser1" Address="https://google.com"/>
