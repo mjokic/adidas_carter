@@ -310,10 +310,18 @@ namespace AdidasBot
             {
                 Manager.sizes.TryGetValue(size, out sizeCode);
             }
+
             Job job = new Job(pid, sizeCode, quantity);
             job.Size = size;
 
-            Manager.jobs.Add(job);
+            if (Manager.jobs.Count < Manager.tasksLimit)
+            {
+                Manager.jobs.Add(job);
+            }
+            else
+            {
+                await this.ShowMessageAsync("Error!", "You're not allowed to add more tasks!", MessageDialogStyle.Affirmative);
+            }
 
         }
 
@@ -1083,6 +1091,13 @@ namespace AdidasBot
             Manager.addToCartFunction = Manager.TA.GetFeatureValue("addToCartFunction");
             Manager.atcUrl = Manager.TA.GetFeatureValue("atcUrl");
             Manager.atcUrlPart = Manager.TA.GetFeatureValue("atcUrlPart");
+            try
+            {
+                Manager.tasksLimit = int.Parse(Manager.TA.GetFeatureValue("tasksLimit"));
+            }catch(TurboActivateException ex)
+            {
+                Manager.tasksLimit = 1000;
+            }
             //Manager.ExpireDate = Convert.ToDateTime(Manager.TA.GetFeatureValue("expire"));
             //Manager.daysLeft = ((Manager.ExpireDate - DateTime.Today).TotalDays).ToString();
 
