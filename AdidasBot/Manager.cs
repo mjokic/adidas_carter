@@ -67,7 +67,7 @@ namespace AdidasBot
 
         public static Dictionary<string, string> sizes = new Dictionary<string, string>();
 
-        public static TurboActivate TA = new TurboActivate("4de5d381591dfd48877143.36833305");
+        public static TurboActivate TA = new TurboActivate("48bde63659246a40c355d6.45154597");
 
 
         #region Server Variables
@@ -232,7 +232,7 @@ namespace AdidasBot
         public static void initialize()
         {
             Username = TA.GetExtraData();
-            LicenseType = "PRO";
+            LicenseType = "ECO";
         }
 
         public static bool dateCheck()
