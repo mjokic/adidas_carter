@@ -667,6 +667,8 @@ namespace AdidasBot
 
             foreach (SplashTask st in Manager.splashTasks)
             {
+                st.RefreshTime = Convert.ToInt32(sliderSplashBypassRefreshTime.Value);
+
                 var t = Task.Run(() => st.startTask(url, Manager.ctSplashTask), Manager.ctSplashTask);
                 Manager.runningSplashTasks.Add(t);
             }

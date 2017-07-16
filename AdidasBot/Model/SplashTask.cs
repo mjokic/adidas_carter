@@ -177,6 +177,14 @@ namespace AdidasCarterPro.Model
                         return;
                       }
 
+                      //// pausing task..
+                      //if(RefreshTime != 0)
+                      //{
+                      //    this.Status = "Waiting for " + RefreshTime + " seconds...";
+                      //    Thread.Sleep(RefreshTime * 1000);
+                      //}
+
+                      Console.WriteLine("sleeping doesn't worki...");
                       this.browser.Reload(true);
                       return;
                       
@@ -189,6 +197,7 @@ namespace AdidasCarterPro.Model
         #region Properties
         public string url { get; private set; }
         public int seconds { get; set; }
+        public int RefreshTime { get; set; }
         public Proxy Proxy { get; set; }
         public DispatcherTimer timer { get; set; }
         public List<Cookie> Cookies { get; set; }

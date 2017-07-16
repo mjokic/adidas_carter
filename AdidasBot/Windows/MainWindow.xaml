@@ -159,10 +159,10 @@
                     <Button Name="buttonStartSplashBypass" Content="Start" Grid.Row="0" Grid.Column="1" Margin="10" Click="buttonStartSplashBypass_Click"/>
                     <Button Name="buttonCreateLocalTask" Content="Create local task" Grid.Row="0" Grid.Column="2" Margin="10" Click="buttonCreateLocalTask_Click"/>
 
-                    <TextBlock x:Name="textBlock18" Text="Refresh time" Grid.Row="0" Grid.Column="3" Width="100" TextAlignment="Center"/>
+                    <TextBlock x:Name="textBlock18" Text="Refresh time" Grid.Row="0" Grid.Column="3" Width="100" TextAlignment="Center" />
                     <TextBlock x:Name="textBlock19" Text="0" Grid.Row="0" Grid.Column="3" Width="100" Margin="10,0,0,0" TextAlignment="Left" HorizontalAlignment="Left"/>
                     <TextBlock x:Name="textBlock20" Text="120" Grid.Row="0" Grid.Column="3" Width="100" Margin="0,0,10,0" TextAlignment="Right" HorizontalAlignment="Right"/>
-                    <Slider Name="sliderSplashBypassRefreshTime" Grid.Row="0" Grid.Column="3" Height="18" Margin="10"/>
+                    <Slider Name="sliderSplashBypassRefreshTime" Grid.Row="0" Grid.Column="3" Height="18" Margin="10" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="0" Minimum="0" Maximum="120" LargeChange="10" SmallChange="1" />
 
                     <DataGrid Name="dataGridSplashTasks" Grid.Row="1" Grid.ColumnSpan="4" SelectionMode="Single" IsReadOnly="True" AutoGenerateColumns="False">
                         <DataGrid.ContextMenu>
