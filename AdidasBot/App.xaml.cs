@@ -19,6 +19,7 @@ namespace AdidasBot
         public App()
         {
             CefSettings settings = new CefSettings();
+            settings.BrowserSubprocessPath = @"x86\CefSharp.BrowserSubprocess.exe";
             //settings.MultiThreadedMessageLoop = false;
             //Cef.Initialize(settings, performDependencyCheck: false, browserProcessHandler: null);
             Cef.Initialize(settings, true, null);
