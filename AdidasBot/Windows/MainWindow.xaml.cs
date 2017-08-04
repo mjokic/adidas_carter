@@ -317,6 +317,7 @@ namespace AdidasBot
             if (Manager.jobs.Count < Manager.tasksLimit)
             {
                 Manager.jobs.Add(job);
+                await job.getCookies();
             }
             else
             {

@@ -280,7 +280,7 @@ namespace AdidasBot
                 this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
             }
 
-            await getCookies();
+            //await getCookies();
             
 
             using (HttpResponseMessage response = await this.client.PostAsync(_url, data))
