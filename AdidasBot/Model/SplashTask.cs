@@ -177,18 +177,20 @@ namespace AdidasCarterPro.Model
                         return;
                       }
 
-                      //// pausing task..
-                      //if(RefreshTime != 0)
-                      //{
-                      //    this.Status = "Waiting for " + RefreshTime + " seconds...";
-                      //    Thread.Sleep(RefreshTime * 1000);
-                      //}
-
-                      Console.WriteLine("sleeping doesn't worki...");
-                      this.browser.Reload(true);
-                      return;
+                     
                       
                   });
+
+                // pausing task..
+                if (RefreshTime != 0)
+                {
+                    this.Status = "Waiting for " + RefreshTime + " seconds...";
+                    Thread.Sleep(RefreshTime * 1000);
+                }
+
+                //Console.WriteLine("sleeping doesn't worki...");
+                this.browser.Reload(true);
+                return;
 
             }
         }
