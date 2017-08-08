@@ -91,12 +91,20 @@ namespace AdidasBot.Windows
             // assinging proxies automatically
             foreach (Job j in Manager.jobs)
             {
+                // need to create new handler and httpclient
+                // because we want to use proxies now
+                j.setup();
+
                 // getting proxy from queue
                 // assinging it to job
                 // putting proxy back to queue
                 Proxy currentProxy = q.Dequeue() as Proxy;
                 j.Proxy = currentProxy;
                 q.Enqueue(currentProxy);
+
+                // getting cookies with new proxy
+                j.getCookies();
+
 
             }
 

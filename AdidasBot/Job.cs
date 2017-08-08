@@ -22,55 +22,30 @@ namespace AdidasBot
             this.pid = pid;
             this.sizeCode = sizeCode;
             this.quantity = quantity;
-            this.cookieContainer = new CookieContainer();
-            this.handler = new HttpClientHandler();
-            this.handler.UseCookies = true;
-            this.handler.CookieContainer = this.cookieContainer;
-            //this.handler.CookieContainer = new CookieContainer();
-            //this.handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-            //this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
-            //this.client.DefaultRequestHeaders.Add("Referer", "http://www.adidas.co.uk/" + this.pid + ".html");
-            this.client = new HttpClient(this.handler);
-            this.client.DefaultRequestHeaders.Add("Accept", "*/*");
-            this.client.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
-            this.client.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
-            this.client.DefaultRequestHeaders.Add("Referer", "http://www." + Manager.selectedProfile.Domain + "/" + this.pid + ".html");
-            this.client.DefaultRequestHeaders.Add("Connection", "close");
 
-            //// add custom headers here...
-            //foreach (string key in Manager.customHeaders.Keys)
-            //{
-            //    Console.WriteLine(key.ToLower() + " <-- CUSTOM HEADERS");
-            //    if (key.ToLower() == "user-agent")
-            //    {
-            //        this.userAgent = Manager.customHeaders[key];
-            //        client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
-            //        continue;
-            //    }
-            //    else if (key.ToLower() == "cookie")
-            //    {
-            //        // uradi za cookie sta treba
-            //        string cookieString = Manager.customHeaders[key];
-            //        //client.DefaultRequestHeaders.Add("Cookie", cookieString);
-            //        prepareCookies(cookieString);
-            //        continue;
-            //    }
-
-
-            //    client.DefaultRequestHeaders.Add(key, Manager.customHeaders[key]);
-            //}
-
-            //if (!Manager.customHeaders.ContainsKey("User-Agent"))
-            //{
-            //    this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
-            //}
-
+            setup();
+            
+            
             // security check
             if (Manager.Username == "username")
             {
                 throw new Exception();
             }
 
+        }
+
+        public void setup()
+        {
+            this.cookieContainer = new CookieContainer();
+            this.handler = new HttpClientHandler();
+            this.handler.UseCookies = true;
+            this.handler.CookieContainer = this.cookieContainer;
+            this.client = new HttpClient(this.handler);
+            this.client.DefaultRequestHeaders.Add("Accept", "*/*");
+            this.client.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
+            this.client.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
+            this.client.DefaultRequestHeaders.Add("Referer", "http://www." + Manager.selectedProfile.Domain + "/" + this.pid + ".html");
+            this.client.DefaultRequestHeaders.Add("Connection", "close");
         }
 
         // constructor with handler
@@ -336,12 +311,18 @@ namespace AdidasBot
         {
             string homeUrl = Manager.customPage;
 
-            //this.client.DefaultRequestHeaders.Add("User-Agent", this.userAgent);
-
-            using (HttpResponseMessage response = await this.client.GetAsync(homeUrl))
+            try
             {
-                string content = await response.Content.ReadAsStringAsync();
+                using (HttpResponseMessage response = await this.client.GetAsync(homeUrl))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                }
             }
+            catch (HttpRequestException ex)
+            {
+                this.Status = "PROXY FAILED!";
+            }
+            
         }
 
         private void prepareCookies(String cookieString)
