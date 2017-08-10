@@ -47,7 +47,7 @@ namespace AdidasBot.Model
             {
                 try
                 {
-                    this.handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                    //this.handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
                     this.client = new HttpClient(this.handler);
                 }
                 catch (Exception)
@@ -55,7 +55,6 @@ namespace AdidasBot.Model
                     throw;
                 }
                 
-                Console.WriteLine("Im FUCKING here!!!");
             }
 
             //this.client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0");
@@ -65,19 +64,28 @@ namespace AdidasBot.Model
             this.client.DefaultRequestHeaders.Add("Connection", "keep-alive");
             this.client.DefaultRequestHeaders.Add("Upgrade-Insecure-Requests", "1");
 
-            using (HttpResponseMessage response = await this.client.GetAsync(url))
+            try
             {
-                string content = await response.Content.ReadAsStringAsync();
-                //Manager.debugSave("test" + new Random().Next(1, 999999) + ".html", content);
 
-                Regex r = new Regex("name=\"CSRFToken\" value=\"(.*?)\"");
-                var tmp = r.Match(content);
-                this.csrfToken = tmp.Groups[1].Value;
-                Console.WriteLine("CSRF TOKEN:"+this.csrfToken);
-                //Console.WriteLine("CSRF Token: " + this.csrfToken);
+                using (HttpResponseMessage response = await this.client.GetAsync(url))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    //Manager.debugSave("test" + new Random().Next(1, 999999) + ".html", content);
+
+                    Regex r = new Regex("name=\"CSRFToken\" value=\"(.*?)\"");
+                    var tmp = r.Match(content);
+                    this.csrfToken = tmp.Groups[1].Value;
+                    Console.WriteLine("CSRF TOKEN:"+this.csrfToken);
+                    //Console.WriteLine("CSRF Token: " + this.csrfToken);
 
 
+                }
+
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
+
 
 
 

@@ -40,6 +40,9 @@ namespace AdidasBot
             this.handler = new HttpClientHandler();
             this.handler.UseCookies = true;
             this.handler.CookieContainer = this.cookieContainer;
+
+            this.handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
             this.client = new HttpClient(this.handler);
             this.client.DefaultRequestHeaders.Add("Accept", "*/*");
             this.client.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");

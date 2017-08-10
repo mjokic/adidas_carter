@@ -31,6 +31,7 @@ namespace AdidasBot.Model
             WebProxy proxy = new WebProxy(this.ip + ":" + this.port, false);
             if(this.username != null && this.password != null) proxy.Credentials = new NetworkCredential(this.username, this.password);
             handler.Proxy = proxy;
+            handler.ClientCertificateOptions = ClientCertificateOption.Automatic;
 
             using (HttpClient client = new HttpClient(handler))
             {
